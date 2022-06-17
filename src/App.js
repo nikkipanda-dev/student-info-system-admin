@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route, } from "react-router-dom";
+import "./App.css";
+import { globalStyles, } from "./stitches.config";
+
+import Sidebar from "./components/widgets/Sidebar";
+import Navbar from "./components/widgets/Navbar";
+import LandingPage from "./components/pages/landing-page";
+import Dashboard from "./components/pages/dashboard";
+import Settings from "./components/pages/settings";
+import Admins from "./components/pages/admins";
+import Students from "./components/pages/students";
+import NotFound from "./components/pages/not-found";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    globalStyles();
+
+    return (
+        <>
+            <Sidebar />
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/administrators" element={<Admins />} />
+                <Route path="/students" element={<Students />} />
+                <Route path="/:slug" element={<NotFound />} />
+            </Routes>
+        </>
+    );
 }
 
 export default App;
