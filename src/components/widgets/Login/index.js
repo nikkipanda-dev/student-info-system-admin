@@ -18,28 +18,41 @@ const formItemLayout = {
     },
 }
 
+const validateMessages = {
+    required: '${label} is required.',
+    types: {
+        email: '${label} is not a valid email.',
+    },
+};
+
 export const Login = ({
     form,
     onFinish,
+    emailHelp,
+    passwordHelp,
 }) => {
     return (
         <Form
-        name="basic"
+        name="login-form"
         {...formItemLayout}
+        form={form}
         initialValues={{ remember: true }}
         onFinish={onFinish}
+        validateMessages={validateMessages}
         autoComplete="off">
             <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}>
+            label="Email address"
+            name="email"
+            {...emailHelp && {help: emailHelp}}
+            rules={[{ required: true, type: 'email', }]}>
                 <Input />
             </Form.Item>
 
             <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}>
+            {...passwordHelp && {help: passwordHelp}}
+            rules={[{ required: true, }]}>
                 <Input.Password />
             </Form.Item>
 

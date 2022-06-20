@@ -1,6 +1,6 @@
 import Container from "../Container"
 
-export const index = ({
+export const Column = ({
     children,
     className,
     css,
@@ -11,3 +11,5 @@ export const index = ({
         </Container>
     )
 }
+
+export default Column;

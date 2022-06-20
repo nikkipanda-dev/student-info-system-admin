@@ -1,13 +1,15 @@
 import Container from "../Container"
 
-export const index = ({
+const Row = ({
     children,
     css,
     className,
 }) => {
     return (
-        <Container className={className} css={{...css}}>
+        <Container className={'row m-0' + (className ? (' ' + className) : '')} css={{...css}}>
             {children}
         </Container>
     )
 }
+
+export default Row;

@@ -21,30 +21,34 @@ const Btn = styled('button', {
                 },
             },
             yellow: {
-                background: '$yellow1',
+                background: '$yellow2',
                 color: '$gray5',
                 '&:hover': {
-                    background: '$yellow2',
+                    background: '$yellow3',
                 },
             },
             green: {
-                background: '$green1',
+                background: '$green2',
                 color: '$white',
                 '&:hover': {
-                    background: '$green2',
+                    background: '$green3',
                 },
             },
             red: {
-                background: '$red1',
+                background: '$red2',
                 color: '$white',
                 '&:hover': {
-                    background: '$red2',
+                    background: '$red3',
                 },
             },
         },
     },
-    '.button-sm': {
-
+    '&.button-sm': {
+        fontSize: '$small',
+    },
+    '&.button-lg': {
+        padding: '10px $10 $5',
+        fontSize: '$large',
     },
     '&:hover': {
         cursor: 'pointer',
