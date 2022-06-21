@@ -3,13 +3,18 @@ import {
     Routes, 
     Route,
     Navigate,
+    useLocation,
 } from "react-router-dom";
 import "./App.css";
 import { isAuthCookie, } from "./util/auth";
 import Cookies from "js-cookie";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleNotch, } from "@fortawesome/free-solid-svg-icons";
-import { globalStyles, spinnerStyle, } from "./stitches.config";
+import { 
+    globalStyles, 
+    spinnerStyle,
+    fadeOut,
+} from "./stitches.config";
 
 import Container from "./components/core/Container";
 import Sidebar from "./components/widgets/Sidebar";
@@ -27,20 +32,20 @@ function App() {
     const [forceRender, setForceRender] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [authUser, setAuthUser] = useState('');
+    const location = useLocation();
 
+    const handleShowSpinner = () => setIsLoading(true);
+    const handleHideSpinner = () => setIsLoading(false);
     const handleForceRender = () => setForceRender(!(forceRender));
     const handleUser = authUser => setAuthUser(authUser);
     const handleLoggedIn = () => setIsAuth(true);
     const handleLoggedOut = () => setIsAuth(false);
 
+    // Handle state is no user cookies
     useEffect(() => {
         let loading = true;
 
         if (loading) {
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 500);
-
             if (!(isAuthCookie())) {
                 handleLoggedOut();
                 return;
@@ -54,15 +59,43 @@ function App() {
             loading = false;
         }
     }, []);
+
+    // Show spinner
+    useEffect(() => {
+        let loading = true;
+
+        if (loading) {
+            handleShowSpinner();
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [location.pathname]);
+
+    // Hide spinner
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && (isLoading)) {
+            setTimeout(() => {
+                handleHideSpinner();
+            }, 800);
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [isLoading]);
     
     return (
         <>
         {
             isLoading ? 
-            <Container css={{ ...spinnerStyle }}>
+            <Container css={{ ...spinnerStyle, animation: `${fadeOut} .2s ease-in-out .5s 1 normal forwards`, }}>
                 <FontAwesomeIcon icon={faCircleNotch} className="fa-spin fa-fw fa-3x" />
             </Container> :
-            <>
+            <Container>
             {
                 isAuth &&
                 <>
@@ -90,7 +123,7 @@ function App() {
                     </>
                 }
                 </Routes>            
-            </>
+            </Container>
         }
         </>
     );

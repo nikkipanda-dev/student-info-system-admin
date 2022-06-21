@@ -1,4 +1,5 @@
-import { styled } from "../../../stitches.config";
+import { forwardRef, } from "react";
+import { styled, } from "../../../stitches.config";
 
 const Wrapper = styled('div', {
     variants: {
@@ -28,20 +29,21 @@ const Wrapper = styled('div', {
     },
 });
 
-export const Container = ({
+export const Container = forwardRef(({
     children, 
     css,
     className,
     background,
-}) => {
+}, ref) => {
     return (
         <Wrapper 
         {...className && {className: className}} 
         {...css && {css: {...css}}}
-        {...background && {background: background}}>
+        {...background && {background: background}}
+        ref={ref}>
             {children}
         </Wrapper>
     )
-}
+});
 
 export default Container;
