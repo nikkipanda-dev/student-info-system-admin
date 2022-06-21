@@ -1,5 +1,8 @@
-import { Link } from "react-router-dom"; 
+import { NavLink, } from "react-router-dom"; 
 import Container from "../../core/Container";
+import { sidebarStyle, } from "../../../stitches.config";
+
+const styling = sidebarStyle;
 
 export const Sidebar = () => {
     const links = [
@@ -10,27 +13,27 @@ export const Sidebar = () => {
         },
         {
             id: 1,
-            label: "Settings",
-            path: "/settings",
-        },
-        {
-            id: 2,
             label: "Administrators",
             path: "/administrators",
         },
         {
-            id: 3,
+            id: 2,
             label: "Students",
             path: "/students",
         },
     ]
 
     return (
-        <Container>
+        <Container className="d-flex flex-column" css={styling}>
         {
             (links && (Object.keys(links).length > 0)) && 
             Object.keys(links).map((i, val) => 
-                <Link key={Object.values(links)[val].id} to={Object.values(links)[val].path}>{Object.values(links)[val].label}</Link>
+                <NavLink 
+                key={Object.values(links)[val].id} 
+                to={Object.values(links)[val].path}
+                className={({ isActive }) =>
+                    isActive ? 'activeLink' : undefined
+                }>{Object.values(links)[val].label}</NavLink>
             )
         }
         </Container>
