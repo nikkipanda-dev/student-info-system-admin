@@ -33,6 +33,7 @@ export const Container = forwardRef(({
     children, 
     css,
     className,
+    onClick,
     background,
 }, ref) => {
     return (
@@ -40,6 +41,7 @@ export const Container = forwardRef(({
         {...className && {className: className}} 
         {...css && {css: {...css}}}
         {...background && {background: background}}
+        {...onClick && {onClick: () => onClick()}}
         ref={ref}>
             {children}
         </Wrapper>

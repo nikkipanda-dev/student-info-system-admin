@@ -9,3 +9,11 @@ export function isAuthCookie() {
 
     return hasCookie;
 }
+
+export function getToken() {
+    return JSON.parse(Cookies.get('auth_admin_token'));
+}
+
+export function getAuthEmail() {
+    return JSON.parse(Cookies.get('auth_admin')).email;
+}

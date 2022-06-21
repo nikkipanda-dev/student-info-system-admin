@@ -1,23 +1,25 @@
 import { useState, useEffect, } from "react";
-import Container from "../../core/Container";
-import { request, } from "../../../util/request";
 import { useNavigate, } from "react-router-dom";
-import { styled, fadeIn, } from "../../../stitches.config";
+import Container from "../../core/Container";
+import { Dropdown, Menu, } from "antd";
+import { request, } from "../../../util/request";
+import { styled, } from "../../../stitches.config";
 import Cookies from "js-cookie";
+import { getToken } from "../../../util/auth";
+
+import Text from "../../core/Text";
 
 const Nav = styled('nav', {
     position: 'sticky',
     top: 0,
-    background: 'blue',
+    background: '$white',
+    padding: '$15',
     transition: '$default',
-    opacity: 0,
-    animation: `${fadeIn} .2s ease-in-out .2s 1 normal forwards`,
+    zIndex: '99999',
 });
 
 export const Navbar = ({ isAuth, handleLoggedOut, }) => {
-    const [isLoading, setIsLoading] = useState(true);
-
-    const handleHideSpinner = () => setIsLoading(false);
+    const navigate = useNavigate();
 
     const onLogOut = () => {
         if (!(isAuth)) {
@@ -46,20 +48,36 @@ export const Navbar = ({ isAuth, handleLoggedOut, }) => {
         });
     }
 
-    useEffect(() => {
-        let loading = true;
+    const navigator = pathname => {
+        navigate(pathname, {replace: true});
+    }
 
-        if (loading && isAuth) {
-            handleHideSpinner();
-        }
-
-        return () => {
-            loading = false;
-        }
-    }, []);
+    const menu = (
+        <Menu
+            items={[
+                {
+                    key: '1',
+                    type: 'group',
+                    label: <Text type="span">Settings</Text>,
+                    children: [
+                        {
+                            key: '1-1',
+                            label: <Container onClick={() => navigator("/settings")}><Text type="span" color="info">Settings</Text></Container>,
+                        },
+                    ],
+                },
+                {
+                    type: 'divider',
+                },
+                {
+                    key: '2',
+                    label: <Container onClick={() => onLogOut()}><Text type="span" color="info">Sign out</Text></Container>,
+                },
+            ]}
+        />
+    );
 
     return (
-        !(isLoading) && 
         <Nav>
             <span>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, molestias!
@@ -67,17 +85,20 @@ export const Navbar = ({ isAuth, handleLoggedOut, }) => {
             <span>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, molestias!
             </span>
-            <button type="button" onClick={() => onLogOut()}>Logout</button>
+            {/* Click trigger for mobile view */}
+            <Dropdown overlay={menu} trigger={['click', 'hover']}>
+                <a onClick={(e) => e.preventDefault()}>
+                    Click me
+                </a>
+            </Dropdown>
         </Nav>
     )
 }
 
 async function logout(form) {
-    const authToken = JSON.parse(Cookies.get('auth_admin_token'));
-
     return request.post("logout", form, {
         headers: {
-            'Authorization': `Bearer ${authToken}`,
+            'Authorization': `Bearer ${getToken()}`,
         }
     });
 }

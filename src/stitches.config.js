@@ -26,8 +26,8 @@ export const {
             green2: "#28A745",
             green3: "#178931",
             gray1: "#FBFBFB",
-            gray2: "#9D9D9D",
-            gray3: "#E3E3E3",
+            gray2: "#E3E3E3",
+            gray3: "#9D9D9D",
             gray4: "#747474",
             gray5: "#3e3e3e",
             white: "#ffffff",
@@ -90,7 +90,7 @@ export const globalStyles = globalCss({
         color: '$red2',
         fontFamily: '$khula',
         fontSize: '$small',
-    }, 
+    },
     "@import": ["https://fonts.googleapis.com/css2?family=Khula&family=Sawarabi+Gothic&display=swap"],
 });
 
@@ -112,3 +112,23 @@ export const fadeOut = keyframes({
     '0%': { opacity: '1' },
     '100%': { opacity: '0' },
 });
+
+export const sectionStyle = {
+    background: '$gray1', 
+    padding: '$30',
+    borderRadius: '$rounded',
+}
+
+export const sidebarStyle = {
+    padding: '$15',
+    fontFamily: '$khula',
+    fontSize: '$default',
+    'a': {
+        color: '$gray4',
+        letterSpacing: '$default',
+    },
+    '.activeLink': {
+        fontFamily: '$khula',
+        color: '$blue2',
+    },
+}

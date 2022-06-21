@@ -1,6 +1,9 @@
-import { styled } from "../../../stitches.config";
+import { styled, fadeIn, } from "../../../stitches.config";
 
 const Wrapper = styled('section', {
+    transition: '$default',
+    opacity: 0,
+    animation: `${fadeIn} .2s ease-in-out .1s 1 normal forwards`,
     width: '100%',
     variants: {
         background: {

@@ -1,8 +1,9 @@
 import { useState, useEffect, } from "react";
+import { useLocation, useNavigate, } from "react-router-dom";
 import { request, } from "../../../util/request";
+import { getErrorMessage, } from "../../../util";
 import Cookies from "js-cookie";
 import { Form, message, } from "antd";
-import { fadeIn, } from "../../../stitches.config";
 
 import Login from "../../widgets/Login";
 import Section from "../../core/Section";
@@ -12,15 +13,12 @@ import Text from "../../core/Text";
 export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
     const [form] = Form.useForm();
 
-    const [isLoading, setIsLoading] = useState(true);
-
     const [alert, setAlert] = useState('');
     const [status, setStatus] = useState('');
     const [header, setHeader] = useState('');
     const [emailHelp, setEmailHelp] = useState('');
     const [passwordHelp, setPasswordHelp] = useState('');
 
-    const handleHideSpinner = () => setIsLoading(false);
     const handleAlert = message => setAlert(message);
     const handleStatus = status => setStatus(status);
     const handleHeader = header => setHeader(header);
@@ -66,36 +64,14 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
 
         .catch(err => {
             if (err.response && err.response.data.errors) {
-                if (err.response.data.errors.email) {
-                    handleEmailHelp(<Text type="span" color="danger">{err.response.data.errors.email[0]}</Text>);   
-                }
-
-                if (err.response.data.errors.password) {
-                    handlePasswordHelp(err.response.data.errors.password[0]);
-                }
+                err.response.data.errors.email && handleEmailHelp(getErrorMessage(err.response.data.errors.email[0]));
+                err.response.data.errors.password && handlePasswordHelp(getErrorMessage(err.response.data.errors.password[0]));
             }
         });
     }
 
-    useEffect(() => {
-        let loading = true;
-
-        if (loading && !(isAuth)) {
-            handleHideSpinner();
-        }
-
-        return () => {
-            loading = false;
-        }
-    }, []);
-
     return (
-        !(isLoading) && 
-        <Section background="gray2" css={{
-            transition: '$default',
-            opacity: 0,
-            animation: `${fadeIn} .2s ease-in-out .2s 1 normal forwards`
-        }}>
+        <Section background="gray2">
         {
             alert &&
             <Alert status={status} header={header}>

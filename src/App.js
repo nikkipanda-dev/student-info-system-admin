@@ -9,13 +9,7 @@ import {
 import "./App.css";
 import { isAuthCookie, } from "./util/auth";
 import Cookies from "js-cookie";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleNotch, } from "@fortawesome/free-solid-svg-icons";
-import { 
-    globalStyles, 
-    spinnerStyle,
-    fadeOut,
-} from "./stitches.config";
+import { globalStyles, } from "./stitches.config";
 
 import Container from "./components/core/Container";
 import Main from "./components/core/Main";
@@ -34,12 +28,14 @@ import { Spinner } from "./util";
 function App() {
     globalStyles();
     const [isLoading, setIsLoading] = useState(true);
+    const [isContentLoading, setIsContentLoading] = useState(true);
     const [forceRender, setForceRender] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [authUser, setAuthUser] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
 
+    const handleHideLoading = () => setIsContentLoading(false);
     const handleShowSpinner = () => setIsLoading(true);
     const handleHideSpinner = () => setIsLoading(false);
     const handleForceRender = () => setForceRender(!(forceRender));
@@ -55,6 +51,7 @@ function App() {
             handleShowSpinner();
 
             if (!(isAuthCookie())) {
+                !(isAuth) && navigate("/admin", { replace: true });
                 handleLoggedOut();
                 return;
             }
@@ -66,7 +63,7 @@ function App() {
         return () => {
             loading = false;
         }
-    }, []);
+    }, [isAuth]);
 
     // Show spinner
     useEffect(() => {
@@ -88,59 +85,54 @@ function App() {
         if (loading && isLoading) {
             setTimeout(() => {
                 handleHideSpinner();
-            }, 700);
+                handleHideLoading();
+            }, 600);
         }
 
         return () => {
             loading = false;
         }
     }, [isLoading]);
-
-    useEffect(() => {
-        let loading = true;
-
-        if (loading) {
-            // Redirect catch all slug if user is unauthenticated
-            !(isAuth) && ((location.pathname === "/") || location.pathname[1]) && navigate("/admin", { replace: true });
-
-            // Redirect authenticated user to dashboard if pathname is root or /admin 
-            isAuth && ((location.pathname === "/") || location.pathname === "/admin") && navigate("/dashboard", { replace: true });
-        }
-
-        return () => {
-            loading = false;
-        }
-    }, [isAuth]);
     
     return (
         <>
         {
-            isLoading ?
-            <Spinner /> :
+            !(isContentLoading) && 
             <Main>
                 <Row>
                 {
                     isAuth &&
-                    <Column className="col">
+                    <Column className="col-sm-3">
                         <Sidebar />
                     </Column>
                 }
-                    <Column className="col">
+                    <Column className={isAuth ? "col-sm-9" : "col"}>
                     {
                         isAuth &&
-                        <Navbar isAuth={isAuth} handleLoggedOut={handleLoggedOut} handleShowSpinner={handleShowSpinner} />
+                        <Navbar isAuth={isAuth} handleLoggedOut={handleLoggedOut} />
+                    }
+                    {
+                        isLoading ?
+                        <Spinner /> : 
+                        <Container css={{ padding: '$15', }}>
+                            {
+                                !(isAuth) ?
+                                    <Routes>
+                                        <Route index element={<LandingPage handleLoggedIn={handleLoggedIn} isAuth={isAuth} />} />
+                                        <Route path="/admin" element={<LandingPage handleLoggedIn={handleLoggedIn} isAuth={isAuth} />} />
+                                    </Routes> :
+                                    <Routes>
+                                        <Route path="/dashboard" element={<Dashboard isAuth={isAuth} />} />
+                                        <Route path="/settings" element={<Settings />} />
+                                        <Route path="/administrators" element={<Admins isAuth={isAuth} />} />
+                                        <Route path="/students" element={<Students />} />
+                                        <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
+                                    </Routes>
+                            }
+                        </Container>
                     }
                     </Column>
                 </Row>
-                <Routes>
-                    <Route path="/admin" element={<LandingPage handleLoggedIn={handleLoggedIn} isAuth={isAuth} />} />
-                    <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
-                    <Route path="/dashboard" element={<Dashboard isAuth={isAuth} />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="/administrators" element={<Admins />} />
-                    <Route path="/students" element={<Students />} />
-                    <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
-                </Routes>
             </Main>
             }
         </>

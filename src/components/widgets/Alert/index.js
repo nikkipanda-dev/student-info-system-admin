@@ -1,11 +1,6 @@
 import { styled } from "../../../stitches.config";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { 
-    faCircleInfo,
-    faCircleCheck,
-    faCircleExclamation,
-    faCircleXmark,
-} from "@fortawesome/free-solid-svg-icons";
+import { icons, } from "../../../util";
 import Container from "../../core/Container";
 
 import NotFound from "../NotFound";
@@ -32,25 +27,6 @@ const Wrapper = styled('div', {
     },
 });
 
-const icon = {
-    info: {
-        icon: faCircleInfo,
-        color: "#E3E3E3",
-    },
-    success: {
-        icon: faCircleCheck,
-        color: "#178931",
-    },
-    warning: {
-        icon: faCircleExclamation,
-        color: "#f0ca57",
-    },
-    danger: {
-        icon: faCircleXmark,
-        color: "#DC3545",
-    },
-}
-
 export const Alert = ({
     className,
     css,
@@ -62,7 +38,7 @@ export const Alert = ({
         return <NotFound name="Alert status" />;
     }
 
-    const headerIcon = icon[status];
+    const headerIcon = icons[status];
 
     if (!(headerIcon)) {
         return <NotFound name="Alert icon" />;

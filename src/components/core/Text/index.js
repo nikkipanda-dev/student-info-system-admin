@@ -8,7 +8,7 @@ const styling = {
     variants: {
         color: {
             info: {
-                color: '$gray2',
+                color: '$gray4',
             },
             success: {
                 color: '$green2',
