@@ -1,17 +1,23 @@
+import { useState, useEffect, } from "react";
 import Container from "../../core/Container";
 import { request, } from "../../../util/request";
 import { useNavigate, } from "react-router-dom";
-import { styled } from "../../../stitches.config";
+import { styled, fadeIn, } from "../../../stitches.config";
 import Cookies from "js-cookie";
 
 const Nav = styled('nav', {
     position: 'sticky',
     top: 0,
     background: 'blue',
+    transition: '$default',
+    opacity: 0,
+    animation: `${fadeIn} .2s ease-in-out .2s 1 normal forwards`,
 });
 
 export const Navbar = ({ isAuth, handleLoggedOut, }) => {
-    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(true);
+
+    const handleHideSpinner = () => setIsLoading(false);
 
     const onLogOut = () => {
         if (!(isAuth)) {
@@ -31,11 +37,8 @@ export const Navbar = ({ isAuth, handleLoggedOut, }) => {
 
             Cookies.remove('auth_admin');
             Cookies.remove('auth_admin_token');
-            handleLoggedOut();
 
-            setTimeout(() => {
-                navigate("/admin", {replace: true});
-            }, 500);
+            handleLoggedOut();
         })
 
         .catch(err => {
@@ -43,7 +46,20 @@ export const Navbar = ({ isAuth, handleLoggedOut, }) => {
         });
     }
 
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && isAuth) {
+            handleHideSpinner();
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, []);
+
     return (
+        !(isLoading) && 
         <Nav>
             <span>
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, molestias!

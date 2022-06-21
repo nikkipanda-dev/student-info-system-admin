@@ -1,15 +1,18 @@
-import { useState, } from "react";
+import { useState, useEffect, } from "react";
 import { request, } from "../../../util/request";
 import Cookies from "js-cookie";
 import { Form, message, } from "antd";
+import { fadeIn, } from "../../../stitches.config";
 
 import Login from "../../widgets/Login";
 import Section from "../../core/Section";
 import Alert from "../../widgets/Alert";
 import Text from "../../core/Text";
 
-export const LandingPage = ({ handleLoggedIn, }) => {
+export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
     const [form] = Form.useForm();
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const [alert, setAlert] = useState('');
     const [status, setStatus] = useState('');
@@ -17,6 +20,7 @@ export const LandingPage = ({ handleLoggedIn, }) => {
     const [emailHelp, setEmailHelp] = useState('');
     const [passwordHelp, setPasswordHelp] = useState('');
 
+    const handleHideSpinner = () => setIsLoading(false);
     const handleAlert = message => setAlert(message);
     const handleStatus = status => setStatus(status);
     const handleHeader = header => setHeader(header);
@@ -55,7 +59,9 @@ export const LandingPage = ({ handleLoggedIn, }) => {
                 secure: true,
             });
 
-            handleLoggedIn();
+            setTimeout(() => {
+                handleLoggedIn();                
+            }, 1000);
         })
 
         .catch(err => {
@@ -71,8 +77,25 @@ export const LandingPage = ({ handleLoggedIn, }) => {
         });
     }
 
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && !(isAuth)) {
+            handleHideSpinner();
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, []);
+
     return (
-        <Section background="gray2">
+        !(isLoading) && 
+        <Section background="gray2" css={{
+            transition: '$default',
+            opacity: 0,
+            animation: `${fadeIn} .2s ease-in-out .2s 1 normal forwards`
+        }}>
         {
             alert &&
             <Alert status={status} header={header}>

@@ -80,7 +80,7 @@ export const Alert = ({
                 <FontAwesomeIcon icon={headerIcon.icon} className="fa-fw fa-xl" style={{ color: headerIcon.color }} />
                 <Heading 
                 type={4} 
-                text="Header" 
+                text={header}
                 css={{ margin: '1px 0px 0px 3px', }} />
             </Container>
             <Container css={{ marginTop: '$10', }}>

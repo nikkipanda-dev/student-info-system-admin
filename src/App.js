@@ -3,6 +3,7 @@ import {
     Routes, 
     Route,
     Navigate,
+    useNavigate,
     useLocation,
 } from "react-router-dom";
 import "./App.css";
@@ -17,6 +18,7 @@ import {
 } from "./stitches.config";
 
 import Container from "./components/core/Container";
+import Main from "./components/core/Main";
 import Sidebar from "./components/widgets/Sidebar";
 import Navbar from "./components/widgets/Navbar";
 import LandingPage from "./components/pages/landing-page";
@@ -25,6 +27,9 @@ import Settings from "./components/pages/settings";
 import Admins from "./components/pages/admins";
 import Students from "./components/pages/students";
 import NotFound from "./components/pages/not-found";
+import Row from "./components/core/Row";
+import Column from "./components/core/Column";
+import { Spinner } from "./util";
 
 function App() {
     globalStyles();
@@ -33,6 +38,7 @@ function App() {
     const [isAuth, setIsAuth] = useState(false);
     const [authUser, setAuthUser] = useState('');
     const location = useLocation();
+    const navigate = useNavigate();
 
     const handleShowSpinner = () => setIsLoading(true);
     const handleHideSpinner = () => setIsLoading(false);
@@ -46,6 +52,8 @@ function App() {
         let loading = true;
 
         if (loading) {
+            handleShowSpinner();
+
             if (!(isAuthCookie())) {
                 handleLoggedOut();
                 return;
@@ -64,7 +72,7 @@ function App() {
     useEffect(() => {
         let loading = true;
 
-        if (loading) {
+        if (loading && (!(isLoading))) {
             handleShowSpinner();
         }
 
@@ -77,54 +85,64 @@ function App() {
     useEffect(() => {
         let loading = true;
 
-        if (loading && (isLoading)) {
+        if (loading && isLoading) {
             setTimeout(() => {
                 handleHideSpinner();
-            }, 800);
+            }, 700);
         }
 
         return () => {
             loading = false;
         }
     }, [isLoading]);
+
+    useEffect(() => {
+        let loading = true;
+
+        if (loading) {
+            // Redirect catch all slug if user is unauthenticated
+            !(isAuth) && ((location.pathname === "/") || location.pathname[1]) && navigate("/admin", { replace: true });
+
+            // Redirect authenticated user to dashboard if pathname is root or /admin 
+            isAuth && ((location.pathname === "/") || location.pathname === "/admin") && navigate("/dashboard", { replace: true });
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [isAuth]);
     
     return (
         <>
         {
-            isLoading ? 
-            <Container css={{ ...spinnerStyle, animation: `${fadeOut} .2s ease-in-out .5s 1 normal forwards`, }}>
-                <FontAwesomeIcon icon={faCircleNotch} className="fa-spin fa-fw fa-3x" />
-            </Container> :
-            <Container>
-            {
-                isAuth &&
-                <>
-                    <Sidebar />
-                    <Navbar isAuth={isAuth} handleLoggedOut={handleLoggedOut} />
-                </>
-            }
-                <Routes>
-                    <Route path="/" element={<Navigate to={!(isAuth) ? "/admin" : "/dashboard"} />} />
-                {
-                    !(isAuth) &&
-                    <>
-                        <Route path="/admin" element={<LandingPage handleLoggedIn={handleLoggedIn} />} />
-                        <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
-                    </>
-                }
+            isLoading ?
+            <Spinner /> :
+            <Main>
+                <Row>
                 {
                     isAuth &&
-                    <>
-                        <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/settings" element={<Settings />} />
-                        <Route path="/administrators" element={<Admins />} />
-                        <Route path="/students" element={<Students />} />
-                        <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
-                    </>
+                    <Column className="col">
+                        <Sidebar />
+                    </Column>
                 }
-                </Routes>            
-            </Container>
-        }
+                    <Column className="col">
+                    {
+                        isAuth &&
+                        <Navbar isAuth={isAuth} handleLoggedOut={handleLoggedOut} handleShowSpinner={handleShowSpinner} />
+                    }
+                    </Column>
+                </Row>
+                <Routes>
+                    <Route path="/admin" element={<LandingPage handleLoggedIn={handleLoggedIn} isAuth={isAuth} />} />
+                    <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
+                    <Route path="/dashboard" element={<Dashboard isAuth={isAuth} />} />
+                    <Route path="/settings" element={<Settings />} />
+                    <Route path="/administrators" element={<Admins />} />
+                    <Route path="/students" element={<Students />} />
+                    <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
+                </Routes>
+            </Main>
+            }
         </>
     );
 }
