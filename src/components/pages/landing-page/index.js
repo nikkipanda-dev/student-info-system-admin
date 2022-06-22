@@ -30,8 +30,6 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
         for (let i in values) {
             values[i] && form.append(i, values[i]);
         }
-
-        return console.info(login(form));
         
         login(form).then(response => {
             if (!(response.data.is_success)) {
