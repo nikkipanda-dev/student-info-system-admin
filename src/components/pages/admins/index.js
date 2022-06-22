@@ -25,7 +25,7 @@ const cardGroupStyling = {
 export const Admins = ({ isAuth, }) => {
     const [form] = Form.useForm();
 
-    const [administrators, setAdministrators] = useState('');
+    const [administrators, setAdministrators] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [title, setTitle] = useState('');
