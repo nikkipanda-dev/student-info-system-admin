@@ -24,7 +24,7 @@ const validateMessages = {
     },
 };
 
-export const RegisterUser = ({
+export const RegisterAdmin = ({
     form,
     onFinish,
     firstNameHelp,
@@ -35,7 +35,7 @@ export const RegisterUser = ({
 }) => {
     return (
         <Form
-        name="registration-form"
+        name="admin-registration-form"
         {...formItemLayout}
         form={form}
         onFinish={onFinish}
@@ -106,4 +106,4 @@ export const RegisterUser = ({
     )
 }
 
-export default RegisterUser;
+export default RegisterAdmin;

@@ -9,7 +9,7 @@ import Section from "../../core/Section";
 import Container from "../../core/Container";
 import Alert from "../../widgets/Alert";
 import Text from "../../core/Text";
-import RegisterUser from "../../widgets/RegisterUser";
+import RegisterUser from "../../widgets/RegisterAdmin";
 import UserCards from "../../widgets/UserCards";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
@@ -79,7 +79,6 @@ export const Admins = ({ isAuth, }) => {
             return;
         }
 
-        arr = administrators;
         const form = new FormData();
 
         for (let i in values) {
@@ -93,15 +92,16 @@ export const Admins = ({ isAuth, }) => {
 
         storeUser(form).then(response => {
             if (!(response.data.is_success)) {
-                handleHeader("Login failed");
+                handleHeader("Error");
                 handleStatus("danger");
                 handleAlert(<Text type="span">{response.data.data}</Text>);
                 return;
             }
 
+            arr = administrators;
+            (Object.values(arr).length > 0) ? arr.push(response.data.data.details) : arr = [response.data.data.details];
             resetForm();
             handleHideModal();
-            arr.push(response.data.data.details);
             handleAdministrators(arr);
             setTimeout(() => {
                 emitMessage("Administrator added.", "success", 2.5);

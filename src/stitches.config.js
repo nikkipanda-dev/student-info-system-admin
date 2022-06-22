@@ -96,7 +96,7 @@ export const globalStyles = globalCss({
 
 export const spinnerStyle = {
     width: '100%',
-    height: '100vh',
+    height: 'auto',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',

@@ -9,12 +9,20 @@ import {
 import { message, } from "antd";
 import Container from "../components/core/Container";
 import Text from "../components/core/Text";
-import { fadeOut, spinnerStyle, } from "../stitches.config";
+import { 
+    fadeOut, 
+    spinnerStyle,
+    sectionStyle,
+} from "../stitches.config";
 
 export const Spinner = () => {
     return (
-        <Container css={{ ...spinnerStyle, animation: `${fadeOut} .2s ease-in-out .2s 1 normal forwards`, }}>
-            <FontAwesomeIcon icon={faCircleNotch} className="fa-spin fa-fw fa-3x" />
+        <Container css={{padding: '$15',}}>
+            <Container css={sectionStyle}>
+                <Container css={{ ...spinnerStyle, animation: `${fadeOut} .2s ease-in-out .2s 1 normal forwards`, }}>
+                    <FontAwesomeIcon icon={faCircleNotch} className="fa-spin fa-fw fa-3x" />
+                </Container>
+            </Container>
         </Container>
     )
 }

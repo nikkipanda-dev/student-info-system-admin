@@ -20,6 +20,7 @@ import Dashboard from "./components/pages/dashboard";
 import Settings from "./components/pages/settings";
 import Admins from "./components/pages/admins";
 import Students from "./components/pages/students";
+import Student from "./components/pages/student";
 import NotFound from "./components/pages/not-found";
 import Row from "./components/core/Row";
 import Column from "./components/core/Column";
@@ -57,6 +58,7 @@ function App() {
             }
 
             handleLoggedIn();
+            (location.pathname === "/" || location.pathname === "/admin") && navigate("/dashboard", {replace: true});
             handleUser(JSON.parse(Cookies.get('auth_admin')));
         }
 
@@ -125,7 +127,8 @@ function App() {
                                         <Route path="/dashboard" element={<Dashboard isAuth={isAuth} />} />
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/administrators" element={<Admins isAuth={isAuth} />} />
-                                        <Route path="/students" element={<Students />} />
+                                        <Route path="/students" element={<Students isAuth={isAuth} />} />
+                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} />} />
                                         <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                     </Routes>
                             }
