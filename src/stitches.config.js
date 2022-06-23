@@ -132,3 +132,20 @@ export const sidebarStyle = {
         color: '$blue2',
     },
 }
+
+export const studentContentStyle = {
+    display: 'flex',
+    flexFlow: 'column',
+    padding: '$20',
+}
+
+export const studentBioStyle = {
+    display: 'flex',
+    flexFlow: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    'span': {
+        textAlign: 'center',
+    },
+    padding: '$20',
+}

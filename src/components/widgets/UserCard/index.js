@@ -51,7 +51,7 @@ export const UserCard = ({
 
     return (
         (administrator && (Object.keys(administrator).length > 0)) && 
-        <Card>
+        <Card background="white" radius="default">
             <Container>
                 <Heading type={4} text={`${administrator.first_name} ${administrator.last_name}`} />
             </Container>

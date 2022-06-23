@@ -1,21 +1,19 @@
 import Container from "../Container";
 
-const styling = {
-    background: '$gray1',
-    borderRadius: '$default',
-}
-
 export const Card = ({
     children,
     className,
     css,
     header,
+    background,
+    radius,
 }) => {
     return (
-        <Container className={className} css={{
-            ...css,
-            ...styling,
-        }}>
+        <Container 
+        className={className} 
+        css={css}
+        background={background}
+        radius={radius}>
             <Container>
                 {header}
             </Container>

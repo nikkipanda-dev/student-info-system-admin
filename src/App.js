@@ -21,6 +21,7 @@ import Settings from "./components/pages/settings";
 import Admins from "./components/pages/admins";
 import Students from "./components/pages/students";
 import Student from "./components/pages/student";
+import StudentContent from "./components/widgets/StudentContent";
 import NotFound from "./components/pages/not-found";
 import Row from "./components/core/Row";
 import Column from "./components/core/Column";
@@ -128,7 +129,10 @@ function App() {
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/administrators" element={<Admins isAuth={isAuth} />} />
                                         <Route path="/students" element={<Students isAuth={isAuth} />} />
-                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} />} />
+                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} />}>
+                                            <Route index element={<StudentContent isAuth={isAuth} />} />
+                                            <Route path=":slug" element={<StudentContent isAuth={isAuth} />} />
+                                        </Route>
                                         <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                     </Routes>
                             }
