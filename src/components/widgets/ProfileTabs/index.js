@@ -5,11 +5,19 @@ import { navStyle, } from "../../../stitches.config";
 const styling = {
     ...navStyle,
     'a': {
+        transition: '$default',
         color: '$gray4',
         fontSize: '$large',
+        padding: '$15',
+        background: '$gray2',
+        borderBottom: '1px solid $gray3',
     },
-    'activeLink': {
+    '.activeLink': {
         color: '$blue2',
+        background: '$white',
+        borderWidth: '1px 1px 0px',
+        borderStyle: 'solid solid none',
+        borderColor: '$blue2',
     },
 };
 
@@ -38,7 +46,7 @@ export const ProfileTabs = () => {
     ];
 
     return (
-        <Container className="d-flex" css={styling}>
+        <Container className="d-flex flex-column flex-md-row" css={styling}>
         {
             (tabLinks && (Object.keys(tabLinks).length > 0)) &&
             Object.keys(tabLinks).map((i, val) =>

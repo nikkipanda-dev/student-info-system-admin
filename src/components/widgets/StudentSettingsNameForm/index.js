@@ -203,7 +203,7 @@ export const StudentSettingsNameForm = ({
                         <Input allowClear />
                     </Form.Item>
 
-                    <Container className="d-flex">
+                    <Container className="d-flex flex-column flex-sm-row justify-content-sm-center align-items-sm-center">
                         <Button
                         submit
                         text="Submit"

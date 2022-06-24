@@ -76,7 +76,10 @@ export const StudentSettingsDisplayPhotoForm = ({
     }
 
     const handleRemoveImage = () => {
-        ref.current.value = '';
+        if (ref.current) {
+            ref.current.value = '';
+        }
+
         handleFile('');
         handleImageUrl('');
         handleAlertComponent(null, null, null);
@@ -156,6 +159,24 @@ export const StudentSettingsDisplayPhotoForm = ({
     useEffect(() => {
         let loading = true;
 
+        if (loading && !(isVisible)) {
+            if (ref.current) {
+                ref.current.value = '';
+            }
+
+            handleFile('');
+            handleImageUrl('');
+            handleAlertComponent(null, null, null);
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [isVisible]);
+
+    useEffect(() => {
+        let loading = true;
+
         if (loading && values && (Object.keys(values).length > 0) && displayPhoto) {
             handleStudent({
                 ...values,
@@ -226,7 +247,7 @@ export const StudentSettingsDisplayPhotoForm = ({
             </Container>
         }
         {
-            imageUrl && 
+            (imageUrl && isVisible) && 
             <>
                 <Container className="d-flex flex-column align-items-center">
                     <Image src={imageUrl} />
@@ -240,7 +261,11 @@ export const StudentSettingsDisplayPhotoForm = ({
                     css={{ color: '$red2', }}
                     onClick={() => handleRemoveImage()} />
                 </Container>
-                <Container className="d-flex">
+                <Container 
+                className="d-flex flex-column flex-sm-row justify-content-sm-center align-items-sm-center"
+                css={{
+                    marginTop: '$20',
+                }}>
                     <Button
                     submit
                     text="Submit"
