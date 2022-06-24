@@ -1,8 +1,8 @@
 import { NavLink, } from "react-router-dom"; 
 import Container from "../../core/Container";
-import { sidebarStyle, } from "../../../stitches.config";
+import { navStyle, } from "../../../stitches.config";
 
-const styling = sidebarStyle;
+const styling = navStyle;
 
 export const Sidebar = () => {
     const links = [

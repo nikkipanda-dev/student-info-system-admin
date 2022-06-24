@@ -119,7 +119,7 @@ export const sectionStyle = {
     borderRadius: '$rounded',
 }
 
-export const sidebarStyle = {
+export const navStyle = {
     padding: '$15',
     fontFamily: '$khula',
     fontSize: '$default',
@@ -148,4 +148,23 @@ export const studentBioStyle = {
         textAlign: 'center',
     },
     padding: '$20',
+}
+
+export const anchorStyle = {
+    'a': {
+        fontFamily: '$khula',
+        fontSize: '$small',
+        color: '$blue2',
+    },
+    'a:hover': {
+        color: '$blue3',
+    },
+}
+
+export const displayPhotoStyle = {
+    width: '100%',
+    height: 'auto',
+    maxWidth: '300px',
+    maxHeight: '300px',
+    objectFit: 'cover',
 }

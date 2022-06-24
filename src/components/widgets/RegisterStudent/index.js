@@ -1,9 +1,12 @@
+import { useState, } from 'react';
 import { 
     Form, 
     Input,
     Radio,
     Select,
 } from 'antd';
+import { getAuthEmail, } from '../../../util/auth';
+import { getErrorMessage, } from '../../../util';
 
 import Container from '../../core/Container';
 import Button from '../../core/Button';
@@ -34,16 +37,19 @@ const validateMessages = {
 export const RegisterStudent = ({
     form,
     onFinish,
-    firstNameHelp,
-    middleNameHelp,
-    lastNameHelp,
-    studentNumberHelp,
-    courseHelp,
-    yearHelp,
-    termHelp,
-    emailHelp,
-    passwordHelp,
+    emitMessage,
+    isAuth,
+    handleAlertComponent,
+    students,
+    handleStudents,
+    resetForm,
+    handleHideModal,
 }) => {
+    const [helpers, setHelpers] = useState('');
+    let arr;
+
+    const handleHelpers = payload => setHelpers(payload);
+
     const selectOptions = [
         {
             id: 1,
@@ -89,18 +95,72 @@ export const RegisterStudent = ({
         },
     ];
 
+    const onStore = values => {
+        if (!(isAuth)) {
+            console.error('on store student: not auth');
+            return;
+        }
+
+        const storeForm = new FormData();
+
+        for (let i in values) {
+            values[i] && storeForm.append(i, values[i]);
+        }
+
+        storeForm.append("auth_email", getAuthEmail());
+
+        emitMessage("Loading", "loading", 2);
+
+        onFinish(storeForm).then(response => {
+            if (!(response.data.is_success)) {
+                handleAlertComponent("Error", "danger", response.data.data);
+                return;
+            }
+
+            arr = students;
+            (Object.values(arr).length > 0) && arr.push(response.data.data.details);
+            if (Object.values(arr).length === 0) {
+                arr = [response.data.data.details]
+            }
+
+            resetForm();
+            handleStudents(arr);
+            handleHideModal();
+            setTimeout(() => {
+                emitMessage("Student added.", "success", 2.5);
+            }, 2000);
+        })
+
+        .catch(err => {
+            if (err.response && err.response.data.errors) {
+                handleHelpers({
+                    first_name: err.response.data.errors.first_name && getErrorMessage(err.response.data.errors.first_name[0]),
+                    middle_name: err.response.data.errors.middle_name && getErrorMessage(err.response.data.errors.middle_name[0]),
+                    last_name: err.response.data.errors.last_name && getErrorMessage(err.response.data.errors.last_name[0]),
+                    student_number: err.response.data.errors.student_number && getErrorMessage(err.response.data.errors.student_number[0]),
+                    course: err.response.data.errors.course && getErrorMessage(err.response.data.errors.course[0]),
+                    year: err.response.data.errors.year && getErrorMessage(err.response.data.errors.year[0]),
+                    term: err.response.data.errors.term && getErrorMessage(err.response.data.errors.year[0]),
+                    email: err.response.data.errors.email && getErrorMessage(err.response.data.errors.email[0]),
+                    password: err.response.data.errors.password && getErrorMessage(err.response.data.errors.password[0]),
+                    password_confirmation: err.response.data.errors.password_confirmation && getErrorMessage(err.response.data.errors.password_confirmation[0]),
+                });
+            }
+        });
+    }
+
     return (
         <Form
         name="student-registration-form"
         {...formItemLayout}
         form={form}
-        onFinish={onFinish}
+        onFinish={onStore}
         validateMessages={validateMessages}
         autoComplete="off">
             <Form.Item
             label="First name"
             name="first_name"
-            {...firstNameHelp && { help: firstNameHelp }}
+            {...helpers && helpers.first_name && { help: helpers.first_name }}
             rules={[{
                 required: true,
                 type: 'string',
@@ -113,7 +173,7 @@ export const RegisterStudent = ({
             <Form.Item
             label="Middle name"
             name="middle_name"
-            {...middleNameHelp && { help: middleNameHelp }}
+            {...helpers && helpers.middle_name && { help: helpers.middle_name }}
             rules={[{
                 type: 'string',
                 min: 2,
@@ -125,7 +185,7 @@ export const RegisterStudent = ({
             <Form.Item
             label="Last name"
             name="last_name"
-            {...lastNameHelp && { help: lastNameHelp }}
+            {...helpers && helpers.last_name && { help: helpers.last_name }}
             rules={[{
                 required: true,
                 type: 'string',
@@ -138,7 +198,7 @@ export const RegisterStudent = ({
             <Form.Item
             label="Student number"
             name="student_number"
-            {...studentNumberHelp && { help: studentNumberHelp }}
+            {...helpers && helpers.student_number && { help: helpers.student_number }}
             rules={[{
                 required: true,
                 type: 'string',
@@ -153,7 +213,7 @@ export const RegisterStudent = ({
                 <Form.Item
                     label="Course"
                     name="course"
-                    {...courseHelp && { help: courseHelp }}
+                    {...helpers && helpers.course && { help: helpers.course }}
                     rules={[{
                         required: true,
                         message: "Course is required.",
@@ -172,7 +232,7 @@ export const RegisterStudent = ({
             <Form.Item
             label="Year"
             name="year"
-                {...yearHelp && { help: yearHelp }}
+            {...helpers && helpers.year && { help: helpers.year }}
             rules={[{
                 required: true,
             }, {
@@ -187,7 +247,7 @@ export const RegisterStudent = ({
                 <Form.Item
                     label="Term"
                     name="term"
-                    {...termHelp && { help: termHelp }}
+                    {...helpers && helpers.term && { help: helpers.term }}
                     rules={[{
                         required: true,
                         message: "Term is required.",
@@ -203,7 +263,7 @@ export const RegisterStudent = ({
             <Form.Item
             label="Email address"
             name="email"
-            {...emailHelp && { help: emailHelp }}
+            {...helpers && helpers.email && { help: helpers.email }}
             rules={[{ required: true, type: 'email', }]}>
                 <Input allowClear />
             </Form.Item>
@@ -211,8 +271,35 @@ export const RegisterStudent = ({
             <Form.Item
             label="Temporary password"
             name="password"
-            {...passwordHelp && { help: passwordHelp }}
-            rules={[{ required: true, }]}>
+            {...helpers && helpers.password && { help: helpers.password }}
+            rules={[{ 
+                required: true, 
+                type: 'string',
+                min: 8,
+                max: 20,
+            }]}>
+                <Input.Password allowClear visibilityToggle />
+            </Form.Item>
+
+            <Form.Item
+            label="Repeat password"
+            name="password_confirmation"
+            dependencies={['password']}
+            {...helpers && helpers.password_confirmation && { help: helpers.password_confirmation }}
+            rules={[
+                {
+                    required: true,
+                    message: 'Please confirm the temporary password.',
+                },
+                ({ getFieldValue }) => ({
+                    validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('The two passwords that you entered do not match.'));
+                    },
+                }),
+            ]}>
                 <Input.Password allowClear visibilityToggle />
             </Form.Item>
 

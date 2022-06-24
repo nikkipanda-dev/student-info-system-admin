@@ -1,4 +1,7 @@
+import { useState, useEffect, } from 'react';
 import { Form, Input, } from 'antd';
+import { getAuthEmail, } from '../../../util/auth';
+import { getErrorMessage, } from '../../../util';
 
 import Container from '../../core/Container';
 import Button from '../../core/Button';
@@ -27,24 +30,78 @@ const validateMessages = {
 export const RegisterAdmin = ({
     form,
     onFinish,
-    firstNameHelp,
-    middleNameHelp,
-    lastNameHelp,
-    emailHelp,
-    passwordHelp,
+    emitMessage,
+    isAuth,
+    handleAlertComponent,
+    administrators,
+    handleAdministrators,
+    resetForm,
+    handleHideModal,
 }) => {
+    const [helpers, setHelpers] = useState('');
+    let arr;
+
+    const handleHelpers = payload => setHelpers(payload);
+
+    const onStore = values => {
+        if (!(isAuth)) {
+            console.info('on store admin: not auth');
+            return;
+        }
+
+        const form = new FormData();
+
+        for (let i in values) {
+            values[i] && form.append(i, values[i]);
+        }
+
+        form.append("auth_email", getAuthEmail());
+
+        emitMessage("Loading", "loading", 2);
+
+        onFinish(form).then(response => {
+            if (!(response.data.is_success)) {
+                handleAlertComponent("Error", "danger", response.data.data);
+                return;
+            }
+
+            arr = administrators;
+            (Object.values(arr).length > 0) ? arr.push(response.data.data.details) : arr = [response.data.data.details];
+            resetForm();
+            handleHideModal();
+            handleAdministrators(arr);
+            setTimeout(() => {
+                emitMessage("Administrator added.", "success", 2.5);
+            }, 2000);
+        })
+
+        .catch(err => {
+            if (err.response && err.response.data.errors) {
+                console.error('err ', err.response.data.errors);
+                handleHelpers({
+                    first_name: err.response.data.errors.first_name && getErrorMessage(err.response.data.errors.first_name[0]),
+                    middle_name: err.response.data.errors.middle_name && getErrorMessage(err.response.data.errors.middle_name[0]),
+                    last_name: err.response.data.errors.last_name && getErrorMessage(err.response.data.errors.last_name[0]),
+                    email: err.response.data.errors.email && getErrorMessage(err.response.data.errors.email[0]),
+                    password: err.response.data.errors.password && getErrorMessage(err.response.data.errors.password[0]),
+                    password_confirmation: err.response.data.errors.password_confirmation && getErrorMessage(err.response.data.errors.password_confirmation[0]),
+                });
+            }
+        });
+    }
+
     return (
         <Form
         name="admin-registration-form"
         {...formItemLayout}
         form={form}
-        onFinish={onFinish}
+        onFinish={onStore}
         validateMessages={validateMessages}
         autoComplete="off">
             <Form.Item
                 label="First name"
                 name="first_name"
-                {...firstNameHelp && { help: firstNameHelp }}
+                {...helpers && helpers.first_name && { help: helpers.first_name }}
                 rules={[{ 
                     required: true, 
                     type: 'string', 
@@ -57,7 +114,7 @@ export const RegisterAdmin = ({
             <Form.Item
                 label="Middle name"
                 name="middle_name"
-                {...middleNameHelp && { help: middleNameHelp }}
+                {...helpers && helpers.middle_name && { help: helpers.middle_name }}
                 rules={[{ 
                     type: 'string',
                     min: 2,
@@ -69,7 +126,7 @@ export const RegisterAdmin = ({
             <Form.Item
                 label="Last name"
                 name="last_name"
-                {...lastNameHelp && { help: lastNameHelp }}
+                {...helpers && helpers.last_name && { help: helpers.last_name }}
                 rules={[{ 
                     required: true, 
                     type: 'string',
@@ -82,7 +139,7 @@ export const RegisterAdmin = ({
             <Form.Item
             label="Email address"
             name="email"
-            {...emailHelp && { help: emailHelp }}
+            {...helpers && helpers.email && { help: helpers.email }}
             rules={[{ required: true, type: 'email', }]}>
                 <Input allowClear />
             </Form.Item>
@@ -90,8 +147,35 @@ export const RegisterAdmin = ({
             <Form.Item
             label="Temporary password"
             name="password"
-            {...passwordHelp && { help: passwordHelp }}
-            rules={[{ required: true, }]}>
+            {...helpers && helpers.password && { help: helpers.password }}
+            rules={[{ 
+                required: true,
+                type: 'string',
+                min: 8,
+                max: 20,
+            }]}>
+                <Input.Password allowClear visibilityToggle />
+            </Form.Item>
+
+            <Form.Item
+            label="Repeat password"
+            name="password_confirmation"
+            dependencies={['password']}
+            {...helpers && helpers.password_confirmation && { help: helpers.password_confirmation }}
+            rules={[
+                {
+                    required: true,
+                    message: 'Please confirm the temporary password.',
+                },
+                ({ getFieldValue }) => ({
+                    validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('The two passwords that you entered do not match.'));
+                    },
+                }),
+            ]}>
                 <Input.Password allowClear visibilityToggle />
             </Form.Item>
 

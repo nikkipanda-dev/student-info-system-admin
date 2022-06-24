@@ -1,4 +1,10 @@
 import Container from "../../core/Container";
+import { 
+    useLocation, 
+    useParams, 
+    useOutlet,
+    Outlet,
+} from "react-router-dom";
 import { studentContentStyle, } from "../../../stitches.config";
 
 import Card from "../../core/Card";
@@ -9,15 +15,7 @@ export const StudentContent = ({
     css,
 }) => {
     return (
-        <Card
-        className={'d-flex flex-column ' + (className ? (' ' + className) : '')}
-        css={css}
-        background="white"
-        radius="small">
-            <Container css={studentContentStyle}>
-                INSERT TABS HERE
-            </Container>
-        </Card>
+        <Outlet />
     )
 }
 
