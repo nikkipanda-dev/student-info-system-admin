@@ -9,7 +9,7 @@ import Section from "../../core/Section";
 import Container from "../../core/Container";
 import Alert from "../../widgets/Alert";
 import Text from "../../core/Text";
-import RegisterUser from "../../widgets/RegisterAdmin";
+import RegisterAdmin from "../../widgets/RegisterAdmin";
 import UserCards from "../../widgets/UserCards";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
@@ -32,11 +32,6 @@ export const Admins = ({ isAuth, }) => {
     const [alert, setAlert] = useState('');
     const [status, setStatus] = useState('');
     const [header, setHeader] = useState('');
-    const [firstNameHelp, setFirstNameHelp] = useState('');
-    const [middleNameHelp, setMiddleNameHelp] = useState('');
-    const [lastNameHelp, setLastNameHelp] = useState('');
-    const [emailHelp, setEmailHelp] = useState('');
-    const [passwordHelp, setPasswordHelp] = useState('');
 
     const handleAdministrators = payload => setAdministrators(payload);
     const handleShowModal = () => setIsModalVisible(true);
@@ -45,12 +40,6 @@ export const Admins = ({ isAuth, }) => {
     const handleAlert = message => setAlert(message);
     const handleStatus = status => setStatus(status);
     const handleHeader = header => setHeader(header);
-    const handleFirstNameHelp = message => setFirstNameHelp(message);
-    const handleMiddleNameHelp = message => setMiddleNameHelp(message);
-    const handleLastNameHelp = message => setLastNameHelp(message);
-    const handleEmailHelp = message => setEmailHelp(message);
-    const handlePasswordHelp = message => setPasswordHelp(message);
-    let arr;
 
     const handleModalContent = (payload, title) => {
         setModalContent(payload);
@@ -65,57 +54,22 @@ export const Admins = ({ isAuth, }) => {
         handleAlert('');
     }
 
+    const handleAlertComponent = (header, status, message) => {
+        if (!(message)) {
+            handleAlert('');
+            return;
+        }
+
+        handleHeader(header);
+        handleStatus(status);
+        handleAlert(<Text type="span">{message}</Text>);
+    }
+
     const emitMessage = (content, status, duration) => {
         return getMessage({
             content: content,
             status: status,
             duration: duration,
-        });
-    }
-
-    const onStore = values => {
-        if (!(isAuth)) {
-            console.info('on store admin: not auth');
-            return;
-        }
-
-        const form = new FormData();
-
-        for (let i in values) {
-            console.info('val ', values[i]);
-            values[i] && form.append(i, values[i]);
-        }
-
-        form.append("auth_email", getAuthEmail());
-
-        emitMessage("Loading", "loading", 2);
-
-        storeUser(form).then(response => {
-            if (!(response.data.is_success)) {
-                handleHeader("Error");
-                handleStatus("danger");
-                handleAlert(<Text type="span">{response.data.data}</Text>);
-                return;
-            }
-
-            arr = administrators;
-            (Object.values(arr).length > 0) ? arr.push(response.data.data.details) : arr = [response.data.data.details];
-            resetForm();
-            handleHideModal();
-            handleAdministrators(arr);
-            setTimeout(() => {
-                emitMessage("Administrator added.", "success", 2.5);
-            }, 2000);
-        })
-
-        .catch(err => {
-            if (err.response && err.response.data.errors) {
-                err.response.data.errors.first_name && handleFirstNameHelp(getErrorMessage(err.response.data.errors.first_name[0]));
-                err.response.data.errors.middle_name && handleMiddleNameHelp(getErrorMessage(err.response.data.errors.middle_name[0]));
-                err.response.data.errors.last_name && handleLastNameHelp(getErrorMessage(err.response.data.errors.last_name[0]));
-                err.response.data.errors.email && handleEmailHelp(getErrorMessage(err.response.data.errors.email[0]));
-                err.response.data.errors.password && handlePasswordHelp(getErrorMessage(err.response.data.errors.password[0]));
-            }
         });
     }
 
@@ -134,6 +88,18 @@ export const Admins = ({ isAuth, }) => {
         }
     }, []);
 
+    useEffect(() => {
+        let loading = true;
+
+        if (loading) {
+            form.resetFields();
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [isModalVisible]);
+
     return (
         <Section css={sectionStyle}>
             <Container>
@@ -145,14 +111,24 @@ export const Admins = ({ isAuth, }) => {
             }
                 <Button 
                 onClick={() => handleModalContent(
-                    <RegisterUser
+                    <RegisterAdmin
                     form={form}
-                    onFinish={onStore}
-                    firstNameHelp={firstNameHelp}
-                    middleNameHelp={middleNameHelp}
-                    lastNameHelp={lastNameHelp}
-                    emailHelp={emailHelp}
-                    passwordHelp={passwordHelp} />, "Add Administrator"
+                    onFinish={storeUser}
+                    emitMessage={emitMessage}
+                    isAuth={isAuth}
+                    resetForm={resetForm}
+                    handleAlertComponent={handleAlertComponent}
+                    administrators={administrators}
+                    handleAdministrators={handleAdministrators}
+                    handleHideModal={handleHideModal}
+                    {...alert && {
+                        alert: <Alert
+                            status={status}
+                            header={header}
+                            css={{ marginBottom: '$20', }}>
+                            {alert}
+                        </Alert>
+                    }} />, "Add Administrator"
                 )}
                 text="Add" />
             </Container>

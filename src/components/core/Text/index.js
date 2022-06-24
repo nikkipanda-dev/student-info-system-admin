@@ -19,6 +19,17 @@ const styling = {
             danger: {
                 color: '$red2',
             },
+            blue2: {
+                color: '$blue2',
+            }
+        },
+        size: {
+            default: {
+                fontSize: '$default',
+            },
+            large: {
+                fontSize: '$large',
+            },
         }
     }
 }
@@ -43,7 +54,11 @@ export const Text = ({
     css,
     type,
     color,
+    size,
     children,
+    as,
+    href,
+    download,
 }) => {
     if (!(type)) {
         return <NotFound name="Text" />
@@ -59,7 +74,11 @@ export const Text = ({
         <Text 
         {...className && {className: className}} 
         {...css && {css: {...css}}}
-        {...color && {color: color}}>
+        {...color && {color: color}}
+        {...size && {size: size}}
+        {...as && {as: as}}
+        {...href && {href: href}}
+        {...download && {download: true}}>
             {children}
         </Text>
     )

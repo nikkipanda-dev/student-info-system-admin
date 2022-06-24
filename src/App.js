@@ -9,6 +9,7 @@ import {
 import "./App.css";
 import { isAuthCookie, } from "./util/auth";
 import Cookies from "js-cookie";
+import { isProfileTab, } from "./util";
 import { globalStyles, } from "./stitches.config";
 
 import Container from "./components/core/Container";
@@ -21,6 +22,7 @@ import Settings from "./components/pages/settings";
 import Admins from "./components/pages/admins";
 import Students from "./components/pages/students";
 import Student from "./components/pages/student";
+import StudentContent from "./components/widgets/StudentContent";
 import NotFound from "./components/pages/not-found";
 import Row from "./components/core/Row";
 import Column from "./components/core/Column";
@@ -35,6 +37,7 @@ function App() {
     const [authUser, setAuthUser] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
+    const pattern = [/\/student\/[^"]+?\/payments$/];
 
     const handleHideLoading = () => setIsContentLoading(false);
     const handleShowSpinner = () => setIsLoading(true);
@@ -71,7 +74,12 @@ function App() {
     useEffect(() => {
         let loading = true;
 
+        // console.info('path ', location.pathname);
+        // console.info('path ', location.pathname.startsWith !== "/student");
+
         if (loading && (!(isLoading))) {
+            // console.info('path ', location.pathname);
+            // console.info('path ', !(location.pathname.startsWith("/student/")));
             handleShowSpinner();
         }
 
@@ -96,6 +104,8 @@ function App() {
         }
     }, [isLoading]);
     
+    console.info('isProfileTab ', isProfileTab());
+
     return (
         <>
         {
@@ -114,7 +124,7 @@ function App() {
                         <Navbar isAuth={isAuth} handleLoggedOut={handleLoggedOut} />
                     }
                     {
-                        isLoading ?
+                        (isLoading && (location.pathname ? !(isProfileTab(location.pathname)) : null)) ?
                         <Spinner /> : 
                         <Container css={{ padding: '$15', }}>
                             {
@@ -128,7 +138,11 @@ function App() {
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/administrators" element={<Admins isAuth={isAuth} />} />
                                         <Route path="/students" element={<Students isAuth={isAuth} />} />
-                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} />} />
+                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} />}>
+                                            <Route index element={<StudentContent isAuth={isAuth} />} />
+                                            <Route path="payments" element={<StudentContent isAuth={isAuth} />} />
+                                            <Route path=":slug" element={<StudentContent isAuth={isAuth} />} />
+                                        </Route>
                                         <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                     </Routes>
                             }

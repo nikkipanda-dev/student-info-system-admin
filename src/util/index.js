@@ -78,3 +78,25 @@ export const getMessage = (values) => {
         duration: values.duration ?? 3,
     });
 }
+
+export const isProfileTab = value => {
+    let isTab = false;
+
+    if (value) {
+        const patterns = [
+            /\/student\/[^"]+?\/payments$/,
+            /\/student\/[^"]+?\/cor$/,
+            /\/student\/[^"]+?\/permits$/,
+            /\/student\/[^"]+?\/registrar-files$/
+        ];
+
+        for (let i in patterns) {
+            if (value.match(new RegExp(patterns[i]))) {
+                isTab = true;
+                break;
+            }
+        }
+    }
+
+    return isTab;
+}

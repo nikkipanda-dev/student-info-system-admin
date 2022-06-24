@@ -1,8 +1,8 @@
 import { useState, useEffect, } from "react";
 import { request, } from "../../../util/request";
-import { getToken, getAuthEmail, } from "../../../util/auth";
-import { Form, message, } from "antd";
-import { getErrorMessage, getMessage, } from "../../../util";
+import { getToken, } from "../../../util/auth";
+import { Form, } from "antd";
+import { getMessage, } from "../../../util";
 import Container from "../../core/Container";
 import { sectionStyle, } from "../../../stitches.config";
 
@@ -24,15 +24,6 @@ export const Students = ({ isAuth, }) => {
     const [alert, setAlert] = useState('');
     const [status, setStatus] = useState('');
     const [header, setHeader] = useState('');
-    const [firstNameHelp, setFirstNameHelp] = useState('');
-    const [middleNameHelp, setMiddleNameHelp] = useState('');
-    const [lastNameHelp, setLastNameHelp] = useState('');
-    const [studentNumberHelp, setStudentNumberHelp] = useState('');
-    const [courseHelp, setCourseHelp] = useState('');
-    const [yearHelp, setYearHelp] = useState('');
-    const [termHelp, setTermHelp] = useState('');
-    const [emailHelp, setEmailHelp] = useState('');
-    const [passwordHelp, setPasswordHelp] = useState('');
 
     const handleStudents = payload => setStudents(payload);
     const handleShowModal = () => setIsModalVisible(true);
@@ -41,16 +32,6 @@ export const Students = ({ isAuth, }) => {
     const handleAlert = message => setAlert(message);
     const handleStatus = status => setStatus(status);
     const handleHeader = header => setHeader(header);
-    const handleFirstNameHelp = message => setFirstNameHelp(message);
-    const handleMiddleNameHelp = message => setMiddleNameHelp(message);
-    const handleLastNameHelp = message => setLastNameHelp(message);
-    const handleStudentNumberHelp = message => setStudentNumberHelp(message);
-    const handleCourseHelp = message => setCourseHelp(message);
-    const handleYearHelp = message => setYearHelp(message);
-    const handleTermHelp = message => setTermHelp(message);
-    const handleEmailHelp = message => setEmailHelp(message);
-    const handlePasswordHelp = message => setPasswordHelp(message);
-    let arr;
 
     const handleModalContent = (payload, title) => {
         setModalContent(payload);
@@ -65,65 +46,22 @@ export const Students = ({ isAuth, }) => {
         handleAlert('');
     }
 
+    const handleAlertComponent = (header, status, message) => {
+        if (!(message)) {
+            handleAlert('');
+            return;
+        }
+        
+        handleHeader(header);
+        handleStatus(status);
+        handleAlert(<Text type="span">{message}</Text>);
+    }
+
     const emitMessage = (content, status, duration) => {
         return getMessage({
             content: content,
             status: status,
             duration: duration,
-        });
-    }
-
-    const onStore = values => {
-        if (!(isAuth)) {
-            console.error('on store student: not auth');
-            return;
-        }
-
-        const storeForm = new FormData();
-
-        for (let i in values) {
-            values[i] && storeForm.append(i, values[i]);
-        }
-
-        storeForm.append("auth_email", getAuthEmail());
-
-        emitMessage("Loading", "loading", 2);
-
-        storeUser(storeForm).then(response => {
-            if (!(response.data.is_success)) {
-                handleHeader("Error");
-                handleStatus("danger");
-                handleAlert(<Text type="span">{response.data.data}</Text>);
-                return;
-            }
-
-            arr = students;
-            (Object.values(arr).length > 0) && arr.push(response.data.data.details);
-            if (Object.values(arr).length === 0) {
-                arr = [response.data.data.details]
-            }
-
-            resetForm();
-            handleStudents(arr);
-            handleHideModal();
-            setTimeout(() => {
-                emitMessage("Student added.", "success", 2.5);
-            }, 2000);
-        })
-
-        .catch(err => {
-            if (err.response && err.response.data.errors) {
-                console.info('err ', err.response.data.errors);
-                err.response.data.errors.first_name && handleFirstNameHelp(getErrorMessage(err.response.data.errors.first_name[0]));
-                err.response.data.errors.middle_name && handleMiddleNameHelp(getErrorMessage(err.response.data.errors.middle_name[0]));
-                err.response.data.errors.last_name && handleLastNameHelp(getErrorMessage(err.response.data.errors.last_name[0]));
-                err.response.data.errors.course && handleCourseHelp(getErrorMessage(err.response.data.errors.course[0]));
-                err.response.data.errors.student_number && handleStudentNumberHelp(getErrorMessage(err.response.data.errors.student_number[0]));
-                err.response.data.errors.year && handleYearHelp(getErrorMessage(err.response.data.errors.year[0]));
-                err.response.data.errors.term && handleTermHelp(getErrorMessage(err.response.data.errors.term[0]));
-                err.response.data.errors.email && handleEmailHelp(getErrorMessage(err.response.data.errors.email[0]));
-                err.response.data.errors.password && handlePasswordHelp(getErrorMessage(err.response.data.errors.password[0]));
-            }
         });
     }
 
@@ -145,26 +83,26 @@ export const Students = ({ isAuth, }) => {
     return (
         <Section css={sectionStyle}>
             <Container>
-            {
-                alert &&
-                <Alert status={status} header={header}>
-                    {alert}
-                </Alert>
-            }
             <Button
             onClick={() => handleModalContent(
                 <RegisterStudent
-                    form={form}
-                    onFinish={onStore}
-                    firstNameHelp={firstNameHelp}
-                    middleNameHelp={middleNameHelp}
-                    lastNameHelp={lastNameHelp}
-                    studentNumberHelp={studentNumberHelp}
-                    courseHelp={courseHelp}
-                    yearHelp={yearHelp}
-                    termHelp={termHelp}
-                    emailHelp={emailHelp}
-                    passwordHelp={passwordHelp} />, "Add Student"
+                form={form}
+                onFinish={storeUser}
+                emitMessage={emitMessage}
+                isAuth={isAuth}
+                resetForm={resetForm}
+                handleAlertComponent={handleAlertComponent}
+                students={students}
+                handleStudents={handleStudents}
+                handleHideModal={handleHideModal}
+                {...alert && {
+                    alert: <Alert
+                        status={status}
+                        header={header}
+                        css={{ marginBottom: '$20', }}>
+                        {alert}
+                    </Alert>
+                }} />, "Add Student"
             )}
             text="Add" />
             </Container>
@@ -182,6 +120,10 @@ export const Students = ({ isAuth, }) => {
             maskClosable={false}
             title={title}
             onCancel={handleHideModal}>
+            {
+                alert &&
+                <Alert status={status} header={header}>{alert}</Alert>
+            }
                 {modalContent}
             </Modal>
         }

@@ -58,7 +58,7 @@ export const Students = ({values, }) => {
             title: 'Action',
             dataIndex: 'student_number',
             key: 'action',
-            render: (_, record) => <Link to={`/student/${record.student_number}`}>View profile</Link>,
+            render: (_, record) => <Link to={`/student/${record.slug}`}>View profile</Link>,
         },
     ];
 
