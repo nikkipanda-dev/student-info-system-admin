@@ -77,7 +77,30 @@ export const RegisterStudent = ({
         },
     ];
 
-    const radioOptions = [
+    const yearOptions = [
+        {
+            id: 1,
+            value: 1,
+            label: "1st",
+        },
+        {
+            id: 2,
+            value: 2,
+            label: "2nd",
+        },
+        {
+            id: 3,
+            value: 3,
+            label: "3rd",
+        },
+        {
+            id: 4,
+            value: 4,
+            label: "4th",
+        },
+    ];
+
+    const termOptions = [
         {
             id: 1,
             value: 1,
@@ -229,7 +252,7 @@ export const RegisterStudent = ({
                 </Form.Item>
             }
 
-            <Form.Item
+            {/* <Form.Item
             label="Year"
             name="year"
             {...helpers && helpers.year && { help: helpers.year }}
@@ -240,10 +263,28 @@ export const RegisterStudent = ({
                 message: "Year must be 4-digit characters.",
             }]}>
                 <Input allowClear />
-            </Form.Item>
+            </Form.Item> */}
 
             {
-                (radioOptions && (Object.keys(radioOptions).length > 0)) &&   
+                (yearOptions && (Object.keys(yearOptions).length > 0)) &&
+                <Form.Item
+                    label="Year"
+                    name="year"
+                    {...helpers && helpers.year && { help: helpers.year }}
+                    rules={[{
+                        required: true,
+                        message: "Year is required.",
+                    }]}>
+                    <Radio.Group>
+                        {
+                            Object.keys(yearOptions).map((_, val) => <Radio key={`year-${Object.values(yearOptions)[val].id}`} value={Object.values(yearOptions)[val].value}>{Object.values(yearOptions)[val].label}</Radio>)
+                        }
+                    </Radio.Group>
+                </Form.Item>
+            }
+
+            {
+                (termOptions && (Object.keys(termOptions).length > 0)) &&   
                 <Form.Item
                     label="Term"
                     name="term"
@@ -254,7 +295,7 @@ export const RegisterStudent = ({
                     }]}>
                     <Radio.Group>
                     {
-                        Object.keys(radioOptions).map((i, val) => <Radio key={Object.values(radioOptions)[val].id} value={Object.values(radioOptions)[val].value}>{Object.values(radioOptions)[val].label}</Radio>)
+                        Object.keys(termOptions).map((_, val) => <Radio key={`term-${Object.values(termOptions)[val].id}`} value={Object.values(termOptions)[val].value}>{Object.values(termOptions)[val].label}</Radio>)
                     }
                     </Radio.Group>
                 </Form.Item>

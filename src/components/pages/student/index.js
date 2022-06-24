@@ -1,9 +1,15 @@
 import { useState, useEffect, } from "react";
 import { getToken, getAuthEmail, } from "../../../util/auth";
+import { Outlet, useOutlet, } from "react-router-dom";
 import { request, } from "../../../util/request";
-import { useParams, } from "react-router-dom";
+import { 
+    useParams, 
+    useNavigate,
+    useLocation,
+} from "react-router-dom";
 import { sectionStyle, studentContentStyle, } from "../../../stitches.config";
 import Container from "../../core/Container";
+import { getMessage, } from "../../../util";
 
 import Section from "../../core/Section";
 import Card from "../../core/Card";
@@ -16,8 +22,10 @@ import ProfileTabs from "../../widgets/ProfileTabs";
 import StudentContent from "../../widgets/StudentContent";
 import Modal from "../../widgets/Modal";
 
-export const Student = ({ isAuth, }) => {
+export const Student = ({ isAuth, authUser, }) => {
     const params = useParams();
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const [student, setStudent] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -35,12 +43,22 @@ export const Student = ({ isAuth, }) => {
         handleShowModal();
     };
 
+    const emitMessage = (content, status, duration) => {
+        return getMessage({
+            content: content,
+            status: status,
+            duration: duration,
+        });
+    }
+
     useEffect(() => {
         let loading = true;
 
         if (loading && !(student) && params.slug) {
+            // Redirect to index payments tab 
+            !(params.tab_slug) && navigate("payments");
+
             getUser(params.slug).then(response => {
-                console.info('res ', response);
                 !(response.data.is_success) && handleStudent('');
                 response.data.data.details && handleStudent(response.data.data.details);
             })
@@ -56,29 +74,42 @@ export const Student = ({ isAuth, }) => {
     }, []);
 
     return (
-        (isAuth && params.slug && (student && (Object.keys(student).length > 0))) && 
+        (isAuth && params.slug && (student && (Object.keys(student).length > 0)) && params.tab_slug) && 
         <Section css={sectionStyle}>
-            <Container>
+            <Container className="d-flex justify-content-sm-end align-items-center">
+            {
+                !(isModalVisible) && 
                 <Button
+                className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleModalContent(
-                    <StudentSettings 
-                    slug={params.slug} 
+                    <StudentSettings
+                    slug={params.slug}
                     values={student}
-                    handleStudent={handleStudent } />, "Add Student"
+                    handleStudent={handleStudent} />, "Update Settings"
                 )}
-                text="Add" />
+                color={isModalVisible ? '' : "yellow"}
+                text={isModalVisible ? "Cancel" : "Update"} />
+            }
+            </Container>
+            <Container css={{ marginTop: '$30', }}>
                 <Row>
-                    <Column className="col-sm-4">
+                    <Column className="col-12 col-md-4">
                         <StudentBio values={student} />
                     </Column>
-                    <Column className="col-sm-8">
+                    <Column className="col-12 col-md-8">
                         <Card
                         className="d-flex flex-column"
                         background="white"
                         radius="small">
                             <Container css={studentContentStyle}>
                                 <ProfileTabs />
-                                <StudentContent />
+                                <Outlet context={{
+                                    isAuth: isAuth,
+                                    emitMessage: emitMessage,
+                                    student: student,
+                                    slug: params.slug,
+                                    authUser: authUser,
+                                }}/>
                             </Container>
                         </Card>
                     </Column>

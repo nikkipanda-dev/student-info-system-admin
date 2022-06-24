@@ -47,6 +47,10 @@ function App() {
     const handleLoggedIn = () => setIsAuth(true);
     const handleLoggedOut = () => setIsAuth(false);
 
+    const handleNavigator = () => {
+        (location.pathname === "/" || location.pathname === "/admin") && navigate("/dashboard", { replace: true });
+    }
+
     // Handle state is no user cookies
     useEffect(() => {
         let loading = true;
@@ -61,7 +65,7 @@ function App() {
             }
 
             handleLoggedIn();
-            (location.pathname === "/" || location.pathname === "/admin") && navigate("/dashboard", {replace: true});
+            handleNavigator();
             handleUser(JSON.parse(Cookies.get('auth_admin')));
         }
 
@@ -74,12 +78,8 @@ function App() {
     useEffect(() => {
         let loading = true;
 
-        // console.info('path ', location.pathname);
-        // console.info('path ', location.pathname.startsWith !== "/student");
-
         if (loading && (!(isLoading))) {
-            // console.info('path ', location.pathname);
-            // console.info('path ', !(location.pathname.startsWith("/student/")));
+            handleNavigator();
             handleShowSpinner();
         }
 
@@ -138,10 +138,9 @@ function App() {
                                         <Route path="/settings" element={<Settings />} />
                                         <Route path="/administrators" element={<Admins isAuth={isAuth} />} />
                                         <Route path="/students" element={<Students isAuth={isAuth} />} />
-                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} />}>
+                                        <Route path="/student/:slug" element={<Student isAuth={isAuth} authUser={authUser} />}>
                                             <Route index element={<StudentContent isAuth={isAuth} />} />
-                                            <Route path="payments" element={<StudentContent isAuth={isAuth} />} />
-                                            <Route path=":slug" element={<StudentContent isAuth={isAuth} />} />
+                                            <Route path=":tab_slug" element={<StudentContent isAuth={isAuth} />} />
                                         </Route>
                                         <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                     </Routes>

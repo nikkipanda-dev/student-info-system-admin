@@ -83,8 +83,8 @@ export const Students = ({ isAuth, }) => {
     return (
         <Section css={sectionStyle}>
             <Container>
-            <Button
-            onClick={() => handleModalContent(
+                <Button
+                onClick={() => handleModalContent(
                 <RegisterStudent
                 form={form}
                 onFinish={storeUser}
@@ -103,8 +103,8 @@ export const Students = ({ isAuth, }) => {
                         {alert}
                     </Alert>
                 }} />, "Add Student"
-            )}
-            text="Add" />
+                )}
+                text="Add" />
             </Container>
             <Container>
             {
