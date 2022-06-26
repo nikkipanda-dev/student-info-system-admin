@@ -1,8 +1,6 @@
 import { useState, useEffect, } from "react";
-import { Form, Input, } from "antd";
+import { Form, } from "antd";
 import Container from "../../core/Container";
-import { request, } from "../../../util/request";
-import { getToken, } from "../../../util/auth";
 
 import Modal from "../Modal";
 import Button from "../../core/Button";
@@ -12,13 +10,13 @@ import StudentPaymentsForm from "../StudentPaymentsForm";
 import StudentPaymentsTable from "../StudentPaymentsTable";
 
 export const StudentPayments = ({ 
+    getPayments,
     storePayment, 
     updatePayment,
     deletePayment,
     isAuth,
     emitMessage,
     student,
-    getPayments,
     slug,
     authUser,
 }) => {
@@ -68,7 +66,7 @@ export const StudentPayments = ({
         let loading = true;
 
         if (loading && (!(payments) || (Object.keys(payments).length === 0))) {
-            getPayments(slug).then(response => {
+            getPayments(authUser.email, slug).then(response => {
                 !(response.data.is_success) && handlePayments('');
                 response.data.data.details && handlePayments(response.data.data.details);
             });
@@ -90,6 +88,7 @@ export const StudentPayments = ({
                     <StudentPaymentsForm
                     form={form}
                     student={student}
+                    authUser={authUser}
                     onFinish={storePayment}
                     emitMessage={emitMessage}
                     isAuth={isAuth}

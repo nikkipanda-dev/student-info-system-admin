@@ -1,11 +1,10 @@
 import { useState, useEffect, } from "react";
-import { getToken, getAuthEmail, } from "../../../util/auth";
-import { Outlet, useOutlet, } from "react-router-dom";
+import { getToken, } from "../../../util/auth";
+import { Outlet, } from "react-router-dom";
 import { request, } from "../../../util/request";
 import { 
     useParams, 
     useNavigate,
-    useLocation,
 } from "react-router-dom";
 import { sectionStyle, studentContentStyle, } from "../../../stitches.config";
 import Container from "../../core/Container";
@@ -19,12 +18,10 @@ import Button from "../../core/Button";
 import StudentSettings from "../../widgets/StudentSettings";
 import StudentBio from "../../widgets/StudentBio";
 import ProfileTabs from "../../widgets/ProfileTabs";
-import StudentContent from "../../widgets/StudentContent";
 import Modal from "../../widgets/Modal";
 
 export const Student = ({ isAuth, authUser, }) => {
     const params = useParams();
-    const location = useLocation();
     const navigate = useNavigate();
 
     const [student, setStudent] = useState('');
@@ -58,13 +55,9 @@ export const Student = ({ isAuth, authUser, }) => {
             // Redirect to index payments tab 
             !(params.tab_slug) && navigate("payments");
 
-            getUser(params.slug).then(response => {
+            getUser(authUser.email, params.slug).then(response => {
                 !(response.data.is_success) && handleStudent('');
                 response.data.data.details && handleStudent(response.data.data.details);
-            })
-
-            .catch (err => {
-                console.error('err ', err);
             });
         }
 
@@ -85,6 +78,7 @@ export const Student = ({ isAuth, authUser, }) => {
                     <StudentSettings
                     slug={params.slug}
                     values={student}
+                    authUser={authUser}
                     handleStudent={handleStudent} />, "Update Settings"
                 )}
                 color={isModalVisible ? '' : "yellow"}
@@ -126,10 +120,10 @@ export const Student = ({ isAuth, authUser, }) => {
     )
 }
 
-async function getUser(slug) {
+async function getUser(email, slug) {
     return request.get("student", {
         params: {
-            auth_email: getAuthEmail(),
+            auth_email: email,
             slug: slug,
         },
         headers: {

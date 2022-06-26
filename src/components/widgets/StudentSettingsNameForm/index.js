@@ -1,5 +1,4 @@
 import { useState, useEffect, } from "react";
-import { getAuthEmail, } from "../../../util/auth";
 import { Form, Input, }  from "antd";
 import { getErrorMessage, } from "../../../util";
 
@@ -38,6 +37,7 @@ const validateMessages = {
 };
 
 export const StudentSettingsNameForm = ({
+    authUser,
     onFinish,
     values,
     alert,
@@ -75,7 +75,7 @@ export const StudentSettingsNameForm = ({
             values[i] && updateForm.append(i, values[i]);
         }
 
-        updateForm.append("auth_email", getAuthEmail());
+        updateForm.append("auth_email", authUser.email);
         updateForm.append("slug", slug);
 
         emitMessage("Loading", "loading", 2);

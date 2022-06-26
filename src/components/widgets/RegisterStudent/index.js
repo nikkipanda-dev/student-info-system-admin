@@ -5,7 +5,6 @@ import {
     Radio,
     Select,
 } from 'antd';
-import { getAuthEmail, } from '../../../util/auth';
 import { getErrorMessage, } from '../../../util';
 
 import Container from '../../core/Container';
@@ -37,6 +36,7 @@ const validateMessages = {
 export const RegisterStudent = ({
     form,
     onFinish,
+    authUser,
     emitMessage,
     isAuth,
     handleAlertComponent,
@@ -130,7 +130,7 @@ export const RegisterStudent = ({
             values[i] && storeForm.append(i, values[i]);
         }
 
-        storeForm.append("auth_email", getAuthEmail());
+        storeForm.append("auth_email", authUser.email);
 
         emitMessage("Loading", "loading", 2);
 

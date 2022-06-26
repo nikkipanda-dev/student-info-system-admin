@@ -1,5 +1,4 @@
 import { useState, useEffect, } from "react";
-import { getAuthEmail, } from "../../../util/auth";
 import Container from "../../core/Container";
 
 import Card from "../../core/Card";
@@ -9,20 +8,19 @@ import Button from "../../core/Button";
 export const UserCard = ({ 
     values, 
     onUpdate,
+    authUser,
     emitMessage,
 }) => {
-    console.info('val ', values);
-
     const [administrator, setAdministrator] = useState('');
 
     const handleAdministrator = payload => setAdministrator(payload);
 
     const onToggleAdminStatus = values => {
         const form = new FormData();
-        form.append("auth_email", getAuthEmail());
+        form.append("auth_email", authUser.email);
         form.append("email", values.email);
 
-        emitMessage("Loading", "loading", 2);
+        emitMessage("Loading", "loading", 1.5);
 
         onUpdate(form).then(response => {
             if (!(response.data.is_success)) {

@@ -1,8 +1,8 @@
 import { useState, useEffect, } from "react";
-import { Form, message, } from "antd";
-import { getToken, getAuthEmail, } from "../../../util/auth";
+import { Form, } from "antd";
+import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
-import { getErrorMessage, getMessage, } from "../../../util";
+import { getMessage, } from "../../../util";
 import { sectionStyle, } from "../../../stitches.config";
 
 import Section from "../../core/Section";
@@ -22,7 +22,7 @@ const cardGroupStyling = {
     },
 }
 
-export const Admins = ({ isAuth, }) => {
+export const Admins = ({ isAuth, authUser, }) => {
     const [form] = Form.useForm();
 
     const [administrators, setAdministrators] = useState([]);
@@ -77,7 +77,7 @@ export const Admins = ({ isAuth, }) => {
         let loading = true;
 
         if (loading && (!(administrators) || (Object.keys(administrators).length === 0))) {
-            getUsers().then(response => {
+            getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleAdministrators('');
                 response.data.data.details && handleAdministrators(response.data.data.details);
             });
@@ -87,18 +87,6 @@ export const Admins = ({ isAuth, }) => {
             loading = false;
         }
     }, []);
-
-    useEffect(() => {
-        let loading = true;
-
-        if (loading) {
-            form.resetFields();
-        }
-
-        return () => {
-            loading = false;
-        }
-    }, [isModalVisible]);
 
     return (
         <Section css={sectionStyle}>
@@ -114,6 +102,7 @@ export const Admins = ({ isAuth, }) => {
                     <RegisterAdmin
                     form={form}
                     onFinish={storeUser}
+                    authUser={authUser}
                     emitMessage={emitMessage}
                     isAuth={isAuth}
                     resetForm={resetForm}
@@ -140,6 +129,7 @@ export const Admins = ({ isAuth, }) => {
                 className="d-flex flex-sm-wrap flex-column flex-sm-row" 
                 css={{ ...cardGroupStyling }}
                 onUpdate={toggleAdminStatus}
+                authUser={authUser}
                 emitMessage={emitMessage} /> :
                 <Text type="span">No data</Text>
             }
@@ -158,8 +148,11 @@ export const Admins = ({ isAuth, }) => {
     )
 }
 
-async function getUsers() {
+async function getUsers(email) {
     return request.get("admins", {
+        params: {
+            auth_email: email,
+        },
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }

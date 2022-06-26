@@ -58,29 +58,27 @@ export const Text = ({
     children,
     as,
     href,
-    download,
 }) => {
     if (!(type)) {
         return <NotFound name="Text" />
     }
 
-    const Text = textType[type];
+    const TextType = textType[type];
 
-    if (!(type)) {
+    if (!(TextType)) {
         return <NotFound name="Text [type]" />
     }
 
     return (
-        <Text 
+        <TextType 
         {...className && {className: className}} 
         {...css && {css: {...css}}}
         {...color && {color: color}}
         {...size && {size: size}}
         {...as && {as: as}}
-        {...href && {href: href}}
-        {...download && {download: true}}>
+        {...href && {href: href}}>
             {children}
-        </Text>
+        </TextType>
     )
 }
 

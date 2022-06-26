@@ -14,7 +14,7 @@ import Alert from "../../widgets/Alert";
 import { Students as StudentsTable } from "../../widgets/Students";
 import RegisterStudent from "../../widgets/RegisterStudent";
 
-export const Students = ({ isAuth, }) => {
+export const Students = ({ isAuth, authUser, }) => {
     const [form] = Form.useForm();
 
     const [students, setStudents] = useState([]);
@@ -69,7 +69,7 @@ export const Students = ({ isAuth, }) => {
         let loading = true;
 
         if (loading && (!(students) || (Object.keys(students).length === 0))) {
-            getUsers().then(response => {
+            getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleStudents('');
                 response.data.data.details && handleStudents(response.data.data.details);
             });
@@ -85,32 +85,33 @@ export const Students = ({ isAuth, }) => {
             <Container>
                 <Button
                 onClick={() => handleModalContent(
-                <RegisterStudent
-                form={form}
-                onFinish={storeUser}
-                emitMessage={emitMessage}
-                isAuth={isAuth}
-                resetForm={resetForm}
-                handleAlertComponent={handleAlertComponent}
-                students={students}
-                handleStudents={handleStudents}
-                handleHideModal={handleHideModal}
-                {...alert && {
-                    alert: <Alert
-                        status={status}
-                        header={header}
-                        css={{ marginBottom: '$20', }}>
-                        {alert}
-                    </Alert>
-                }} />, "Add Student"
+                    <RegisterStudent
+                    form={form}
+                    onFinish={storeUser}
+                    authUser={authUser}
+                    emitMessage={emitMessage}
+                    isAuth={isAuth}
+                    resetForm={resetForm}
+                    handleAlertComponent={handleAlertComponent}
+                    students={students}
+                    handleStudents={handleStudents}
+                    handleHideModal={handleHideModal}
+                    {...alert && {
+                        alert: <Alert
+                            status={status}
+                            header={header}
+                            css={{ marginBottom: '$20', }}>
+                            {alert}
+                        </Alert>
+                    }} />, "Add Student"
                 )}
                 text="Add" />
             </Container>
             <Container>
             {
                 (students && (Object.keys(students).length > 0)) ? 
-                    <StudentsTable values={students} /> :
-                    <Text type="span">No data</Text>
+                <StudentsTable values={students} /> :
+                <Text type="span">No data</Text>
             }
             </Container>
         {
@@ -131,8 +132,11 @@ export const Students = ({ isAuth, }) => {
     )
 }
 
-async function getUsers() {
+async function getUsers(email) {
     return request.get("students", {
+        params: {
+            auth_email: email,
+        },
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }

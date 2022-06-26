@@ -1,13 +1,11 @@
 import Container from "../../core/Container";
 
-export const StudentPayment = () => {
-
-
+export const StudentCor = () => {
     return (
         <Container>
-            Student payment
+            Cor
         </Container>
     )
 }
 
-export default StudentPayment;
+export default StudentCor;
