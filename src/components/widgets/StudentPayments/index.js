@@ -66,7 +66,7 @@ export const StudentPayments = ({
         let loading = true;
 
         if (loading && (!(payments) || (Object.keys(payments).length === 0))) {
-            getPayments(slug).then(response => {
+            getPayments(authUser.email, slug).then(response => {
                 !(response.data.is_success) && handlePayments('');
                 response.data.data.details && handlePayments(response.data.data.details);
             });

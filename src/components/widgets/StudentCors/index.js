@@ -66,7 +66,7 @@ export const StudentCors = ({
         let loading = true;
 
         if (loading && (!(cors) || (Object.keys(cors).length === 0))) {
-            getCors(slug).then(response => {
+            getCors(authUser.email, slug).then(response => {
                 !(response.data.is_success) && handleCors('');
                 response.data.data.details && handleCors(response.data.data.details);
             });

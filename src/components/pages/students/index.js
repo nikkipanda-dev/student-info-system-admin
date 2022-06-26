@@ -69,7 +69,7 @@ export const Students = ({ isAuth, authUser, }) => {
         let loading = true;
 
         if (loading && (!(students) || (Object.keys(students).length === 0))) {
-            getUsers().then(response => {
+            getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleStudents('');
                 response.data.data.details && handleStudents(response.data.data.details);
             });
@@ -132,8 +132,11 @@ export const Students = ({ isAuth, authUser, }) => {
     )
 }
 
-async function getUsers() {
+async function getUsers(email) {
     return request.get("students", {
+        params: {
+            auth_email: email,
+        },
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }

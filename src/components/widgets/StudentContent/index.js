@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
-import { getAuthEmail, } from "../../../util/auth";
 
 import StudentPayments from "../StudentPayments";
 import StudentCors from "../StudentCors";
@@ -48,10 +47,10 @@ export const StudentContent = ({
     )
 }
 
-async function getPayments(slug) {
+async function getPayments(email, slug) {
     return request.get("student-payments-get", {
         params: {
-            auth_email: getAuthEmail(),
+            auth_email: email,
             slug: slug,
         },
         headers: {
@@ -84,10 +83,10 @@ async function deletePayment(form) {
     });
 }
 
-async function getCors(slug) {
+async function getCors(email, slug) {
     return request.get("student-cors-get", {
         params: {
-            auth_email: getAuthEmail(),
+            auth_email: email,
             slug: slug,
         },
         headers: {
