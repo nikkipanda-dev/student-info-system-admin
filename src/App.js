@@ -132,12 +132,12 @@ function App() {
                                     <Routes>
                                         <Route index element={<LandingPage handleLoggedIn={handleLoggedIn} isAuth={isAuth} />} />
                                         <Route path="/admin" element={<LandingPage handleLoggedIn={handleLoggedIn} isAuth={isAuth} />} />
-                                    </Routes> :
+                                    </Routes> : 
                                     <Routes>
                                         <Route path="/dashboard" element={<Dashboard isAuth={isAuth} />} />
                                         <Route path="/settings" element={<Settings />} />
-                                        <Route path="/administrators" element={<Admins isAuth={isAuth} />} />
-                                        <Route path="/students" element={<Students isAuth={isAuth} />} />
+                                        <Route path="/administrators" element={<Admins isAuth={isAuth} authUser={authUser} />} />
+                                        <Route path="/students" element={<Students isAuth={isAuth} authUser={authUser} />} />
                                         <Route path="/student/:slug" element={<Student isAuth={isAuth} authUser={authUser} />}>
                                             <Route index element={<StudentContent isAuth={isAuth} />} />
                                             <Route path=":tab_slug" element={<StudentContent isAuth={isAuth} />} />

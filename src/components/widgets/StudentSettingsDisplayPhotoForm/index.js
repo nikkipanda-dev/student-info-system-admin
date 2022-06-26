@@ -4,7 +4,6 @@ import {
     useRef,
 } from "react";
 import Container from "../../core/Container";
-import { getAuthEmail } from "../../../util/auth";
 import { getErrorMessage, getMessage, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
@@ -39,6 +38,7 @@ const styling = {
 const Input = styled('input', {});
 
 export const StudentSettingsDisplayPhotoForm = ({
+    authUser,
     onFinish,
     values,
     alert,
@@ -98,7 +98,7 @@ export const StudentSettingsDisplayPhotoForm = ({
             values[i] && updateForm.append(i, values[i]);
         }
 
-        updateForm.append("auth_email", getAuthEmail());
+        updateForm.append("auth_email", authUser.email);
         updateForm.append("slug", slug);
         updateForm.append("image", file);
 

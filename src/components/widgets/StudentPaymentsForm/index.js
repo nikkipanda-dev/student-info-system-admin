@@ -11,7 +11,6 @@ import {
     DatePicker,
     InputNumber,
 } from "antd";
-import { getAuthEmail, } from "../../../util/auth";
 import { getErrorMessage, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
@@ -67,6 +66,7 @@ const validateMessages = {
 export const StudentPaymentsForm = ({
     form,
     student,
+    authUser,
     onFinish,
     emitMessage,
     isAuth,
@@ -185,7 +185,7 @@ export const StudentPaymentsForm = ({
 
     const onStore = values => {
         if (!(isAuth)) {
-            console.error('on store student: not auth');
+            console.error('on store payment: not auth');
             return;
         }
 
@@ -194,17 +194,14 @@ export const StudentPaymentsForm = ({
         for (let i in values) {
             if (i === 'date_paid') {
                 const date = new Date(values[i]);
-                storeForm.append(i, date.getFullYear() + "-" + (date.getMonth() < 10 && "0") + date.getMonth() + "-" + (date.getDay() < 10 && "0") + (date.getDay()));
+                storeForm.append(i, date.getFullYear() + "-" + (date.getMonth() < 10 ? "0" : '') + date.getMonth() + "-" + (date.getDate() < 10 ? "0" : '') + (date.getDate()));
             } else {
                 values[i] && storeForm.append(i, values[i]);
             }
         }
 
-        storeForm.append("auth_email", getAuthEmail());
+        storeForm.append("auth_email", authUser.email);
         storeForm.append("student_slug", student.slug);
-        storeForm.append("course", student.course);
-        storeForm.append("year", student.year);
-        storeForm.append("term", student.term);
 
         let ctr = 0;
         for (let i of files) {
@@ -244,9 +241,6 @@ export const StudentPaymentsForm = ({
                     date_paid: err.response.data.errors.date_paid && getErrorMessage(err.response.data.errors.date_paid[0]),
                     amount_paid: err.response.data.errors.amount_paid && getErrorMessage(err.response.data.errors.amount_paid[0]),
                     balance: err.response.data.errors.balance && getErrorMessage(err.response.data.errors.balance[0]),
-                    course: err.response.data.errors.course && getErrorMessage(err.response.data.errors.course[0]),
-                    year: err.response.data.errors.year && getErrorMessage(err.response.data.errors.year[0]),
-                    term: err.response.data.errors.term && getErrorMessage(err.response.data.errors.term[0]),
                     payments: err.response.data.errors.payments && getErrorMessage(err.response.data.errors.payments[0]),
                     status: err.response.data.errors.status && getErrorMessage(err.response.data.errors.status[0]),
                 });

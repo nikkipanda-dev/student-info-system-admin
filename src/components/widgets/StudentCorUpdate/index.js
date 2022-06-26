@@ -1,28 +1,18 @@
-import {
-    useState,
-    useEffect,
+import { 
+    useState, 
+    useEffect, 
     useRef,
 } from "react";
-import {
-    Form,
-    Input,
-    Select,
-    Radio,
-    DatePicker,
-    InputNumber,
-} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
-import { styled, } from "../../../stitches.config";
+import { styled } from "../../../stitches.config";
 
-import Button from "../../core/Button";
-import Image from "../../core/Image";
-import Text from "../../core/Text";
 import Container from "../../core/Container";
 import Label from "../../core/Label";
+import Text from "../../core/Text";
+import Image from "../../core/Image";
 import NotFound from "../NotFound";
-
-const { Option } = Select;
+import Button from "../../core/Button";
 
 const NativeInput = styled('input', {});
 
@@ -62,17 +52,18 @@ const validateMessages = {
     },
 };
 
-export const StudentCorForm = ({
-    student,
+export const StudentCorUpdate = ({
+    cors,
+    handleCors,
     onFinish,
     emitMessage,
     isAuth,
+    student,
+    slug,
     handleAlertComponent,
-    cors,
-    handleCors,
-    authUser,
     handleHideModal,
     alert,
+    authUser,
 }) => {
     const ref = useRef('');
 
@@ -81,7 +72,6 @@ export const StudentCorForm = ({
 
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
-    let arr;
 
     const paymentModes = [
         {
@@ -155,9 +145,9 @@ export const StudentCorForm = ({
         handleFile(ref.current.files[0]);
     }
 
-    const onStore = () => {
+    const onUpdate = () => {
         if (!(isAuth)) {
-            console.error('on store cor: not auth');
+            console.error('on update cor: not auth');
             return;
         }
 
@@ -165,6 +155,7 @@ export const StudentCorForm = ({
 
         storeForm.append("auth_email", authUser.email);
         storeForm.append("student_slug", student.slug);
+        storeForm.append("slug", slug);
         storeForm.append('image', file);
 
         emitMessage("Loading", "loading", 2);
@@ -175,24 +166,29 @@ export const StudentCorForm = ({
                 return;
             }
 
-            arr = cors;
-            (Object.values(arr).length > 0) && arr.push(response.data.data.details);
-            if (Object.values(arr).length === 0) {
-                arr = [response.data.data.details]
-            }
+            handleCors(Object.keys(cors).map((_, val) => {
+                if (Object.values(cors)[val].slug === slug) {
+                    return { 
+                        ...Object.values(cors)[val], 
+                        slug: response.data.data.details.slug,
+                        path: response.data.data.details.path, 
+                    }
+                }
+
+                return Object.values(cors)[val];
+            }));
 
             handleRemoveImage();
-            handleCors(arr);
             handleHideModal();
             handleAlertComponent("", "", null);
             setTimeout(() => {
-                emitMessage("COR added.", "success", 2.5);
+                emitMessage("COR updated.", "success", 2.5);
             }, 2000);
         })
 
         .catch(err => {
             if (err.response && err.response.data.errors) {
-                handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
+                err.response.data.errors.image && handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
             }
         });
     }
@@ -265,9 +261,9 @@ export const StudentCorForm = ({
                 text={
                     <Container className="d-flex align-items-center">
                         <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
-                        <Text 
-                        type="span" 
-                        color="danger" 
+                        <Text
+                        type="span"
+                        color="danger"
                         css={{ display: 'inline-block', marginTop: '$5 ', }}>
                             Remove
                         </Text>
@@ -282,7 +278,7 @@ export const StudentCorForm = ({
                     text="Submit"
                     color="blue"
                     className="flex-grow-1 flex-sm-grow-0"
-                    onClick={() => onStore()} />
+                    onClick={() => onUpdate()} />
                 </Container>
             </Container>
         }
@@ -290,4 +286,4 @@ export const StudentCorForm = ({
     )
 }
 
-export default StudentCorForm;
+export default StudentCorUpdate;

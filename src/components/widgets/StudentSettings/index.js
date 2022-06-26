@@ -1,8 +1,8 @@
-import { useState, useEffect, } from "react";
+import { useState, } from "react";
 import { Form } from 'antd';
-import { getToken, getAuthEmail, } from "../../../util/auth";
+import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
-import { getMessage, getErrorMessage, } from "../../../util";
+import { getMessage, } from "../../../util";
 
 import Text from "../../core/Text";
 import Alert from "../Alert";
@@ -13,6 +13,7 @@ import StudentSettingsPasswordForm from "../StudentSettingsPasswordForm";
 
 export const StudentSettings = ({ 
     slug, 
+    authUser,
     values,
     handleStudent,
 }) => {
@@ -65,6 +66,7 @@ export const StudentSettings = ({
         (values && (Object.keys(values).length > 0)) && 
         <>
             <StudentSettingsNameForm
+            authUser={authUser}
             values={values}
             onFinish={updateName}
             emitMessage={emitMessage}
@@ -80,6 +82,7 @@ export const StudentSettings = ({
                 </Alert>
             }} />
             <StudentSettingsDisplayPhotoForm
+            authUser={authUser}
             values={values}
             onFinish={updateDisplayPhoto}
             emitMessage={emitMessage}
@@ -95,6 +98,7 @@ export const StudentSettings = ({
                 </Alert>
             }} />
             <StudentSettingsEmailForm
+            authUser={authUser}
             values={values}
             onFinish={updateEmail}
             emitMessage={emitMessage}
@@ -110,6 +114,7 @@ export const StudentSettings = ({
                 </Alert>
             }} />
             <StudentSettingsPasswordForm
+            authUser={authUser}
             onFinish={updatePassword}
             emitMessage={emitMessage}
             slug={slug}

@@ -9,6 +9,7 @@ export const Image = ({
     alt,
     className,
     css,
+    onClick,
 }) => {
     if (!(src)) {
         <NotFound name="Image src" />
@@ -20,6 +21,7 @@ export const Image = ({
         {...className && {className: className}}
         {...css && {css: {...css}}}
         {...alt && {alt: alt}}
+        {...onClick && {onClick: () => onClick()}}
         src={src} />
     )
 }

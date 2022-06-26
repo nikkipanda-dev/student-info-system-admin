@@ -3,7 +3,7 @@ import { Table, Form, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
-import { getAuthEmail, } from '../../../util/auth';
+import { paymentModes, termOptions, statusOptions, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
@@ -15,6 +15,7 @@ export const StudentPaymentsTable = ({
     values, 
     handleModalContent,
     deletePayment,
+    authUser,
     payments,
     handlePayments,
     emitMessage,
@@ -25,25 +26,7 @@ export const StudentPaymentsTable = ({
     handleHideModal,
     alert,
 }) => {
-    console.info('payments ', values)
     const [form] = Form.useForm();
-
-    const paymentModes = {
-        bank_transfer_bdo: "Bank Transfer (BDO)",
-        bank_transfer_security_bank: "Bank Transfer (Security Bank)",
-        cash: "Cash",
-        gcash: "GCash",
-    }
-
-    const termOptions = {
-        full: "Full",
-        installment: "Installment",
-    }
-
-    const statusOptions = {
-        pending: "Pending",
-        verified: "Verified",
-    }
 
     const onConfirmDeletion = slug => {
         handleModalContent(<Container className="d-flex flex-column">
@@ -65,33 +48,23 @@ export const StudentPaymentsTable = ({
     const onDelete = slug => {
         const form = new FormData();
 
-        form.append("auth_email", getAuthEmail());
+        form.append("auth_email", authUser.email);
         form.append("student_slug", student.slug);
         form.append("slug", slug);
 
         emitMessage("Loading", "loading", 2);
 
         deletePayment(form).then(response => {
-            console.info('res ', response.data);
             if (!(response.data.is_success)) {
                 handleAlertComponent("Error", "danger", response.data.data);
                 return;
             }
 
-            // handlePayments(Object.keys(payments).map((i, val) => {
-            //     if (Object.values(payments)[val].slug === slug) {
-            //         console.info("Target ", Object.values(payments)[val].id);
-            //         return { ...Object.values(payments)[val], status: response.data.data.details.status }
-            //     }
-
-            //     return Object.values(payments)[val]
-            // }));
-
             handlePayments(Object.values(payments).filter(el => el.slug !== slug))
 
             handleHideModal();
             setTimeout(() => {
-                emitMessage("Payment updated.", "success", 2.5);
+                emitMessage("Payment deleted.", "success", 2.5);
             }, 2000);
         });
     }
@@ -148,25 +121,23 @@ export const StudentPaymentsTable = ({
             dataIndex: 'slug',
             key: 'action',
             fixed: 'right',
-            width: '200px',
+            width: '180px',
             render: (_, record) => <Container css={{ 
+                    width: '100%',
                     'button': {
                         background: 'transparent',
                     }
                 }}>
-                <Button
-                text={<Text type="span" color="info">View</Text>}
-                className="button-sm"
-                css={{
-                    color: '$gray4',
-                }}
-                onClick={() => handleModalContent(<StudentPayment />, "Payment Details")} />
-                    <Button 
-                    text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
+                    <Button
+                    text={<Text type="span" color="info">View</Text>}
                     className="button-sm"
                     css={{
                         color: '$gray4',
                     }}
+                    onClick={() => handleModalContent(<StudentPayment />, "Payment Details")} />
+                    <Button 
+                    text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
+                    className="button-sm"
                     onClick={() => handleModalContent(<StudentPaymentUpdate 
                         form={form} 
                         onFinish={updatePayment}
@@ -176,13 +147,16 @@ export const StudentPaymentsTable = ({
                         isAuth={isAuth}
                         student={student}
                         slug={record.slug}
+                        alert={alert}
                         values={{
                             status: record.status,
                         }}
                         handleAlertComponent={handleAlertComponent}
-                        handleHideModal={handleHideModal} />, "Update Payment")} />
+                        handleHideModal={handleHideModal} />, "Update Payment")} 
+                    css={{ marginLeft: '$10', }} />
                     <Button 
                     text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>} 
+                    className="button-sm"
                     css={{ color: '$red2', marginLeft: '$10', }}
                     onClick={() => onConfirmDeletion(record.slug)} />
                 </Container>,

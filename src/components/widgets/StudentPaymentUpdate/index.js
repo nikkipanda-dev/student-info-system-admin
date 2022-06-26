@@ -38,6 +38,7 @@ export const StudentPaymentUpdate = ({
     slug,
     handleAlertComponent,
     handleHideModal,
+    alert,
 }) => {
     const [helpers, setHelpers] = useState('');
     const handleHelpers = payload => setHelpers(payload);
@@ -120,13 +121,17 @@ export const StudentPaymentUpdate = ({
     }, [values]);
 
     return (
-        <Form
-        name="student-update-payment-form"
-        {...formItemLayout}
-        form={form}
-        onFinish={onUpdate}
-        validateMessages={validateMessages}
-        autoComplete="off">
+        <>
+        {
+            alert
+        }
+            <Form
+            name="student-update-payment-form"
+            {...formItemLayout}
+            form={form}
+            onFinish={onUpdate}
+            validateMessages={validateMessages}
+            autoComplete="off">
 
             {
                 (statusOptions && (Object.keys(statusOptions).length > 0)) &&
@@ -139,21 +144,22 @@ export const StudentPaymentUpdate = ({
                     message: "Status is required.",
                 }]}>
                     <Radio.Group>
-                    {
-                        Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
-                    }
+                        {
+                            Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                        }
                     </Radio.Group>
                 </Form.Item>
             }
 
-            <Container className="d-flex">
-                <Button
-                submit
-                text="Submit"
-                color="blue"
-                className="flex-grow-1 flex-sm-grow-0" />
-            </Container>
-        </Form>
+                <Container className="d-flex">
+                    <Button
+                    submit
+                    text="Submit"
+                    color="blue"
+                    className="flex-grow-1 flex-sm-grow-0" />
+                </Container>
+            </Form>
+        </>
     )
 }
 

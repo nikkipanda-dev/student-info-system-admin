@@ -1,6 +1,5 @@
-import { useState, useEffect, } from 'react';
+import { useState, forwardRef, } from 'react';
 import { Form, Input, } from 'antd';
-import { getAuthEmail, } from '../../../util/auth';
 import { getErrorMessage, } from '../../../util';
 
 import Container from '../../core/Container';
@@ -27,9 +26,10 @@ const validateMessages = {
     },
 };
 
-export const RegisterAdmin = ({
+export const RegisterAdmin = forwardRef(({
     form,
     onFinish,
+    authUser,
     emitMessage,
     isAuth,
     handleAlertComponent,
@@ -37,7 +37,7 @@ export const RegisterAdmin = ({
     handleAdministrators,
     resetForm,
     handleHideModal,
-}) => {
+}, ref) => {
     const [helpers, setHelpers] = useState('');
     let arr;
 
@@ -55,7 +55,7 @@ export const RegisterAdmin = ({
             values[i] && form.append(i, values[i]);
         }
 
-        form.append("auth_email", getAuthEmail());
+        form.append("auth_email", authUser.email);
 
         emitMessage("Loading", "loading", 2);
 
@@ -95,6 +95,7 @@ export const RegisterAdmin = ({
         name="admin-registration-form"
         {...formItemLayout}
         form={form}
+        ref={ref}
         onFinish={onStore}
         validateMessages={validateMessages}
         autoComplete="off">
@@ -188,6 +189,6 @@ export const RegisterAdmin = ({
             </Container>
         </Form>
     )
-}
+});
 
 export default RegisterAdmin;

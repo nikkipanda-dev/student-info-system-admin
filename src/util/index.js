@@ -100,3 +100,20 @@ export const isProfileTab = value => {
 
     return isTab;
 }
+
+export const paymentModes = {
+    bank_transfer_bdo: "Bank Transfer (BDO)",
+    bank_transfer_security_bank: "Bank Transfer (Security Bank)",
+    cash: "Cash",
+    gcash: "GCash",
+}
+
+export const termOptions = {
+    full: "Full",
+    installment: "Installment",
+}
+
+export const statusOptions = {
+    pending: "Pending",
+    verified: "Verified",
+}
