@@ -22,9 +22,7 @@ export const StudentPaymentsTable = ({
     isAuth,
     student,
     updatePayment,
-    handleAlertComponent,
     handleHideModal,
-    alert,
 }) => {
     const [form] = Form.useForm();
 
@@ -56,7 +54,7 @@ export const StudentPaymentsTable = ({
 
         deletePayment(form).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                emitMessage(response.data.data, "danger", 3);
                 return;
             }
 
@@ -65,7 +63,7 @@ export const StudentPaymentsTable = ({
             handleHideModal();
             setTimeout(() => {
                 emitMessage("Payment deleted.", "success", 2.5);
-            }, 2000);
+            }, !(response.data.is_success) ? 3000 : 300);
         });
     }
     
@@ -147,11 +145,9 @@ export const StudentPaymentsTable = ({
                         isAuth={isAuth}
                         student={student}
                         slug={record.slug}
-                        alert={alert}
                         values={{
                             status: record.status,
                         }}
-                        handleAlertComponent={handleAlertComponent}
                         handleHideModal={handleHideModal} />, "Update Payment")} 
                     css={{ marginLeft: '$10', }} />
                     <Button 

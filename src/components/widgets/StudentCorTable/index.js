@@ -13,7 +13,6 @@ import StudentCor from '../StudentCor';
 import StudentCorUpdate from "../StudentCorUpdate";
 
 export const StudentCorTable = ({ 
-    values,
     handleModalContent,
     emitMessage,
     isAuth,
@@ -21,11 +20,9 @@ export const StudentCorTable = ({
     cors,
     handleCors,
     updateCor,
-    handleAlertComponent,
     handleHideModal,
     deleteCor,
     authUser,
-    alert,
 }) => {
     const [form] = Form.useForm();
 
@@ -35,7 +32,7 @@ export const StudentCorTable = ({
 
     const onConfirmDeletion = slug => {
         handleModalContent(<Container className="d-flex flex-column">
-            <Alert status="danger" header="Confirmation" css={{ margin: '0' }}><Text type="span">Delete payment?</Text></Alert>
+            <Alert status="danger" header="Confirmation" css={{ margin: '0' }}><Text type="span">Delete certificate of registration?</Text></Alert>
             <Container className="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center" css={{ marginTop: '$20', }}>
                 <Button
                     text="Cancel"
@@ -61,16 +58,15 @@ export const StudentCorTable = ({
 
         deleteCor(form).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                emitMessage(response.data.data, "danger", 3);
                 return;
             }
 
             handleCors(Object.values(cors).filter(el => el.slug !== slug))
-            handleAlertComponent("", "", null);
             handleHideModal();
             setTimeout(() => {
                 emitMessage("COR deleted.", "success", 2.5);
-            }, 2000);
+            }, !(response.data.is_success) ? 3000 : 300);
         });
     }
 
@@ -155,11 +151,9 @@ export const StudentCorTable = ({
                     isAuth={isAuth}
                     student={student}
                     slug={record.slug}
-                    alert={alert}
                     values={{
                         status: record.status,
                     }}
-                    handleAlertComponent={handleAlertComponent}
                     handleHideModal={handleHideModal}
                     authUser={authUser} />, "Update Payment")}
                 css={{ marginLeft: '$10', }} />
@@ -173,10 +167,10 @@ export const StudentCorTable = ({
     ];
 
     return (
-        (values && (Object.keys(values).length > 0)) &&
+        (cors && (Object.keys(cors).length > 0)) &&
         <Table
         columns={columns}
-        dataSource={[...values]}
+        dataSource={[...cors]}
         rowKey="slug"
         scroll={{
             x: 700,

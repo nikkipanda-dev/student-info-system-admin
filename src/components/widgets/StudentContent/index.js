@@ -42,7 +42,17 @@ export const StudentContent = ({
         student={context.student}
         slug={context.slug}
         authUser={context.authUser} /> :
-        (params.tab_slug === "permits") ? <StudentPermits /> :
+        (params.tab_slug === "permits") ? 
+        <StudentPermits 
+        getPermits={getPermits}
+        storePermit={storePermit}
+        updatePermit={updatePermit}
+        deletePermit={deletePermit}
+        isAuth={context.isAuth}
+        emitMessage={context.emitMessage}
+        student={context.student}
+        slug={context.slug}
+        authUser={context.authUser} /> :
         (params.tab_slug === "registrar-files") ? <StudentRegistrarFiles /> : <Navigate to="/not-found" replace={true} />
     )
 }
@@ -113,6 +123,42 @@ async function updateCor(form) {
 
 async function deleteCor(form) {
     return request.post("student-cor-destroy", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function getPermits(email, slug) {
+    return request.get("student-permits-get", {
+        params: {
+            auth_email: email,
+            slug: slug,
+        },
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function storePermit(form) {
+    return request.post("student-permit-store", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function updatePermit(form) {
+    return request.post("student-permit-update", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function deletePermit(form) {
+    return request.post("student-permit-destroy", form, {
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }

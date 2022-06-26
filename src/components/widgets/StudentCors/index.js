@@ -26,17 +26,11 @@ export const StudentCors = ({
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [title, setTitle] = useState('');
-    const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleCors = payload => setCors(payload);
     const handleShowModal = () => setIsModalVisible(true);
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
 
     // const resetForm = () => {
     //     form.resetFields();
@@ -44,17 +38,6 @@ export const StudentCors = ({
     //     handleStatus('');
     //     handleAlert('');
     // }
-
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
-
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
 
     const handleModalContent = (payload, title) => {
         setModalContent(payload);
@@ -90,29 +73,19 @@ export const StudentCors = ({
                     onFinish={storeCor}
                     emitMessage={emitMessage}
                     isAuth={isAuth}
-                    handleAlertComponent={handleAlertComponent}
                     cors={cors}
                     handleCors={handleCors}
                     authUser={authUser}
-                    handleHideModal={handleHideModal}
-                    {...alert && {
-                        alert: <Alert
-                            status={status}
-                            header={header}
-                            css={{ marginBottom: '$20', }}>
-                            {alert}
-                        </Alert>
-                    }} />, "Add a COR"
+                    handleHideModal={handleHideModal} />, "Add a COR"
                 )}
                 color={isModalVisible ? '' : "yellow"}
-                text={isModalVisible ? "Cancel" : "Add Payment"} />
+                text={isModalVisible ? "Cancel" : "Add a COR"} />
             }
             </Container>
             <Container css={{ marginTop: '$30', }}>
             {
                 (cors && (Object.keys(cors).length > 0)) ?
                 <StudentCorTable
-                values={cors}
                 handleModalContent={handleModalContent}
                 emitMessage={emitMessage}
                 isAuth={isAuth}
@@ -120,18 +93,9 @@ export const StudentCors = ({
                 cors={cors}
                 handleCors={handleCors}
                 updateCor={updateCor}
-                handleAlertComponent={handleAlertComponent}
                 handleHideModal={handleHideModal}
                 deleteCor={deleteCor}
-                authUser={authUser}
-                {...alert && {
-                    alert: <Alert
-                        status={status}
-                        header={header}
-                        css={{ marginBottom: '$20', }}>
-                        {alert}
-                    </Alert>
-                }} /> :
+                authUser={authUser} /> :
                 <Text type="span">No data</Text>
             }
             </Container>

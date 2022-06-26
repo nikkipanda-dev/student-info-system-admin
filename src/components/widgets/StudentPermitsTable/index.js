@@ -1,48 +1,116 @@
 import { Link, } from 'react-router-dom';
-import { Table, } from 'antd';
+import { Form, Table, } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
 
 import Text from '../../core/Text';
+import Image from '../../core/Image';
+import Alert from '../Alert';
+import Container from '../../core/Container';
+import Button from '../../core/Button';
+import StudentPermit from '../StudentPermit';
+import StudentPermitUpdate from '../StudentPermitUpdate';
 
-export const StudentPermitsTable = ({ values, }) => {
+export const StudentPermitsTable = ({
+    resetForm,
+    handleModalContent,
+    emitMessage,
+    isAuth,
+    student,
+    permits,
+    handlePermits,
+    updatePermit,
+    handleAlertComponent,
+    handleHideModal,
+    deletePermit,
+    authUser,
+    alert,
+ }) => {
+    const [form] = Form.useForm();
+
+    const onDownload = value => {
+        window.location.href = `${process.env.REACT_APP_BASE_URL}student/file/download/${authUser.slug}/${student.slug}/${value}`;
+    }
+
+    const onConfirmDeletion = slug => {
+        handleModalContent(<Container className="d-flex flex-column">
+            <Alert status="danger" header="Confirmation" css={{ margin: '0' }}><Text type="span">Delete permit?</Text></Alert>
+            <Container className="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center" css={{ marginTop: '$20', }}>
+                <Button
+                    text="Cancel"
+                    className="flex-grow-1 flex-sm-grow-0"
+                    onClick={() => handleHideModal()} />
+                <Button
+                    text="Delete"
+                    className="flex-grow-1 flex-sm-grow-0"
+                    onClick={() => onDelete(slug)}
+                    color="red" />
+            </Container>
+        </Container>, "Confirmation");
+    }
+
+    const onDelete = slug => {
+        const form = new FormData();
+
+        form.append("auth_email", authUser.email);
+        form.append("student_slug", student.slug);
+        form.append("slug", slug);
+
+        emitMessage("Loading", "loading", 2);
+
+        deletePermit(form).then(response => {
+            if (!(response.data.is_success)) {
+                emitMessage(response.data.data, "danger", 3);
+                return;
+            }
+
+            handlePermits(Object.values(permits).filter(el => el.slug !== slug))
+            handleHideModal();
+            setTimeout(() => {
+                emitMessage("Permit deleted.", "success", 2.5);
+            }, !(response.data.is_success) ? 3000 : 300);
+        });
+    }
+
     const columns = [
-        {
-            title: 'Student #',
-            dataIndex: 'student_number',
-            render: (text) => <Text type="span">{text}</Text>,
-        },
-        {
-            title: 'First Name',
-            dataIndex: 'first_name',
-            render: (text) => <Text type="span">{text}</Text>,
-        },
-        {
-            title: 'M.I.',
-            dataIndex: 'middle_name',
-            render: (text) => <Text type="span">{text && `${text.charAt(0)}.`}</Text>,
-        },
-        {
-            title: 'Last Name',
-            dataIndex: 'last_name',
-            render: (text) => <Text type="span">{text}</Text>,
-        },
         {
             title: 'Course',
             dataIndex: 'course',
+            width: '100px',
             render: (text) => <Text type="span">{text}</Text>,
         },
         {
             title: 'Year',
             dataIndex: 'year',
+            width: '100px',
             render: (text) => <Text type="span">{text}</Text>,
         },
         {
             title: 'Term',
             dataIndex: 'term',
+            width: '100px',
             render: (text) => <Text type="span">{text}</Text>,
+        },
+        {
+            title: 'Image',
+            dataIndex: 'slug',
+            width: '130px',
+            render: (_, record) => <Image
+                src={record.path}
+                onClick={() => onDownload(record.slug)}
+                css={{
+                    width: '100px',
+                    width: '100px',
+                    objectFit: 'cover',
+                    '&:hover': {
+                        cursor: 'pointer',
+                    },
+                }} />,
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
+            width: '180px',
             render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
@@ -58,16 +126,57 @@ export const StudentPermitsTable = ({ values, }) => {
             title: 'Action',
             dataIndex: 'student_number',
             key: 'action',
-            render: (_, record) => <Link to={`/student/${record.slug}`}>View profile</Link>,
+            width: '180px',
+            fixed: 'right',
+            render: (_, record) => <Container css={{
+                width: '100%',
+                'button': {
+                    background: 'transparent',
+                }
+            }}>
+                <Button
+                text={<Text type="span" color="info">View</Text>}
+                className="button-sm"
+                css={{
+                    color: '$gray4',
+                }}
+                onClick={() => handleModalContent(<StudentPermit />, "Permit Details")} />
+                <Button
+                text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
+                className="button-sm"
+                onClick={() => handleModalContent(<StudentPermitUpdate
+                    form={form}
+                    onFinish={updatePermit}
+                    permits={permits}
+                    handlePermits={handlePermits}
+                    emitMessage={emitMessage}
+                    resetForm={resetForm}
+                    isAuth={isAuth}
+                    student={student}
+                    slug={record.slug}
+                    alert={alert}
+                    handleAlertComponent={handleAlertComponent}
+                    handleHideModal={handleHideModal}
+                    authUser={authUser} />, "Update Payment")}
+                css={{ marginLeft: '$10', }} />
+                <Button
+                text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>}
+                className="button-sm"
+                css={{ color: '$red2', marginLeft: '$10', }}
+                onClick={() => onConfirmDeletion(record.slug)} />
+            </Container>,
         },
     ];
 
     return (
-        (values && (Object.keys(values).length > 0)) &&
+        (permits && (Object.keys(permits).length > 0)) &&
         <Table
         columns={columns}
-        dataSource={[...values]}
-        rowKey="student_number" />
+        dataSource={[...permits]}
+        rowKey="slug"
+        scroll={{
+            x: 700,
+        }} />
     )
 }
 

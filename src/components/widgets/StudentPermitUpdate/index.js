@@ -1,19 +1,25 @@
-import { 
-    useState, 
-    useEffect, 
+import {
+    useState,
+    useEffect,
     useRef,
 } from "react";
+import {
+    Form,
+    Input,
+    Radio,
+} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
+import { getErrorMessage, } from "../../../util";
 import { styled } from "../../../stitches.config";
 
-import Container from "../../core/Container";
-import Label from "../../core/Label";
+import Container from '../../core/Container';
+import Alert from '../Alert';
 import Text from "../../core/Text";
-import Image from "../../core/Image";
-import Alert from "../Alert";
-import NotFound from "../NotFound";
 import Button from "../../core/Button";
+import NotFound from "../NotFound";
+import Label from "../../core/Label";
+import Image from "../../core/Image";
 
 const NativeInput = styled('input', {});
 
@@ -32,11 +38,24 @@ const styling = {
     },
 }
 
-export const StudentCorUpdate = ({
-    cors,
-    handleCors,
+const formItemLayout = {
+    labelCol: {
+        sm: { span: 9, },
+        md: { span: 8, },
+    },
+    wrapperCol: {
+        sm: { span: 24, },
+        md: { span: 24, },
+    },
+}
+
+export const StudentPermitUpdate = ({
+    form,
     onFinish,
+    permits,
+    handlePermits,
     emitMessage,
+    resetForm,
     isAuth,
     student,
     slug,
@@ -45,6 +64,7 @@ export const StudentCorUpdate = ({
 }) => {
     const ref = useRef('');
 
+    const [helpers, setHelpers] = useState('');
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
@@ -56,57 +76,25 @@ export const StudentCorUpdate = ({
     const handleAlert = message => setAlert(message);
     const handleStatus = status => setStatus(status);
     const handleHeader = header => setHeader(header);
+    let arr;
 
-    const paymentModes = [
+    const handleHelpers = payload => setHelpers(payload);
+
+    const typeOptions = [
         {
             id: 1,
-            value: "bank_transfer_bdo",
-            label: "Bank Transfer (BDO)",
-            isDisabled: false,
+            value: "prelim",
+            label: "Prelim",
         },
         {
             id: 2,
-            value: "bank_transfer_security_bank",
-            label: "Bank Transfer (Security Bank)",
-            isDisabled: false,
+            value: "midterm",
+            label: "Midterm",
         },
         {
             id: 3,
-            value: "cash",
-            label: "Cash",
-            isDisabled: false,
-        },
-        {
-            id: 4,
-            value: "gcash",
-            label: "GCash",
-            isDisabled: false,
-        },
-    ];
-
-    const termOptions = [
-        {
-            id: 1,
-            value: "full",
-            label: "Full",
-        },
-        {
-            id: 2,
-            value: "installment",
-            label: "Installment",
-        },
-    ];
-
-    const statusOptions = [
-        {
-            id: 1,
-            value: "pending",
-            label: "Pending",
-        },
-        {
-            id: 2,
-            value: "verified",
-            label: "Verified",
+            value: "final",
+            label: "Final",
         },
     ];
 
@@ -140,13 +128,17 @@ export const StudentCorUpdate = ({
         handleFile(ref.current.files[0]);
     }
 
-    const onUpdate = () => {
+    const onUpdate = value => {
         if (!(isAuth)) {
-            console.error('on update cor: not auth');
+            console.error('on store permit: not auth');
             return;
         }
 
         const storeForm = new FormData();
+
+        for (let i in value) {
+            value[i] && storeForm.append(i, value[i]);
+        }
 
         storeForm.append("auth_email", authUser.email);
         storeForm.append("student_slug", student.slug);
@@ -161,29 +153,33 @@ export const StudentCorUpdate = ({
                 return;
             }
 
-            handleCors(Object.keys(cors).map((_, val) => {
-                if (Object.values(cors)[val].slug === slug) {
-                    return { 
-                        ...Object.values(cors)[val], 
+            handlePermits(Object.keys(permits).map((_, val) => {
+                if (Object.values(permits)[val].slug === slug) {
+                    return {
+                        ...Object.values(permits)[val],
                         slug: response.data.data.details.slug,
-                        path: response.data.data.details.path, 
+                        path: response.data.data.details.path,
                     }
                 }
 
-                return Object.values(cors)[val];
+                return Object.values(permits)[val];
             }));
 
+            resetForm(form, handleHeader, handleStatus, handleAlert);
             handleRemoveImage();
-            handleHideModal();
             handleAlertComponent("", "", null);
+            handleHideModal();
             setTimeout(() => {
-                emitMessage("COR updated.", "success", 2.5);
+                emitMessage("Permit updated.", "success", 2.5);
             }, 2000);
         })
 
         .catch(err => {
             if (err.response && err.response.data.errors) {
-                err.response.data.errors.image && handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
+                handleHelpers({
+                    image: err.response.data.errors.image && getErrorMessage(err.response.data.errors.image[0]),
+                    type: err.response.data.errors.type && getErrorMessage(err.response.data.errors.type[0]),
+                });
             }
         });
     }
@@ -212,7 +208,7 @@ export const StudentCorUpdate = ({
         <Container css={styling}>
             <Container>
             {
-                alert && 
+                alert &&
                 <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
             }
             </Container>
@@ -268,18 +264,49 @@ export const StudentCorUpdate = ({
                 color="transparent"
                 css={{ color: '$red2', }}
                 onClick={() => handleRemoveImage()} />
-                <Container className="d-flex">
-                    <Button
-                    submit
-                    text="Submit"
-                    color="blue"
-                    className="flex-grow-1 flex-sm-grow-0"
-                    onClick={() => onUpdate()} />
-                </Container>
+                <Text type="span" color="danger">{ helpers && helpers.type }</Text>
+            </Container>
+        }
+        {
+            file &&
+            <Container>
+                <Form
+                name="student-permit-form"
+                {...formItemLayout}
+                form={form}
+                onFinish={onUpdate}
+                autoComplete="off">
+
+                {
+                    (typeOptions && (Object.keys(typeOptions).length > 0)) &&
+                    <Form.Item
+                    label="Type"
+                    name="type"
+                    {...helpers && helpers.type && { help: helpers.type }}
+                    rules={[{
+                        required: true,
+                        message: "Type is required.",
+                    }]}>
+                        <Radio.Group>
+                        {
+                            Object.keys(typeOptions).map((_, val) => <Radio key={Object.values(typeOptions)[val].id} value={Object.values(typeOptions)[val].value}>{Object.values(typeOptions)[val].label}</Radio>)
+                        }
+                        </Radio.Group>
+                    </Form.Item>
+                }
+
+                    <Container className="d-flex">
+                        <Button
+                        submit
+                        text="Submit"
+                        color="blue"
+                        className="flex-grow-1 flex-sm-grow-0" />
+                    </Container>
+                </Form>
             </Container>
         }
         </Container>
     )
 }
 
-export default StudentCorUpdate;
+export default StudentPermitUpdate;

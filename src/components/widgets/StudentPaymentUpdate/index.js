@@ -5,6 +5,24 @@ import Container from "../../core/Container";
 import { getAuthEmail, } from "../../../util/auth";
 import { getErrorMessage, } from "../../../util";
 
+import Alert from "../Alert";
+import Text from "../../core/Text";
+
+const styling = {
+    'img': {
+        width: '100%',
+        height: 'auto',
+        maxWidth: '400px',
+        maxHeight: '400px',
+        objectFit: 'cover',
+    },
+    '@media screen and (max-width: 575px)': {
+        'button': {
+            marginTop: '$10',
+        }
+    },
+}
+
 const formItemLayout = {
     labelCol: {
         sm: { span: 9, },
@@ -36,12 +54,17 @@ export const StudentPaymentUpdate = ({
     student,
     values,
     slug,
-    handleAlertComponent,
     handleHideModal,
-    alert,
 }) => {
     const [helpers, setHelpers] = useState('');
+    const [alert, setAlert] = useState('');
+    const [status, setStatus] = useState('');
+    const [header, setHeader] = useState('');
+
     const handleHelpers = payload => setHelpers(payload);
+    const handleAlert = message => setAlert(message);
+    const handleStatus = status => setStatus(status);
+    const handleHeader = header => setHeader(header);
 
     const statusOptions = [
         {
@@ -55,6 +78,17 @@ export const StudentPaymentUpdate = ({
             label: "Verified",
         },
     ];
+
+    const handleAlertComponent = (header, status, message) => {
+        if (!(message)) {
+            handleAlert('');
+            return;
+        }
+
+        handleHeader(header);
+        handleStatus(status);
+        handleAlert(<Text type="span">{message}</Text>);
+    }
 
     const onUpdate = value => {
         if (!(isAuth)) {
@@ -81,9 +115,8 @@ export const StudentPaymentUpdate = ({
                 return;
             }
 
-            handlePayments(Object.keys(payments).map((i, val) => {
+            handlePayments(Object.keys(payments).map((_, val) => {
                 if (Object.values(payments)[val].slug === slug) {
-                    console.info("Target ", Object.values(payments)[val].id);
                     return {...Object.values(payments)[val], status: response.data.data.details.status}
                 }
 
@@ -121,9 +154,14 @@ export const StudentPaymentUpdate = ({
     }, [values]);
 
     return (
-        <>
+        <Container css={styling}>
         {
-            alert
+            <Container>
+            {
+                alert && 
+                <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
+            }
+            </Container>
         }
             <Form
             name="student-update-payment-form"
@@ -144,9 +182,9 @@ export const StudentPaymentUpdate = ({
                     message: "Status is required.",
                 }]}>
                     <Radio.Group>
-                        {
-                            Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
-                        }
+                    {
+                        Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                    }
                     </Radio.Group>
                 </Form.Item>
             }
@@ -159,7 +197,7 @@ export const StudentPaymentUpdate = ({
                     className="flex-grow-1 flex-sm-grow-0" />
                 </Container>
             </Form>
-        </>
+        </Container>
     )
 }
 

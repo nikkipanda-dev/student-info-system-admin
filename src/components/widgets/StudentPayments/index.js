@@ -5,7 +5,6 @@ import Container from "../../core/Container";
 import Modal from "../Modal";
 import Button from "../../core/Button";
 import Text from "../../core/Text";
-import Alert from "../Alert";
 import StudentPaymentsForm from "../StudentPaymentsForm";
 import StudentPaymentsTable from "../StudentPaymentsTable";
 
@@ -26,34 +25,17 @@ export const StudentPayments = ({
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [title, setTitle] = useState('');
-    const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handlePayments = payload => setPayments(payload);
     const handleShowModal = () => setIsModalVisible(true);
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
 
-    const resetForm = () => {
+    const resetForm = (form, handleHeader, handleStatus, handleAlert) => {
         form.resetFields();
         handleHeader('');
         handleStatus('');
         handleAlert('');
-    }
-
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
-
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
     }
 
     const handleModalContent = (payload, title) => {
@@ -93,18 +75,9 @@ export const StudentPayments = ({
                     emitMessage={emitMessage}
                     isAuth={isAuth}
                     resetForm={resetForm}
-                    handleAlertComponent={handleAlertComponent}
                     payments={payments}
                     handlePayments={handlePayments}
-                    handleHideModal={handleHideModal}
-                    {...alert && {
-                        alert: <Alert
-                            status={status}
-                            header={header}
-                            css={{ marginBottom: '$20', }}>
-                            {alert}
-                        </Alert>
-                    }} />, "Add Payment"
+                    handleHideModal={handleHideModal} />, "Add Payment"
                 )}
                 color={isModalVisible ? '' : "yellow"}
                 text={isModalVisible ? "Cancel" : "Add Payment"} />
@@ -122,18 +95,9 @@ export const StudentPayments = ({
                 payments={payments}
                 handlePayments={handlePayments}
                 updatePayment={updatePayment}
-                handleAlertComponent={handleAlertComponent}
                 handleHideModal={handleHideModal}
                 deletePayment={deletePayment}
-                authUser={authUser}
-                {...alert && {
-                    alert: <Alert
-                        status={status}
-                        header={header}
-                        css={{ marginBottom: '$20', }}>
-                        {alert}
-                    </Alert>
-                }} /> :
+                authUser={authUser} /> :
                 <Text type="span">No data</Text>
             }
             </Container>
