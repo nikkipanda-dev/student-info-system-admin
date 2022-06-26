@@ -3,14 +3,6 @@ import {
     useEffect,
     useRef,
 } from "react";
-import {
-    Form,
-    Input,
-    Select,
-    Radio,
-    DatePicker,
-    InputNumber,
-} from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
 import { styled, } from "../../../stitches.config";
@@ -18,11 +10,10 @@ import { styled, } from "../../../stitches.config";
 import Button from "../../core/Button";
 import Image from "../../core/Image";
 import Text from "../../core/Text";
+import Alert from "../Alert";
 import Container from "../../core/Container";
 import Label from "../../core/Label";
 import NotFound from "../NotFound";
-
-const { Option } = Select;
 
 const NativeInput = styled('input', {});
 
@@ -41,46 +32,29 @@ const styling = {
     },
 }
 
-const formItemLayout = {
-    labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
-    },
-    wrapperCol: {
-        sm: { span: 24, },
-        md: { span: 24, },
-    },
-}
-
-const validateMessages = {
-    required: '${label} is required.',
-    types: {
-        email: '${label} is not a valid email.',
-    },
-    string: {
-        range: "${label} must be must be between ${min} and ${max} characters.",
-    },
-};
-
 export const StudentCorForm = ({
     student,
     onFinish,
     emitMessage,
     isAuth,
-    handleAlertComponent,
     cors,
     handleCors,
     authUser,
     handleHideModal,
-    alert,
 }) => {
     const ref = useRef('');
 
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
+    const [alert, setAlert] = useState('');
+    const [status, setStatus] = useState('');
+    const [header, setHeader] = useState('');
 
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
+    const handleAlert = message => setAlert(message);
+    const handleStatus = status => setStatus(status);
+    const handleHeader = header => setHeader(header);
     let arr;
 
     const paymentModes = [
@@ -135,6 +109,17 @@ export const StudentCorForm = ({
             label: "Verified",
         },
     ];
+
+    const handleAlertComponent = (header, status, message) => {
+        if (!(message)) {
+            handleAlert('');
+            return;
+        }
+
+        handleHeader(header);
+        handleStatus(status);
+        handleAlert(<Text type="span">{message}</Text>);
+    }
 
     const handleRemoveImage = () => {
         handleFile('');
@@ -192,7 +177,7 @@ export const StudentCorForm = ({
 
         .catch(err => {
             if (err.response && err.response.data.errors) {
-                handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
+                err.response.data.errors.image && handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
             }
         });
     }
@@ -219,6 +204,12 @@ export const StudentCorForm = ({
 
     return (
         <Container css={styling}>
+            <Container>
+            {
+                alert &&
+                <Alert status={status} header={header} css={{ margin: '0' }}>{alert}</Alert>
+            }
+            </Container>
         {
             !(file) &&
             <Container>
@@ -255,11 +246,6 @@ export const StudentCorForm = ({
         {
             imageUrl &&
             <Container>
-                <Container>
-                {
-                    alert
-                }
-                </Container>
                 <Image src={imageUrl} />
                 <Button
                 text={
