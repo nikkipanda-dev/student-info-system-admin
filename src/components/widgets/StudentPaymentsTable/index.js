@@ -12,7 +12,6 @@ import StudentPaymentUpdate from '../StudentPaymentUpdate';
 import StudentPayment from '../StudentPayment';
 
 export const StudentPaymentsTable = ({ 
-    values, 
     handleModalContent,
     deletePayment,
     authUser,
@@ -160,11 +159,11 @@ export const StudentPaymentsTable = ({
     ];
 
     return (
-        (values && (Object.keys(values).length > 0)) &&
+        (payments && (Object.keys(payments).length > 0)) &&
         <Container>
             <Table
             columns={columns}
-            dataSource={[...values]}
+            dataSource={[...payments]}
             rowKey="slug"
             scroll={{
                 x: 700,

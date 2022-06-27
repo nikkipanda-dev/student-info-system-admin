@@ -53,7 +53,17 @@ export const StudentContent = ({
         student={context.student}
         slug={context.slug}
         authUser={context.authUser} /> :
-        (params.tab_slug === "registrar-files") ? <StudentRegistrarFiles /> : <Navigate to="/not-found" replace={true} />
+        (params.tab_slug === "registrar-files") ? 
+        <StudentRegistrarFiles 
+        getRegistrarFiles={getRegistrarFiles}
+        storeRegistrarFile={storeRegistrarFile}
+        updateRegistrarFile={updateRegistrarFile}
+        deleteRegistrarFile={deleteRegistrarFile}
+        isAuth={context.isAuth}
+        emitMessage={context.emitMessage}
+        student={context.student}
+        slug={context.slug}
+        authUser={context.authUser} /> : <Navigate to="/not-found" replace={true} />
     )
 }
 
@@ -159,6 +169,42 @@ async function updatePermit(form) {
 
 async function deletePermit(form) {
     return request.post("student-permit-destroy", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function getRegistrarFiles(email, slug) {
+    return request.get("student-registrar-files-get", {
+        params: {
+            auth_email: email,
+            slug: slug,
+        },
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function storeRegistrarFile(form) {
+    return request.post("student-registrar-file-store", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function updateRegistrarFile(form) {
+    return request.post("student-registrar-file-update", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function deleteRegistrarFile(form) {
+    return request.post("student-registrar-file-destroy", form, {
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }
