@@ -87,7 +87,6 @@ export const StudentPayments = ({
             {
                 (payments && (Object.keys(payments).length > 0)) ?
                 <StudentPaymentsTable 
-                values={payments} 
                 handleModalContent={handleModalContent}
                 emitMessage={emitMessage}
                 isAuth={isAuth}
