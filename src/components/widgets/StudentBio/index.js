@@ -1,6 +1,7 @@
 import Container from "../../core/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, } from "@fortawesome/free-solid-svg-icons";
+import { ordinalNumbers, } from "../../../util";
 import { 
     studentBioStyle, 
     anchorStyle,
@@ -27,18 +28,12 @@ export const StudentBio = ({
         bsba: "Bachelor of Science in Business Administration",
     };
 
-    const terms = {
-        1: "1st",
-        2: "2nd",
-        3: "3rd",
-    }
-
     if (!(courses[values.course])) {
         console.error('Invalid course.');
         return;
     }
 
-    if (!(terms[values.term])) {
+    if (!(ordinalNumbers[values.term])) {
         console.error('Invalid term.');
         return;
     }
@@ -62,7 +57,7 @@ export const StudentBio = ({
                     {`${values.email}`}
                 </Text>
                 <Text type="span">{`${courses[values.course]}`}</Text>
-                <Text type="span">{`${values.year}, ${terms[values.term]} term`}</Text>
+                <Text type="span">{`${ordinalNumbers[values.year]} year, ${ordinalNumbers[values.term]} term`}</Text>
             </Container>
         </Card>
     )

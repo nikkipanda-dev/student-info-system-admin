@@ -22,7 +22,7 @@ const validateMessages = {
         email: '${label} is not a valid email.',
     },
     string: {
-        range: "${label} must be must be between ${min} and ${max} characters.",
+        range: "${label} must be between ${min} and ${max} characters.",
     },
 };
 
