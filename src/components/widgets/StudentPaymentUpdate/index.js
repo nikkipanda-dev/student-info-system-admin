@@ -1,9 +1,9 @@
 import { useState, useEffect, } from "react";
-import { Form, Input, Radio, } from "antd";
+import { Form, Radio, } from "antd";
 import Button from "../../core/Button";
 import Container from "../../core/Container";
 import { getAuthEmail, } from "../../../util/auth";
-import { getErrorMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 
 import Alert from "../Alert";
 import Text from "../../core/Text";
@@ -58,13 +58,9 @@ export const StudentPaymentUpdate = ({
 }) => {
     const [helpers, setHelpers] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleHelpers = payload => setHelpers(payload);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
 
     const statusOptions = [
         {
@@ -78,17 +74,6 @@ export const StudentPaymentUpdate = ({
             label: "Verified",
         },
     ];
-
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
-
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
 
     const onUpdate = value => {
         if (!(isAuth)) {
@@ -109,9 +94,8 @@ export const StudentPaymentUpdate = ({
         emitMessage("Loading", "loading", 2);
 
         onFinish(updateForm).then(response => {
-            console.info('res ', response.data);
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
@@ -123,6 +107,7 @@ export const StudentPaymentUpdate = ({
                 return Object.values(payments)[val]
             }));
 
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             setTimeout(() => {
                 emitMessage("Payment updated.", "success", 2.5);
@@ -130,7 +115,6 @@ export const StudentPaymentUpdate = ({
         })
 
         .catch(err => {
-            console.info('err ', err.response.data.errors);
             if (err.response && err.response.data.errors) {
                 handleHelpers({
                     status: err.response.data.errors.status && getErrorMessage(err.response.data.errors.status[0]),
@@ -156,12 +140,7 @@ export const StudentPaymentUpdate = ({
     return (
         <Container css={styling}>
         {
-            <Container>
-            {
-                alert && 
-                <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
-            }
-            </Container>
+            alert
         }
             <Form
             name="student-update-payment-form"

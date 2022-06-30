@@ -1,5 +1,4 @@
 import { useState, useEffect, } from "react";
-import { Form, } from "antd";
 import Container from "../../core/Container";
 
 import Modal from "../Modal";
@@ -19,8 +18,6 @@ export const StudentCors = ({
     slug,
     authUser,
 }) => {
-    const [form] = Form.useForm();
-
     const [cors, setCors] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');

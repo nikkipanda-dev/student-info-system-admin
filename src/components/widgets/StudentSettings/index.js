@@ -1,6 +1,6 @@
 import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
-import { getMessage, } from "../../../util";
+import { emitMessage, } from "../../../util";
 
 import SettingsNameForm from "../SettingsNameForm";
 import SettingsDisplayPhotoForm from "../SettingsDisplayPhotoForm";
@@ -13,14 +13,6 @@ export const StudentSettings = ({
     values,
     handleStudent,
 }) => {
-    const emitMessage = (content, status, duration) => {
-        return getMessage({
-            content: content,
-            status: status,
-            duration: duration,
-        });
-    }
-
     return (
         (values && (Object.keys(values).length > 0)) && 
         <>

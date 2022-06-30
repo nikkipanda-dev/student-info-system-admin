@@ -47,7 +47,7 @@ export const StudentBio = ({
                 values.display_photo ? <Image src={values.display_photo} css={displayPhotoStyle} /> : 
                 <FontAwesomeIcon icon={faUser} className="fa-fw fa-10x" />
             }
-                <Text type="span">{`${values.first_name} ${values.middle_name} ${values.last_name}`}</Text>
+                <Text type="span">{`${values.first_name} ${values.middle_name ?? ''} ${values.last_name}`}</Text>
                 <Text 
                 type="span" 
                 as="a" 

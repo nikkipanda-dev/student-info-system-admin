@@ -2,7 +2,7 @@ import { useState, useEffect, } from "react";
 import { request, } from "../../../util/request";
 import { getToken, } from "../../../util/auth";
 import { Form, } from "antd";
-import { getMessage, } from "../../../util";
+import { emitMessage, } from "../../../util";
 import Container from "../../core/Container";
 import { sectionStyle, } from "../../../stitches.config";
 
@@ -10,8 +10,7 @@ import Section from "../../core/Section";
 import Text from "../../core/Text";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
-import Alert from "../../widgets/Alert";
-import { Students as StudentsTable } from "../../widgets/Students";
+import StudentsTable from "../../widgets/StudentsTable";
 import RegisterStudent from "../../widgets/RegisterStudent";
 
 export const Students = ({ isAuth, authUser, }) => {
@@ -35,14 +34,6 @@ export const Students = ({ isAuth, authUser, }) => {
 
     const resetForm = () => {
         form.resetFields();
-    }
-
-    const emitMessage = (content, status, duration) => {
-        return getMessage({
-            content: content,
-            status: status,
-            duration: duration,
-        });
     }
 
     useEffect(() => {

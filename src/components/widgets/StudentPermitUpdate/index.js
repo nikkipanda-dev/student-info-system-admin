@@ -72,7 +72,6 @@ export const StudentPermitUpdate = ({
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
     const handleAlertComponent = payload => setAlert(payload);
-    let arr;
 
     const handleHelpers = payload => setHelpers(payload);
 
@@ -93,17 +92,6 @@ export const StudentPermitUpdate = ({
             label: "Final",
         },
     ];
-
-    // const handleAlertComponent = (header, status, message) => {
-    //     if (!(message)) {
-    //         handleAlert('');
-    //         return;
-    //     }
-
-    //     handleHeader(header);
-    //     handleStatus(status);
-    //     handleAlert(<Text type="span">{message}</Text>);
-    // }
 
     const handleRemoveImage = () => {
         handleFile('');

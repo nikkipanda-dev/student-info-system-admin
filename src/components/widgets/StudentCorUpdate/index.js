@@ -12,7 +12,6 @@ import Container from "../../core/Container";
 import Label from "../../core/Label";
 import Text from "../../core/Text";
 import Image from "../../core/Image";
-import Alert from "../Alert";
 import NotFound from "../NotFound";
 import Button from "../../core/Button";
 
@@ -106,17 +105,6 @@ export const StudentCorUpdate = ({
             label: "Verified",
         },
     ];
-
-    // const handleAlertComponent = (header, status, message) => {
-    //     if (!(message)) {
-    //         handleAlert('');
-    //         return;
-    //     }
-
-    //     handleHeader(header);
-    //     handleStatus(status);
-    //     handleAlert(<Text type="span">{message}</Text>);
-    // }
 
     const handleRemoveImage = () => {
         handleFile('');

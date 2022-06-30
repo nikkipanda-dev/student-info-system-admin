@@ -11,7 +11,6 @@ import { styled, } from "../../../stitches.config";
 import Button from "../../core/Button";
 import Image from "../../core/Image";
 import Text from "../../core/Text";
-import Alert from "../Alert";
 import Container from "../../core/Container";
 import Label from "../../core/Label";
 import NotFound from "../NotFound";

@@ -19,7 +19,6 @@ import Image from "../../core/Image";
 import Text from "../../core/Text";
 import Button from "../../core/Button";
 import NotFound from "../NotFound";
-import Alert from "../Alert";
 
 const NativeInput = styled('input', {});
 
@@ -63,7 +62,6 @@ export const StudentRegistrarFileUpdate = ({
     handleHideModal,
     authUser,
 }) => {
-    console.info('val ', values);
     const ref = useRef('');
 
     const [registrarFile, setRegistrarFile] = useState('');
@@ -78,7 +76,6 @@ export const StudentRegistrarFileUpdate = ({
     const handleFiles = value => setFiles(value);
     const handleImageUrls = value => setImageUrls(value);
     const handleAlertComponent = payload => setAlert(payload);
-    let arr;
 
     const handleHelpers = payload => setHelpers(payload);
 
@@ -94,17 +91,6 @@ export const StudentRegistrarFileUpdate = ({
             label: "Verified",
         },
     ];
-
-    // const handleAlertComponent = (header, status, message) => {
-    //     if (!(message)) {
-    //         handleAlert('');
-    //         return;
-    //     }
-
-    //     handleHeader(header);
-    //     handleStatus(status);
-    //     handleAlert(<Text type="span">{message}</Text>);
-    // }
 
     const handleRemoveImage = value => {
         let target = Object.values(imageUrls).find(el => el.id === value);

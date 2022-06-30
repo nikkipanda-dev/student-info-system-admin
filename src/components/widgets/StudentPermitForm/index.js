@@ -5,7 +5,6 @@ import {
 } from "react";
 import { 
     Form, 
-    Input,
     Radio,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -145,17 +144,6 @@ export const StudentPermitForm = ({
             label: "Final",
         },
     ];
-
-    // const handleAlertComponent = (header, status, message) => {
-    //     if (!(message)) {
-    //         handleAlert('');
-    //         return;
-    //     }
-
-    //     handleHeader(header);
-    //     handleStatus(status);
-    //     handleAlert(<Text type="span">{message}</Text>);
-    // }
 
     const handleRemoveImage = () => {
         handleFile('');

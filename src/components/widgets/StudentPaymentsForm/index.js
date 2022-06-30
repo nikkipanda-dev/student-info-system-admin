@@ -5,7 +5,6 @@ import {
 } from "react";
 import { 
     Form, 
-    Input, 
     Select, 
     Radio,
     DatePicker,
@@ -144,17 +143,6 @@ export const StudentPaymentsForm = ({
             label: "Verified",
         },
     ];
-
-    // const handleAlertComponent = (header, status, message) => {
-    //     if (!(message)) {
-    //         handleAlert('');
-    //         return;
-    //     }
-
-    //     handleHeader(header);
-    //     handleStatus(status);
-    //     handleAlert(<Text type="span">{message}</Text>);
-    // }
 
     const handleRemoveImage = value => {
         let target = Object.values(imageUrls).find(el => el.id === value);
