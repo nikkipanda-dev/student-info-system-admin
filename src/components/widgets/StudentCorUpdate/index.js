@@ -5,6 +5,7 @@ import {
 } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
+import { getAlertComponent, } from "../../../util";
 import { styled } from "../../../stitches.config";
 
 import Container from "../../core/Container";
@@ -48,14 +49,10 @@ export const StudentCorUpdate = ({
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
 
     const paymentModes = [
         {
@@ -110,16 +107,16 @@ export const StudentCorUpdate = ({
         },
     ];
 
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
+    // const handleAlertComponent = (header, status, message) => {
+    //     if (!(message)) {
+    //         handleAlert('');
+    //         return;
+    //     }
 
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
+    //     handleHeader(header);
+    //     handleStatus(status);
+    //     handleAlert(<Text type="span">{message}</Text>);
+    // }
 
     const handleRemoveImage = () => {
         handleFile('');
@@ -157,7 +154,7 @@ export const StudentCorUpdate = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
@@ -175,7 +172,7 @@ export const StudentCorUpdate = ({
 
             handleRemoveImage();
             handleHideModal();
-            handleAlertComponent("", "", null);
+            handleAlertComponent(getAlertComponent(null, null, null));
             setTimeout(() => {
                 emitMessage("COR updated.", "success", 2.5);
             }, 2000);
@@ -183,7 +180,7 @@ export const StudentCorUpdate = ({
 
         .catch(err => {
             if (err.response && err.response.data.errors) {
-                err.response.data.errors.image && handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
+                err.response.data.errors.image && handleAlertComponent(getAlertComponent("Error", "danger", err.response.data.errors.image[0], { marginTop: '0', }));
             }
         });
     }
@@ -210,12 +207,9 @@ export const StudentCorUpdate = ({
 
     return (
         <Container css={styling}>
-            <Container>
-            {
-                alert && 
-                <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
-            }
-            </Container>
+        {
+            alert 
+        }
         {
             !(file) &&
             <Container>

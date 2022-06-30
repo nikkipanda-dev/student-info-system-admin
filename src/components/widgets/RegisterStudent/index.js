@@ -5,7 +5,7 @@ import {
     Radio,
     Select,
 } from 'antd';
-import { getErrorMessage, } from '../../../util';
+import { getErrorMessage, getAlertComponent, } from '../../../util';
 
 import Container from '../../core/Container';
 import Button from '../../core/Button';
@@ -39,16 +39,17 @@ export const RegisterStudent = ({
     authUser,
     emitMessage,
     isAuth,
-    handleAlertComponent,
     students,
     handleStudents,
     resetForm,
     handleHideModal,
 }) => {
+    const [alert, setAlert] = useState('');
     const [helpers, setHelpers] = useState('');
     let arr;
 
     const handleHelpers = payload => setHelpers(payload);
+    const handleAlertComponent = payload => setAlert(payload);
 
     const selectOptions = [
         {
@@ -136,7 +137,9 @@ export const RegisterStudent = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, {
+                    marginTop: '0',
+                }));
                 return;
             }
 
@@ -148,6 +151,7 @@ export const RegisterStudent = ({
 
             resetForm();
             handleStudents(arr);
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             setTimeout(() => {
                 emitMessage("Student added.", "success", 2.5);
@@ -173,86 +177,90 @@ export const RegisterStudent = ({
     }
 
     return (
-        <Form
-        name="student-registration-form"
-        {...formItemLayout}
-        form={form}
-        onFinish={onStore}
-        validateMessages={validateMessages}
-        autoComplete="off">
-            <Form.Item
-            label="First name"
-            name="first_name"
-            {...helpers && helpers.first_name && { help: helpers.first_name }}
-            rules={[{
-                required: true,
-                type: 'string',
-                min: 2,
-                max: 200,
-            }]}>
-                <Input allowClear />
-            </Form.Item>
+        <Container>
+            {
+                alert
+            }
+            <Form
+            name="student-registration-form"
+            {...formItemLayout}
+            form={form}
+            onFinish={onStore}
+            validateMessages={validateMessages}
+            autoComplete="off">
+                <Form.Item
+                label="First name"
+                name="first_name"
+                {...helpers && helpers.first_name && { help: helpers.first_name }}
+                rules={[{
+                    required: true,
+                    type: 'string',
+                    min: 2,
+                    max: 200,
+                }]}>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
-            label="Middle name"
-            name="middle_name"
-            {...helpers && helpers.middle_name && { help: helpers.middle_name }}
-            rules={[{
-                type: 'string',
-                min: 2,
-                max: 200,
-            }]}>
-                <Input allowClear />
-            </Form.Item>
+                <Form.Item
+                label="Middle name"
+                name="middle_name"
+                {...helpers && helpers.middle_name && { help: helpers.middle_name }}
+                rules={[{
+                    type: 'string',
+                    min: 2,
+                    max: 200,
+                }]}>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
-            label="Last name"
-            name="last_name"
-            {...helpers && helpers.last_name && { help: helpers.last_name }}
-            rules={[{
-                required: true,
-                type: 'string',
-                min: 2,
-                max: 200,
-            }]}>
-                <Input allowClear />
-            </Form.Item>
+                <Form.Item
+                label="Last name"
+                name="last_name"
+                {...helpers && helpers.last_name && { help: helpers.last_name }}
+                rules={[{
+                    required: true,
+                    type: 'string',
+                    min: 2,
+                    max: 200,
+                }]}>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
-            label="Student number"
-            name="student_number"
-            {...helpers && helpers.student_number && { help: helpers.student_number }}
-            rules={[{
-                required: true,
-                type: 'string',
-                min: 2,
-                max: 200,
-            }]}>
-                <Input allowClear />
-            </Form.Item>
+                <Form.Item
+                label="Student number"
+                name="student_number"
+                {...helpers && helpers.student_number && { help: helpers.student_number }}
+                rules={[{
+                    required: true,
+                    type: 'string',
+                    min: 2,
+                    max: 200,
+                }]}>
+                    <Input allowClear />
+                </Form.Item>
 
             {
-                (selectOptions && (Object.keys(selectOptions).length > 0)) &&    
+                (selectOptions && (Object.keys(selectOptions).length > 0)) &&
                 <Form.Item
-                    label="Course"
-                    name="course"
-                    {...helpers && helpers.course && { help: helpers.course }}
-                    rules={[{
-                        required: true,
-                        message: "Course is required.",
-                    }]}>
+                label="Course"
+                name="course"
+                {...helpers && helpers.course && { help: helpers.course }}
+                rules={[{
+                    required: true,
+                    message: "Course is required.",
+                }]}>
                     <Select>
                     {
-                        Object.keys(selectOptions).map((i, val) => <Option 
-                        key={Object.values(selectOptions)[val].id} 
-                        value={Object.values(selectOptions)[val].value} 
-                        disabled={Object.values(selectOptions)[val].isDisabled}>{Object.values(selectOptions)[val].label}</Option>)
+                        Object.keys(selectOptions).map((i, val) => <Option
+                            key={Object.values(selectOptions)[val].id}
+                            value={Object.values(selectOptions)[val].value}
+                            disabled={Object.values(selectOptions)[val].isDisabled}>{Object.values(selectOptions)[val].label}</Option>)
                     }
                     </Select>
                 </Form.Item>
             }
 
-            {/* <Form.Item
+                {/* <Form.Item
             label="Year"
             name="year"
             {...helpers && helpers.year && { help: helpers.year }}
@@ -268,90 +276,91 @@ export const RegisterStudent = ({
             {
                 (yearOptions && (Object.keys(yearOptions).length > 0)) &&
                 <Form.Item
-                    label="Year"
-                    name="year"
-                    {...helpers && helpers.year && { help: helpers.year }}
-                    rules={[{
-                        required: true,
-                        message: "Year is required.",
-                    }]}>
-                    <Radio.Group>
-                        {
-                            Object.keys(yearOptions).map((_, val) => <Radio key={`year-${Object.values(yearOptions)[val].id}`} value={Object.values(yearOptions)[val].value}>{Object.values(yearOptions)[val].label}</Radio>)
-                        }
-                    </Radio.Group>
-                </Form.Item>
-            }
-
-            {
-                (termOptions && (Object.keys(termOptions).length > 0)) &&   
-                <Form.Item
-                    label="Term"
-                    name="term"
-                    {...helpers && helpers.term && { help: helpers.term }}
-                    rules={[{
-                        required: true,
-                        message: "Term is required.",
-                    }]}>
+                label="Year"
+                name="year"
+                {...helpers && helpers.year && { help: helpers.year }}
+                rules={[{
+                    required: true,
+                    message: "Year is required.",
+                }]}>
                     <Radio.Group>
                     {
-                        Object.keys(termOptions).map((_, val) => <Radio key={`term-${Object.values(termOptions)[val].id}`} value={Object.values(termOptions)[val].value}>{Object.values(termOptions)[val].label}</Radio>)
+                        Object.keys(yearOptions).map((_, val) => <Radio key={`year-${Object.values(yearOptions)[val].id}`} value={Object.values(yearOptions)[val].value}>{Object.values(yearOptions)[val].label}</Radio>)
                     }
                     </Radio.Group>
                 </Form.Item>
             }
 
-            <Form.Item
-            label="Email address"
-            name="email"
-            {...helpers && helpers.email && { help: helpers.email }}
-            rules={[{ required: true, type: 'email', }]}>
-                <Input allowClear />
-            </Form.Item>
-
-            <Form.Item
-            label="Temporary password"
-            name="password"
-            {...helpers && helpers.password && { help: helpers.password }}
-            rules={[{ 
-                required: true, 
-                type: 'string',
-                min: 8,
-                max: 20,
-            }]}>
-                <Input.Password allowClear visibilityToggle />
-            </Form.Item>
-
-            <Form.Item
-            label="Repeat password"
-            name="password_confirmation"
-            dependencies={['password']}
-            {...helpers && helpers.password_confirmation && { help: helpers.password_confirmation }}
-            rules={[
-                {
+            {
+                (termOptions && (Object.keys(termOptions).length > 0)) &&
+                <Form.Item
+                label="Term"
+                name="term"
+                {...helpers && helpers.term && { help: helpers.term }}
+                rules={[{
                     required: true,
-                    message: 'Please confirm the temporary password.',
-                },
-                ({ getFieldValue }) => ({
-                    validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                            return Promise.resolve();
+                    message: "Term is required.",
+                }]}>
+                    <Radio.Group>
+                        {
+                            Object.keys(termOptions).map((_, val) => <Radio key={`term-${Object.values(termOptions)[val].id}`} value={Object.values(termOptions)[val].value}>{Object.values(termOptions)[val].label}</Radio>)
                         }
-                        return Promise.reject(new Error('The two passwords that you entered do not match.'));
-                    },
-                }),
-            ]}>
-                <Input.Password allowClear visibilityToggle />
-            </Form.Item>
+                    </Radio.Group>
+                </Form.Item>
+            }
 
-            <Container className="d-flex">
-                <Button
-                submit
-                text="Submit"
-                color="blue"
-                className="flex-grow-1 flex-sm-grow-0" />
-            </Container>
-        </Form>
+                <Form.Item
+                label="Email address"
+                name="email"
+                {...helpers && helpers.email && { help: helpers.email }}
+                rules={[{ required: true, type: 'email', }]}>
+                    <Input allowClear />
+                </Form.Item>
+
+                <Form.Item
+                label="Temporary password"
+                name="password"
+                {...helpers && helpers.password && { help: helpers.password }}
+                rules={[{
+                    required: true,
+                    type: 'string',
+                    min: 8,
+                    max: 20,
+                }]}>
+                    <Input.Password allowClear visibilityToggle />
+                </Form.Item>
+
+                <Form.Item
+                label="Repeat password"
+                name="password_confirmation"
+                dependencies={['password']}
+                {...helpers && helpers.password_confirmation && { help: helpers.password_confirmation }}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please confirm the temporary password.',
+                    },
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            if (!value || getFieldValue('password') === value) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('The two passwords that you entered do not match.'));
+                        },
+                    }),
+                ]}>
+                    <Input.Password allowClear visibilityToggle />
+                </Form.Item>
+
+                <Container className="d-flex">
+                    <Button
+                    submit
+                    text="Submit"
+                    color="blue"
+                    className="flex-grow-1 flex-sm-grow-0" />
+                </Container>
+            </Form>
+        </Container>
     )
 }
 

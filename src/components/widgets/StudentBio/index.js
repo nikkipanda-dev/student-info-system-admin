@@ -19,8 +19,6 @@ export const StudentBio = ({
     className,
     css,
 }) => {
-    console.info('val BIO ', values);
-
     const courses = {
         bsit: "Bachelor of Science in Information Technology",
         bscs: "Bachelor of Science in Computer Science",

@@ -5,6 +5,7 @@ import {
 } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
+import { getAlertComponent, } from "../../../util";
 import { styled, } from "../../../stitches.config";
 
 import Button from "../../core/Button";
@@ -47,14 +48,10 @@ export const StudentCorForm = ({
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
     let arr;
 
     const paymentModes = [
@@ -110,17 +107,6 @@ export const StudentCorForm = ({
         },
     ];
 
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
-
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
-
     const handleRemoveImage = () => {
         handleFile('');
         handleImageUrl('');
@@ -156,7 +142,7 @@ export const StudentCorForm = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
@@ -169,7 +155,7 @@ export const StudentCorForm = ({
             handleRemoveImage();
             handleCors(arr);
             handleHideModal();
-            handleAlertComponent("", "", null);
+            handleAlertComponent(getAlertComponent(null, null, null));
             setTimeout(() => {
                 emitMessage("COR added.", "success", 2.5);
             }, 2000);
@@ -177,7 +163,7 @@ export const StudentCorForm = ({
 
         .catch(err => {
             if (err.response && err.response.data.errors) {
-                err.response.data.errors.image && handleAlertComponent("Error", "danger", err.response.data.errors.image[0]);
+                err.response.data.errors.image && handleAlertComponent(getAlertComponent("Error", "danger", err.response.data.errors.image[0], { marginTop: '0', }));
             }
         });
     }
@@ -204,12 +190,9 @@ export const StudentCorForm = ({
 
     return (
         <Container css={styling}>
-            <Container>
-            {
-                alert &&
-                <Alert status={status} header={header} css={{ margin: '0' }}>{alert}</Alert>
-            }
-            </Container>
+        {
+            alert
+        }
         {
             !(file) &&
             <Container>

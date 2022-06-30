@@ -1,9 +1,7 @@
-import { Link, } from 'react-router-dom';
 import { Form, Table, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
-import { termOptions, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';

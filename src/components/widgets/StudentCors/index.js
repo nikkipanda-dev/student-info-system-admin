@@ -5,7 +5,6 @@ import Container from "../../core/Container";
 import Modal from "../Modal";
 import Button from "../../core/Button";
 import Text from "../../core/Text";
-import Alert from "../Alert";
 import StudentCorTable from "../StudentCorTable";
 import StudentCorForm from "../StudentCorForm";
 
@@ -31,13 +30,6 @@ export const StudentCors = ({
     const handleShowModal = () => setIsModalVisible(true);
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
-
-    // const resetForm = () => {
-    //     form.resetFields();
-    //     handleHeader('');
-    //     handleStatus('');
-    //     handleAlert('');
-    // }
 
     const handleModalContent = (payload, title) => {
         setModalContent(payload);

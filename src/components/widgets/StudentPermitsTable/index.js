@@ -1,4 +1,3 @@
-import { Link, } from 'react-router-dom';
 import { Form, Table, } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
@@ -20,11 +19,9 @@ export const StudentPermitsTable = ({
     permits,
     handlePermits,
     updatePermit,
-    handleAlertComponent,
     handleHideModal,
     deletePermit,
     authUser,
-    alert,
  }) => {
     const [form] = Form.useForm();
 
@@ -154,8 +151,6 @@ export const StudentPermitsTable = ({
                     isAuth={isAuth}
                     student={student}
                     slug={record.slug}
-                    alert={alert}
-                    handleAlertComponent={handleAlertComponent}
                     handleHideModal={handleHideModal}
                     authUser={authUser} />, "Update Payment")}
                 css={{ marginLeft: '$10', }} />

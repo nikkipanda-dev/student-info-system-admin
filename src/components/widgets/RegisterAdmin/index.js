@@ -1,6 +1,6 @@
 import { useState, forwardRef, } from 'react';
 import { Form, Input, } from 'antd';
-import { getErrorMessage, } from '../../../util';
+import { getErrorMessage, getAlertComponent, } from '../../../util';
 
 import Container from '../../core/Container';
 import Button from '../../core/Button';
@@ -32,16 +32,17 @@ export const RegisterAdmin = forwardRef(({
     authUser,
     emitMessage,
     isAuth,
-    handleAlertComponent,
     administrators,
     handleAdministrators,
     resetForm,
     handleHideModal,
 }, ref) => {
     const [helpers, setHelpers] = useState('');
+    const [alert, setAlert] = useState('');
     let arr;
 
     const handleHelpers = payload => setHelpers(payload);
+    const handleAlertComponent = payload => setAlert(payload);
 
     const onStore = values => {
         if (!(isAuth)) {
@@ -61,13 +62,18 @@ export const RegisterAdmin = forwardRef(({
 
         onFinish(form).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
             arr = administrators;
-            (Object.values(arr).length > 0) ? arr.push(response.data.data.details) : arr = [response.data.data.details];
+            (Object.values(arr).length > 0) && arr.push(response.data.data.details);
+            if (Object.values(arr).length === 0) {
+                arr = [response.data.data.details]
+            }
+
             resetForm();
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             handleAdministrators(arr);
             setTimeout(() => {
@@ -91,103 +97,108 @@ export const RegisterAdmin = forwardRef(({
     }
 
     return (
-        <Form
-        name="admin-registration-form"
-        {...formItemLayout}
-        form={form}
-        ref={ref}
-        onFinish={onStore}
-        validateMessages={validateMessages}
-        autoComplete="off">
-            <Form.Item
+        <Container>
+        {
+            alert
+        }
+            <Form
+            name="admin-registration-form"
+            {...formItemLayout}
+            form={form}
+            ref={ref}
+            onFinish={onStore}
+            validateMessages={validateMessages}
+            autoComplete="off">
+                <Form.Item
                 label="First name"
                 name="first_name"
                 {...helpers && helpers.first_name && { help: helpers.first_name }}
-                rules={[{ 
-                    required: true, 
-                    type: 'string', 
-                    min: 2, 
+                rules={[{
+                    required: true,
+                    type: 'string',
+                    min: 2,
                     max: 200,
                 }]}>
-                <Input allowClear />
-            </Form.Item>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
+                <Form.Item
                 label="Middle name"
                 name="middle_name"
                 {...helpers && helpers.middle_name && { help: helpers.middle_name }}
-                rules={[{ 
+                rules={[{
                     type: 'string',
                     min: 2,
                     max: 200,
                 }]}>
-                <Input allowClear />
-            </Form.Item>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
+                <Form.Item
                 label="Last name"
                 name="last_name"
                 {...helpers && helpers.last_name && { help: helpers.last_name }}
-                rules={[{ 
-                    required: true, 
+                rules={[{
+                    required: true,
                     type: 'string',
                     min: 2,
                     max: 200,
                 }]}>
-                <Input allowClear />
-            </Form.Item>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
-            label="Email address"
-            name="email"
-            {...helpers && helpers.email && { help: helpers.email }}
-            rules={[{ required: true, type: 'email', }]}>
-                <Input allowClear />
-            </Form.Item>
+                <Form.Item
+                label="Email address"
+                name="email"
+                {...helpers && helpers.email && { help: helpers.email }}
+                rules={[{ required: true, type: 'email', }]}>
+                    <Input allowClear />
+                </Form.Item>
 
-            <Form.Item
-            label="Temporary password"
-            name="password"
-            {...helpers && helpers.password && { help: helpers.password }}
-            rules={[{ 
-                required: true,
-                type: 'string',
-                min: 8,
-                max: 20,
-            }]}>
-                <Input.Password allowClear visibilityToggle />
-            </Form.Item>
-
-            <Form.Item
-            label="Repeat password"
-            name="password_confirmation"
-            dependencies={['password']}
-            {...helpers && helpers.password_confirmation && { help: helpers.password_confirmation }}
-            rules={[
-                {
+                <Form.Item
+                label="Temporary password"
+                name="password"
+                {...helpers && helpers.password && { help: helpers.password }}
+                rules={[{
                     required: true,
-                    message: 'Please confirm the temporary password.',
-                },
-                ({ getFieldValue }) => ({
-                    validator(_, value) {
-                        if (!value || getFieldValue('password') === value) {
-                            return Promise.resolve();
-                        }
-                        return Promise.reject(new Error('The two passwords that you entered do not match.'));
-                    },
-                }),
-            ]}>
-                <Input.Password allowClear visibilityToggle />
-            </Form.Item>
+                    type: 'string',
+                    min: 8,
+                    max: 20,
+                }]}>
+                    <Input.Password allowClear visibilityToggle />
+                </Form.Item>
 
-            <Container className="d-flex">
-                <Button
-                submit
-                text="Submit"
-                color="blue"
-                className="flex-grow-1 flex-sm-grow-0" />
-            </Container>
-        </Form>
+                <Form.Item
+                label="Repeat password"
+                name="password_confirmation"
+                dependencies={['password']}
+                {...helpers && helpers.password_confirmation && { help: helpers.password_confirmation }}
+                rules={[
+                    {
+                        required: true,
+                        message: 'Please confirm the temporary password.',
+                    },
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                            if (!value || getFieldValue('password') === value) {
+                                return Promise.resolve();
+                            }
+                            return Promise.reject(new Error('The two passwords that you entered do not match.'));
+                        },
+                    }),
+                ]}>
+                    <Input.Password allowClear visibilityToggle />
+                </Form.Item>
+
+                <Container className="d-flex">
+                    <Button
+                    submit
+                    text="Submit"
+                    color="blue"
+                    className="flex-grow-1 flex-sm-grow-0" />
+                </Container>
+            </Form>
+        </Container>
     )
 });
 

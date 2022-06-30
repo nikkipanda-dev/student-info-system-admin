@@ -11,7 +11,7 @@ import {
     DatePicker,
     InputNumber,
 } from "antd";
-import { getErrorMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
 import { styled, } from "../../../stitches.config";
@@ -83,15 +83,11 @@ export const StudentPaymentsForm = ({
     const [files, setFiles] = useState('');
     const [imageUrls, setImageUrls] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleIsInstallment = isInstallment => setIsInstallment(isInstallment);
     const handleFiles = value => setFiles(value);
     const handleImageUrls = value => setImageUrls(value);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
     let arr;
 
     const handleHelpers = payload => setHelpers(payload);
@@ -149,16 +145,16 @@ export const StudentPaymentsForm = ({
         },
     ];
 
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
+    // const handleAlertComponent = (header, status, message) => {
+    //     if (!(message)) {
+    //         handleAlert('');
+    //         return;
+    //     }
 
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
+    //     handleHeader(header);
+    //     handleStatus(status);
+    //     handleAlert(<Text type="span">{message}</Text>);
+    // }
 
     const handleRemoveImage = value => {
         let target = Object.values(imageUrls).find(el => el.id === value);
@@ -231,7 +227,7 @@ export const StudentPaymentsForm = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
@@ -241,8 +237,9 @@ export const StudentPaymentsForm = ({
                 arr = [response.data.data.details]
             }
 
-            resetForm(form, handleHeader, handleStatus, handleAlert);
+            resetForm(form);
             handlePayments(arr);
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             setTimeout(() => {
                 emitMessage("Payment added.", "success", 2.5);
@@ -296,12 +293,9 @@ export const StudentPaymentsForm = ({
 
     return (
         <Container css={styling}>
-            <Container>
-            {
-                alert && 
-                <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
-            }
-            </Container>
+        {
+            alert
+        }
         {
             (!(files) || (Object.keys(files).length === 0)) && 
                 <Container>
@@ -339,7 +333,7 @@ export const StudentPaymentsForm = ({
             <Container className="d-flex flex-column align-items-center">
             {
                 (imageUrls && (Object.keys(imageUrls))) && 
-                Object.keys(imageUrls).map((i, val) => <Container key={Object.values(imageUrls)[val].id}>
+                Object.keys(imageUrls).map((_, val) => <Container key={Object.values(imageUrls)[val].id}>
                     <Image src={Object.values(imageUrls)[val].src} />
                     <Button
                     text={

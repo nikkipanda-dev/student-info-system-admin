@@ -8,7 +8,7 @@ import {
     Input, 
     Radio,
 } from "antd";
-import { getErrorMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "../../../stitches.config";
@@ -67,14 +67,10 @@ export const StudentRegistrarFilesForm = ({
     const [files, setFiles] = useState('');
     const [imageUrls, setImageUrls] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleFiles = value => setFiles(value);
     const handleImageUrls = value => setImageUrls(value);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
     let arr;
 
     const handleHelpers = payload => setHelpers(payload);
@@ -92,16 +88,16 @@ export const StudentRegistrarFilesForm = ({
         },
     ];
 
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
+    // const handleAlertComponent = (header, status, message) => {
+    //     if (!(message)) {
+    //         handleAlert('');
+    //         return;
+    //     }
 
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
+    //     handleHeader(header);
+    //     handleStatus(status);
+    //     handleAlert(<Text type="span">{message}</Text>);
+    // }
 
     const handleRemoveImage = value => {
         let target = Object.values(imageUrls).find(el => el.id === value);
@@ -165,7 +161,7 @@ export const StudentRegistrarFilesForm = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
@@ -175,7 +171,8 @@ export const StudentRegistrarFilesForm = ({
                 arr = [response.data.data.details]
             }
 
-            resetForm(form, handleHeader, handleStatus, handleAlert);
+            resetForm(form);
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleRegistrarFiles(arr);
             handleHideModal();
             setTimeout(() => {
@@ -225,12 +222,9 @@ export const StudentRegistrarFilesForm = ({
 
     return (
         <Container css={styling}>
-            <Container>
-            {
-                alert &&
-                <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
-            }
-            </Container>
+        {
+            alert
+        }
         {
             (!(files) || (Object.keys(files).length === 0)) &&
             <Container>
@@ -303,7 +297,7 @@ export const StudentRegistrarFilesForm = ({
                 type: 'string',
                 min: 2,
                 max: 500,
-                message: "Description must be must be at least 2 and not more than 500 characters.", 
+                message: "Description must be at least 2 and not more than 500 characters.", 
             }]}>
                 <Input.TextArea 
                 rows={4} 

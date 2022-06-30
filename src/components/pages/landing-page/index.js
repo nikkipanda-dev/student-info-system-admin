@@ -1,9 +1,8 @@
-import { useState, useEffect, } from "react";
-import { useLocation, useNavigate, } from "react-router-dom";
+import { useState, } from "react";
 import { request, } from "../../../util/request";
-import { getErrorMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 import Cookies from "js-cookie";
-import { Form, message, } from "antd";
+import { Form, } from "antd";
 
 import Login from "../../widgets/Login";
 import Section from "../../core/Section";
@@ -14,14 +13,10 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
     const [form] = Form.useForm();
 
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
     const [emailHelp, setEmailHelp] = useState('');
     const [passwordHelp, setPasswordHelp] = useState('');
 
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
     const handleEmailHelp = message => setEmailHelp(message);
     const handlePasswordHelp = message => setPasswordHelp(message);
 
@@ -33,15 +28,15 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
         
         login(form).then(response => {
             if (!(response.data.is_success)) {
-                handleHeader("Login failed");
-                handleStatus("danger");
-                handleAlert(<Text type="span">{response.data.data}</Text>);
+                handleAlertComponent(getAlertComponent("Login failed", "danger", response.data.data, {
+                    marginTop: '0',
+                }));
                 return;
             }
 
-            handleHeader("Login successful");
-            handleStatus("success");
-            handleAlert(<Text type="span">Redirecting...</Text>);
+            handleAlertComponent(getAlertComponent("Login successful", "success", "Redirecting...", {
+                marginTop: '0',
+            }));
 
             const cookieExpiration = 0.5;
 
@@ -73,10 +68,7 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
     return (
         <Section background="gray2">
         {
-            alert &&
-            <Alert status={status} header={header}>
-                {alert}
-            </Alert>
+            alert
         }
             <Login 
             onFinish={onLogIn} 

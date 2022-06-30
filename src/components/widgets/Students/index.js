@@ -3,7 +3,7 @@ import { Table, } from 'antd';
 
 import Text from '../../core/Text';
 
-export const Students = ({values, }) => {
+export const Students = ({ values, }) => {
     const columns = [
         {
             title: 'Student #',

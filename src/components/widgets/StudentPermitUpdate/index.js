@@ -10,7 +10,7 @@ import {
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
-import { getErrorMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { styled } from "../../../stitches.config";
 
 import Container from '../../core/Container';
@@ -68,14 +68,10 @@ export const StudentPermitUpdate = ({
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
+    const handleAlertComponent = payload => setAlert(payload);
     let arr;
 
     const handleHelpers = payload => setHelpers(payload);
@@ -98,16 +94,16 @@ export const StudentPermitUpdate = ({
         },
     ];
 
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
+    // const handleAlertComponent = (header, status, message) => {
+    //     if (!(message)) {
+    //         handleAlert('');
+    //         return;
+    //     }
 
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
+    //     handleHeader(header);
+    //     handleStatus(status);
+    //     handleAlert(<Text type="span">{message}</Text>);
+    // }
 
     const handleRemoveImage = () => {
         handleFile('');
@@ -149,7 +145,7 @@ export const StudentPermitUpdate = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
             }
 
@@ -165,9 +161,9 @@ export const StudentPermitUpdate = ({
                 return Object.values(permits)[val];
             }));
 
-            resetForm(form, handleHeader, handleStatus, handleAlert);
+            resetForm(form);
             handleRemoveImage();
-            handleAlertComponent("", "", null);
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             setTimeout(() => {
                 emitMessage("Permit updated.", "success", 2.5);
@@ -206,12 +202,9 @@ export const StudentPermitUpdate = ({
 
     return (
         <Container css={styling}>
-            <Container>
-            {
-                alert &&
-                <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
-            }
-            </Container>
+        {
+            alert
+        }
         {
             !(file) &&
             <Container>
