@@ -3,7 +3,7 @@ import { Table, } from 'antd';
 
 import Text from '../../core/Text';
 
-export const Students = ({values, }) => {
+export const StudentsTable = ({ values, }) => {
     const columns = [
         {
             title: 'Student #',
@@ -71,4 +71,4 @@ export const Students = ({values, }) => {
     )
 }
 
-export default Students;
+export default StudentsTable;

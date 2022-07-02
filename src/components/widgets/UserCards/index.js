@@ -9,10 +9,11 @@ export const UserCards = ({
     onUpdate,
     authUser,
     emitMessage,
+    isModalVisible,
+    handleModalContent,
 }) => {
-    console.info(values);
-
     return (
+        (values && (Object.keys(values).length > 0)) && 
         <Container className={className} css={css}>
         {
             Object.keys(values).map((_, val) => <UserCard 
@@ -20,7 +21,9 @@ export const UserCards = ({
             values={Object.values(values)[val]}
             onUpdate={onUpdate}
             authUser={authUser}
-            emitMessage={emitMessage} />)
+            emitMessage={emitMessage}
+            isModalVisible={isModalVisible}
+            handleModalContent={handleModalContent} />)
         }
         </Container>
     )

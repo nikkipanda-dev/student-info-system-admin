@@ -8,7 +8,7 @@ import {
     Input,
     Radio,
 } from "antd";
-import { getErrorMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "../../../stitches.config";
@@ -19,7 +19,6 @@ import Image from "../../core/Image";
 import Text from "../../core/Text";
 import Button from "../../core/Button";
 import NotFound from "../NotFound";
-import Alert from "../Alert";
 
 const NativeInput = styled('input', {});
 
@@ -63,7 +62,6 @@ export const StudentRegistrarFileUpdate = ({
     handleHideModal,
     authUser,
 }) => {
-    console.info('val ', values);
     const ref = useRef('');
 
     const [registrarFile, setRegistrarFile] = useState('');
@@ -72,17 +70,12 @@ export const StudentRegistrarFileUpdate = ({
     const [files, setFiles] = useState('');
     const [imageUrls, setImageUrls] = useState('');
     const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleRegistrarFile = payload => setRegistrarFile(payload); 
     const handleToggleForm = () => setIsFormShown(!(isFormShown));
     const handleFiles = value => setFiles(value);
     const handleImageUrls = value => setImageUrls(value);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
-    let arr;
+    const handleAlertComponent = payload => setAlert(payload);
 
     const handleHelpers = payload => setHelpers(payload);
 
@@ -98,17 +91,6 @@ export const StudentRegistrarFileUpdate = ({
             label: "Verified",
         },
     ];
-
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
-
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
 
     const handleRemoveImage = value => {
         let target = Object.values(imageUrls).find(el => el.id === value);
@@ -172,7 +154,7 @@ export const StudentRegistrarFileUpdate = ({
 
         onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data));
                 return;
             }
 
@@ -199,8 +181,9 @@ export const StudentRegistrarFileUpdate = ({
                 description: response.data.data.details.description,
             });
             
+            resetForm(form);
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
-            handleAlertComponent("", "", null);
             handleFiles('');
             handleImageUrls('');
             setTimeout(() => {
@@ -211,7 +194,6 @@ export const StudentRegistrarFileUpdate = ({
         .catch(err => {
             console.info('err ', err);
             if (err.response && err.response.data.errors) {
-                console.info('err ', err.response.data.errors);
                 handleHelpers({
                     registrar_files: err.response.data.errors.registrar_files && getErrorMessage(err.response.data.errors.registrar_files[0]),
                     description: err.response.data.errors.description && getErrorMessage(err.response.data.errors.description[0]),
@@ -266,22 +248,22 @@ export const StudentRegistrarFileUpdate = ({
     return (
         (registrarFile && (Object.keys(registrarFile).length > 0)) && 
         <Container>
-            <Button 
-            text={isFormShown ? "Cancel" : "Update"}
-            color={isFormShown ? '' : "yellow"} 
-            onClick={() => handleToggleForm()} />
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
+                <Button
+                text={isFormShown ? "Cancel" : "Update"}
+                color={isFormShown ? '' : "yellow"}
+                className="flex-grow-1 flex-sm-grow-0"
+                onClick={() => handleToggleForm()} />
+            </Container>
         {
             !(isFormShown) ? 
             <Container css={styling}>
                 <Text type="span">Edit</Text>
             </Container> : 
             <Container css={styling}>
-                <Container>
-                {
-                    alert &&
-                    <Alert status={status} header={header} css={{ margin: '0', }}>{alert}</Alert>
-                }
-                </Container>
+            {
+                alert
+            }
             {
                 (!(files) || (Object.keys(files).length === 0)) &&
                 <Container>
@@ -378,7 +360,7 @@ export const StudentRegistrarFileUpdate = ({
                     }]}>
                         <Radio.Group>
                         {
-                            Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                            Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
                         }
                         </Radio.Group>
                     </Form.Item>

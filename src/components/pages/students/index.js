@@ -2,7 +2,7 @@ import { useState, useEffect, } from "react";
 import { request, } from "../../../util/request";
 import { getToken, } from "../../../util/auth";
 import { Form, } from "antd";
-import { getMessage, } from "../../../util";
+import { emitMessage, } from "../../../util";
 import Container from "../../core/Container";
 import { sectionStyle, } from "../../../stitches.config";
 
@@ -10,8 +10,7 @@ import Section from "../../core/Section";
 import Text from "../../core/Text";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
-import Alert from "../../widgets/Alert";
-import { Students as StudentsTable } from "../../widgets/Students";
+import StudentsTable from "../../widgets/StudentsTable";
 import RegisterStudent from "../../widgets/RegisterStudent";
 
 export const Students = ({ isAuth, authUser, }) => {
@@ -21,17 +20,11 @@ export const Students = ({ isAuth, authUser, }) => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [modalContent, setModalContent] = useState('');
     const [title, setTitle] = useState('');
-    const [alert, setAlert] = useState('');
-    const [status, setStatus] = useState('');
-    const [header, setHeader] = useState('');
 
     const handleStudents = payload => setStudents(payload);
     const handleShowModal = () => setIsModalVisible(true);
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
-    const handleAlert = message => setAlert(message);
-    const handleStatus = status => setStatus(status);
-    const handleHeader = header => setHeader(header);
 
     const handleModalContent = (payload, title) => {
         setModalContent(payload);
@@ -39,30 +32,8 @@ export const Students = ({ isAuth, authUser, }) => {
         handleShowModal();
     };
 
-    const resetForm = () => {
+    const resetForm = form => {
         form.resetFields();
-        handleHeader('');
-        handleStatus('');
-        handleAlert('');
-    }
-
-    const handleAlertComponent = (header, status, message) => {
-        if (!(message)) {
-            handleAlert('');
-            return;
-        }
-        
-        handleHeader(header);
-        handleStatus(status);
-        handleAlert(<Text type="span">{message}</Text>);
-    }
-
-    const emitMessage = (content, status, duration) => {
-        return getMessage({
-            content: content,
-            status: status,
-            duration: duration,
-        });
     }
 
     useEffect(() => {
@@ -92,18 +63,9 @@ export const Students = ({ isAuth, authUser, }) => {
                     emitMessage={emitMessage}
                     isAuth={isAuth}
                     resetForm={resetForm}
-                    handleAlertComponent={handleAlertComponent}
                     students={students}
                     handleStudents={handleStudents}
-                    handleHideModal={handleHideModal}
-                    {...alert && {
-                        alert: <Alert
-                            status={status}
-                            header={header}
-                            css={{ marginBottom: '$20', }}>
-                            {alert}
-                        </Alert>
-                    }} />, "Add Student"
+                    handleHideModal={handleHideModal} />, "Add Student"
                 )}
                 text="Add" />
             </Container>
@@ -121,10 +83,6 @@ export const Students = ({ isAuth, authUser, }) => {
             maskClosable={false}
             title={title}
             onCancel={handleHideModal}>
-            {
-                alert &&
-                <Alert status={status} header={header}>{alert}</Alert>
-            }
                 {modalContent}
             </Modal>
         }

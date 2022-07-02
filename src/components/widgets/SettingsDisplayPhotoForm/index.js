@@ -4,7 +4,7 @@ import {
     useRef,
 } from "react";
 import Container from "../../core/Container";
-import { getErrorMessage, getMessage, } from "../../../util";
+import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     faCloudArrowUp, 
@@ -41,11 +41,9 @@ export const StudentSettingsDisplayPhotoForm = ({
     authUser,
     onFinish,
     values,
-    alert,
     slug,
     emitMessage,
-    handleAlertComponent,
-    handleStudent,
+    handleArrayObj,
 }) => {
     const ref = useRef('');
 
@@ -54,12 +52,14 @@ export const StudentSettingsDisplayPhotoForm = ({
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [imageHelp, setImageHelp] = useState('');
+    const [alert, setAlert] = useState('');
 
     const handleToggleForm = () => setIsVisible(!(isVisible));
     const handleDisplayPhoto = payload => setDisplayPhoto(payload);
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
     const handleImageHelp = message => setImageHelp(message);
+    const handleAlertComponent = payload => setAlert(payload);
 
     const onInputChange = () => {
         if (!(ref.current)) {
@@ -106,14 +106,15 @@ export const StudentSettingsDisplayPhotoForm = ({
 
         onFinish(updateForm).then(response => {
             if (!(response.data.is_success)) {
-                handleAlertComponent("Error", "danger", response.data.data);
+                handleAlertComponent(getAlertComponent("Error", "danger", response.data.data));
                 return;
             }
 
             console.info('url ', response.data.data.details);
             handleRemoveImage();
             handleDisplayPhoto(response.data.data.details);
-
+            handleAlertComponent(getAlertComponent(null, null, null));
+            handleToggleForm();
             setTimeout(() => {
                 emitMessage("Display photo updated.", "success", 2.5);
             }, 2000);
@@ -178,7 +179,7 @@ export const StudentSettingsDisplayPhotoForm = ({
         let loading = true;
 
         if (loading && values && (Object.keys(values).length > 0) && displayPhoto) {
-            handleStudent({
+            handleArrayObj({
                 ...values,
                 display_photo: displayPhoto,
             });
@@ -191,6 +192,9 @@ export const StudentSettingsDisplayPhotoForm = ({
     
     return (
         <Container css={styling}>
+        {
+            alert
+        }
             <Container
             className="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center"
             css={{ margin: '$30 0px $15', }}>
@@ -209,9 +213,6 @@ export const StudentSettingsDisplayPhotoForm = ({
                 <FontAwesomeIcon icon={faUser} className="fa-fw fa-10x" />
             }
             </Container>
-        }
-        {
-            alert
         }
         {
             isVisible && 

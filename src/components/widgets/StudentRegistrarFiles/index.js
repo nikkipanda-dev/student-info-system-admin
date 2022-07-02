@@ -31,11 +31,8 @@ export const StudentRegistrarFiles = ({
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
 
-    const resetForm = (form, handleHeader, handleStatus, handleAlert) => {
+    const resetForm = form => {
         form.resetFields();
-        handleHeader('');
-        handleStatus('');
-        handleAlert('');
     }
 
     const handleModalContent = (payload, title) => {

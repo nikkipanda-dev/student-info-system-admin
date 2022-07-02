@@ -5,7 +5,6 @@ import Container from "../../core/Container";
 import Modal from "../Modal";
 import Button from "../../core/Button";
 import Text from "../../core/Text";
-import Alert from "../Alert";
 import StudentPermitsTable from "../StudentPermitsTable";
 import StudentPermitForm from "../StudentPermitForm";
 
@@ -32,11 +31,8 @@ export const StudentPermits = ({
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
 
-    const resetForm = (form, handleHeader, handleStatus, handleAlert) => {
+    const resetForm = form => {
         form.resetFields();
-        handleHeader('');
-        handleStatus('');
-        handleAlert('');
     }
 
     const handleModalContent = (payload, title) => {

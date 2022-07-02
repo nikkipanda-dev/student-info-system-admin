@@ -1,6 +1,7 @@
 import Container from "../../core/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, } from "@fortawesome/free-solid-svg-icons";
+import { ordinalNumbers, } from "../../../util";
 import { 
     studentBioStyle, 
     anchorStyle,
@@ -18,8 +19,6 @@ export const StudentBio = ({
     className,
     css,
 }) => {
-    console.info('val BIO ', values);
-
     const courses = {
         bsit: "Bachelor of Science in Information Technology",
         bscs: "Bachelor of Science in Computer Science",
@@ -27,18 +26,12 @@ export const StudentBio = ({
         bsba: "Bachelor of Science in Business Administration",
     };
 
-    const terms = {
-        1: "1st",
-        2: "2nd",
-        3: "3rd",
-    }
-
     if (!(courses[values.course])) {
         console.error('Invalid course.');
         return;
     }
 
-    if (!(terms[values.term])) {
+    if (!(ordinalNumbers[values.term])) {
         console.error('Invalid term.');
         return;
     }
@@ -54,7 +47,7 @@ export const StudentBio = ({
                 values.display_photo ? <Image src={values.display_photo} css={displayPhotoStyle} /> : 
                 <FontAwesomeIcon icon={faUser} className="fa-fw fa-10x" />
             }
-                <Text type="span">{`${values.first_name} ${values.middle_name} ${values.last_name}`}</Text>
+                <Text type="span">{`${values.first_name} ${values.middle_name ?? ''} ${values.last_name}`}</Text>
                 <Text 
                 type="span" 
                 as="a" 
@@ -62,7 +55,7 @@ export const StudentBio = ({
                     {`${values.email}`}
                 </Text>
                 <Text type="span">{`${courses[values.course]}`}</Text>
-                <Text type="span">{`${values.year}, ${terms[values.term]} term`}</Text>
+                <Text type="span">{`${ordinalNumbers[values.year]} year, ${ordinalNumbers[values.term]} term`}</Text>
             </Container>
         </Card>
     )

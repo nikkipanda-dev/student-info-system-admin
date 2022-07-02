@@ -6,7 +6,6 @@ import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
 import Text from '../../core/Text';
 import Button from '../../core/Button';
 import Alert from '../Alert';
-import StudentRegistrarFile from '../StudentRegistrarFile';
 import StudentRegistrarFileUpdate from '../StudentRegistrarFileUpdate';
 
 export const StudentRegistrarFilesTable = ({ 
@@ -105,13 +104,6 @@ export const StudentRegistrarFilesTable = ({
                     background: 'transparent',
                 }
             }}>
-                <Button
-                text={<Text type="span" color="info">View</Text>}
-                className="button-sm"
-                css={{
-                    color: '$gray4',
-                }}
-                onClick={() => handleModalContent(<StudentRegistrarFile />, "Registrar File Details")} />
                 <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"

@@ -1,4 +1,3 @@
-import Container from "../../core/Container";
 import { 
     Navigate,
     useParams, 
@@ -12,10 +11,7 @@ import StudentCors from "../StudentCors";
 import StudentPermits from "../StudentPermits";
 import StudentRegistrarFiles from "../StudentRegistrarFiles";
 
-export const StudentContent = ({
-    className,
-    css,
-}) => {
+export const StudentContent = () => {
     const params = useParams();
     const context = useOutletContext();
 

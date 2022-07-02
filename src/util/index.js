@@ -9,6 +9,7 @@ import {
 import { message, } from "antd";
 import Container from "../components/core/Container";
 import Text from "../components/core/Text";
+import Alert from "../components/widgets/Alert";
 import { 
     fadeOut, 
     spinnerStyle,
@@ -108,7 +109,14 @@ export const paymentModes = {
     gcash: "GCash",
 }
 
-export const termOptions = {
+export const ordinalNumbers = {
+    1: "1st",
+    2: "2nd",
+    3: "3rd",
+    4: "4th",
+}
+
+export const paymentTypes = {
     full: "Full",
     installment: "Installment",
 }
@@ -116,4 +124,33 @@ export const termOptions = {
 export const statusOptions = {
     pending: "Pending",
     verified: "Verified",
+}
+
+export const getAlertComponent = (
+    header, 
+    status, 
+    message,
+    css,
+) => {
+    return ( 
+        <>
+        {
+            message && 
+            <Alert
+            status={status}
+            header={header}
+            css={{ margin: '$50 0px', ...css, }}>
+                {message}
+            </Alert>   
+        }
+        </>
+    )
+}
+
+export const emitMessage = (content, status, duration) => {
+    return getMessage({
+        content: content,
+        status: status,
+        duration: duration,
+    });
 }

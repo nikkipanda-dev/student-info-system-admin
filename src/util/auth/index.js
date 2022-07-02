@@ -10,7 +10,17 @@ export function isAuthCookie() {
     return hasCookie;
 }
 
-export function getToken() {
+export function getToken(secret) {
+    const cookieExpiration = 0.5;
+
+    if (secret && Cookies.get('auth_admin') && Cookies.get('auth_admin_token')) {
+        Cookies.set('auth_admin_token', JSON.stringify(secret), {
+            expires: cookieExpiration,
+            sameSite: 'strict',
+            secure: true,
+        });
+    }
+
     return JSON.parse(Cookies.get('auth_admin_token'));
 }
 
