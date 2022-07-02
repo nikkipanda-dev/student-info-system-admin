@@ -94,6 +94,7 @@ export const StudentCors = ({
             isVisible={isModalVisible}
             maskClosable={false}
             title={title}
+            destroyOnClose={true}
             bodyStyle={{ maxHeight: '80vh', overflowY: 'auto', }}
             onCancel={handleHideModal}>
                 {modalContent}

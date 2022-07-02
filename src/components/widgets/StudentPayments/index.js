@@ -84,7 +84,6 @@ export const StudentPayments = ({
             {
                 (payments && (Object.keys(payments).length > 0)) ?
                 <StudentPaymentsTable 
-                resetForm={resetForm}
                 handleModalContent={handleModalContent}
                 emitMessage={emitMessage}
                 isAuth={isAuth}
@@ -104,6 +103,7 @@ export const StudentPayments = ({
                 isVisible={isModalVisible}
                 maskClosable={false}
                 title={title}
+                destroyOnClose={true}
                 bodyStyle={{ maxHeight: '80vh', overflowY: 'auto', }}
                 onCancel={handleHideModal}>
                     {modalContent}

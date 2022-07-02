@@ -40,15 +40,20 @@ export const StudentCorUpdate = ({
     isAuth,
     student,
     slug,
+    values,
     handleHideModal,
     authUser,
 }) => {
     const ref = useRef('');
 
+    const [cor, setCor] = useState('');
+    const [isFormShown, setIsFormShown] = useState(false);
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
 
+    const handleCor = payload => setCor(payload);
+    const handleToggleForm = () => setIsFormShown(!(isFormShown));
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
     const handleAlertComponent = payload => setAlert(payload);
@@ -193,71 +198,98 @@ export const StudentCorUpdate = ({
         }
     }, [imageUrl]);
 
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && (values && (Object.keys(values).length > 0))) {
+            handleCor(values);
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, []);
+
     return (
-        <Container css={styling}>
-        {
-            alert 
-        }
-        {
-            !(file) &&
-            <Container>
-                <NativeInput
-                type="file"
-                ref={ref}
-                id="image"
-                hidden
-                accept=".jpg,.jpeg,.png"
-                onChange={() => onInputChange()} />
-
-                <Label
-                htmlFor="image"
-                uploadSize="medium"
-                className="d-flex flex-column justify-content-center align-items-center upload">
-                    <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
-                    <Text
-                    type="span"
-                    color="blue2"
-                    css={{ fontSize: '$heading3' }}>
-                        Upload
-                    </Text>
-                    <Text
-                    type="span"
-                    color="info"
-                    css={{ marginTop: '$10', }}>
-                        Supported formats: .jpg, .jpeg, .png
-                    </Text>
-                </Label>
-            </Container>
-        }
-
-        {/* Display preview */}
-        {
-            imageUrl &&
-            <Container>
-                <Image src={imageUrl} />
+        <Container>
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
                 <Button
-                text={
-                    <Container className="d-flex align-items-center">
-                        <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
+                text={isFormShown ? "Cancel" : "Update"}
+                color={isFormShown ? '' : "yellow"}
+                className="flex-grow-1 flex-sm-grow-0"
+                onClick={() => handleToggleForm()} />
+            </Container>
+        {
+            !(isFormShown) ? 
+            <Container css={styling}>
+                <Text type="span">Edit</Text>
+            </Container> :
+            <Container css={styling}>
+            {
+                alert
+            }       
+            {
+                !(file) &&
+                <Container>
+                    <NativeInput
+                    type="file"
+                    ref={ref}
+                    id="image"
+                    hidden
+                    accept=".jpg,.jpeg,.png"
+                    onChange={() => onInputChange()} />
+
+                    <Label
+                    htmlFor="image"
+                    uploadSize="medium"
+                    className="d-flex flex-column justify-content-center align-items-center upload">
+                        <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
                         <Text
                         type="span"
-                        color="danger"
-                        css={{ display: 'inline-block', marginTop: '$5 ', }}>
-                            Remove
+                        color="blue2"
+                        css={{ fontSize: '$heading3' }}>
+                            Upload
                         </Text>
-                    </Container>
-                }
-                color="transparent"
-                css={{ color: '$red2', }}
-                onClick={() => handleRemoveImage()} />
-                <Container className="d-flex">
-                    <Button
-                    submit
-                    text="Submit"
-                    color="blue"
-                    className="flex-grow-1 flex-sm-grow-0"
-                    onClick={() => onUpdate()} />
+                        <Text
+                        type="span"
+                        color="info"
+                        css={{ marginTop: '$10', }}>
+                            Supported formats: .jpg, .jpeg, .png
+                        </Text>
+                    </Label>
                 </Container>
+            }
+
+            {/* Display preview */}
+            {
+                imageUrl &&
+                <Container>
+                    <Image src={imageUrl} />
+                    <Button
+                    text={
+                        <Container className="d-flex align-items-center">
+                            <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
+                            <Text
+                            type="span"
+                            color="danger"
+                            css={{ display: 'inline-block', marginTop: '$5 ', }}>
+                                Remove
+                            </Text>
+                        </Container>
+                    }
+                    color="transparent"
+                    css={{ color: '$red2', }}
+                    onClick={() => handleRemoveImage()} />
+                    <Container className="d-flex">
+                        <Button
+                        submit
+                        text="Submit"
+                        color="blue"
+                        className="flex-grow-1 flex-sm-grow-0"
+                        onClick={() => onUpdate()} />
+                    </Container>
+                </Container>
+            }
             </Container>
         }
         </Container>

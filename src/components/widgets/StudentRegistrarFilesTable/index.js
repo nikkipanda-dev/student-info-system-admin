@@ -9,7 +9,6 @@ import Alert from '../Alert';
 import StudentRegistrarFileUpdate from '../StudentRegistrarFileUpdate';
 
 export const StudentRegistrarFilesTable = ({ 
-    resetForm,
     handleModalContent,
     emitMessage,
     isAuth,
@@ -109,7 +108,6 @@ export const StudentRegistrarFilesTable = ({
                 className="button-sm"
                 onClick={() => handleModalContent(<StudentRegistrarFileUpdate
                     form={form}
-                    resetForm={resetForm}
                     onFinish={updateRegistrarFile}
                     registrarFiles={registrarFiles}
                     handleRegistrarFiles={handleRegistrarFiles}

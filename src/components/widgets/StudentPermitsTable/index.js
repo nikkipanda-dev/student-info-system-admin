@@ -7,7 +7,6 @@ import Image from '../../core/Image';
 import Alert from '../Alert';
 import Container from '../../core/Container';
 import Button from '../../core/Button';
-import StudentPermit from '../StudentPermit';
 import StudentPermitUpdate from '../StudentPermitUpdate';
 
 export const StudentPermitsTable = ({
@@ -132,13 +131,6 @@ export const StudentPermitsTable = ({
                 }
             }}>
                 <Button
-                text={<Text type="span" color="info">View</Text>}
-                className="button-sm"
-                css={{
-                    color: '$gray4',
-                }}
-                onClick={() => handleModalContent(<StudentPermit />, "Permit Details")} />
-                <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"
                 onClick={() => handleModalContent(<StudentPermitUpdate
@@ -151,6 +143,7 @@ export const StudentPermitsTable = ({
                     isAuth={isAuth}
                     student={student}
                     slug={record.slug}
+                    values={record}
                     handleHideModal={handleHideModal}
                     authUser={authUser} />, "Update Payment")}
                 css={{ marginLeft: '$10', }} />

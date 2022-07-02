@@ -7,10 +7,8 @@ import Text from '../../core/Text';
 import Button from '../../core/Button';
 import Alert from '../Alert';
 import StudentPaymentUpdate from '../StudentPaymentUpdate';
-import StudentPayment from '../StudentPayment';
 
 export const StudentPaymentsTable = ({ 
-    resetForm,
     handleModalContent,
     deletePayment,
     authUser,
@@ -124,19 +122,11 @@ export const StudentPaymentsTable = ({
                         background: 'transparent',
                     }
                 }}>
-                    <Button
-                    text={<Text type="span" color="info">View</Text>}
-                    className="button-sm"
-                    css={{
-                        color: '$gray4',
-                    }}
-                    onClick={() => handleModalContent(<StudentPayment />, "Payment Details")} />
                     <Button 
                     text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                     className="button-sm"
                     onClick={() => handleModalContent(<StudentPaymentUpdate 
                         form={form} 
-                        resetForm={resetForm}
                         onFinish={updatePayment}
                         payments={payments}
                         handlePayments={handlePayments}
@@ -144,9 +134,7 @@ export const StudentPaymentsTable = ({
                         isAuth={isAuth}
                         student={student}
                         slug={record.slug}
-                        values={{
-                            status: record.status,
-                        }}
+                        values={record}
                         handleHideModal={handleHideModal}
                         authUser={authUser} />, "Update Payment")} 
                     css={{ marginLeft: '$10', }} />

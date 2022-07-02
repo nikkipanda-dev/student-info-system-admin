@@ -8,6 +8,7 @@ export const Modal = ({
     closable,
     maskClosable,
     onCancel,
+    destroyOnClose,
 }) => {
     return (
         <Wrapper 
@@ -16,6 +17,7 @@ export const Modal = ({
         closable={closable}
         maskClosable={maskClosable} 
         footer={null}
+        {...destroyOnClose && {destroyOnClose: destroyOnClose}}
         {...bodyStyle && {bodyStyle: {...bodyStyle}}}
         onCancel={() => onCancel()}>
             {children}

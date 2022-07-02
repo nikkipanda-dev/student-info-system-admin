@@ -50,7 +50,6 @@ const formItemLayout = {
 
 export const StudentRegistrarFileUpdate = ({
     form,
-    resetForm,
     onFinish,
     registrarFiles,
     handleRegistrarFiles,
@@ -98,6 +97,13 @@ export const StudentRegistrarFileUpdate = ({
 
         handleFiles(Object.values(files).filter(el => el.id !== value));
         handleImageUrls(Object.values(imageUrls).filter(el => el.id !== value));
+    }
+
+    const onResetForm = () => {
+        handleAlertComponent(getAlertComponent(null, null, null));
+        handleHideModal();
+        handleFiles('');
+        handleImageUrls('');
     }
 
     const onInputChange = () => {
@@ -175,17 +181,8 @@ export const StudentRegistrarFileUpdate = ({
                 description: response.data.data.details.description,
                 status: response.data.data.details.status,
             });
-
-            form.setFieldsValue({
-                status: response.data.data.details.status,
-                description: response.data.data.details.description,
-            });
             
-            resetForm(form);
-            handleAlertComponent(getAlertComponent(null, null, null));
-            handleHideModal();
-            handleFiles('');
-            handleImageUrls('');
+            onResetForm(form);
             setTimeout(() => {
                 emitMessage("Registrar file updated.", "success", 2.5);
             }, 2000);
@@ -232,6 +229,21 @@ export const StudentRegistrarFileUpdate = ({
             }
         }
     }, [imageUrls]);
+
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && (values && (Object.keys(values).length > 0))) {
+            form.setFieldsValue({
+                description: values.description,
+                status: values.status,
+            });
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [values]);
 
     useEffect(() => {
         let loading = true;
@@ -323,10 +335,6 @@ export const StudentRegistrarFileUpdate = ({
                 name="student-registrar-files-form"
                 {...formItemLayout}
                 form={form}
-                initialValues={{
-                    description: registrarFile.description,
-                    status: registrarFile.status,
-                }}
                 onFinish={onUpdate}
                 autoComplete="off">
 

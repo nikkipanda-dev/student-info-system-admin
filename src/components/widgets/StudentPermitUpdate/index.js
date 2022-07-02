@@ -59,16 +59,21 @@ export const StudentPermitUpdate = ({
     isAuth,
     student,
     slug,
+    values,
     handleHideModal,
     authUser,
 }) => {
     const ref = useRef('');
 
+    const [permit, setPermit] = useState('');
+    const [isFormShown, setIsFormShown] = useState(false);
     const [helpers, setHelpers] = useState('');
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
 
+    const handlePermit = payload => setPermit(payload);
+    const handleToggleForm = () => setIsFormShown(!(isFormShown));
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
     const handleAlertComponent = payload => setAlert(payload);
@@ -92,6 +97,12 @@ export const StudentPermitUpdate = ({
             label: "Final",
         },
     ];
+
+    const onResetForm = () => {
+        handleRemoveImage();
+        handleAlertComponent(getAlertComponent(null, null, null));
+        handleHideModal();
+    }
 
     const handleRemoveImage = () => {
         handleFile('');
@@ -149,10 +160,7 @@ export const StudentPermitUpdate = ({
                 return Object.values(permits)[val];
             }));
 
-            resetForm(form);
-            handleRemoveImage();
-            handleAlertComponent(getAlertComponent(null, null, null));
-            handleHideModal();
+            onResetForm();
             setTimeout(() => {
                 emitMessage("Permit updated.", "success", 2.5);
             }, 2000);
@@ -188,102 +196,144 @@ export const StudentPermitUpdate = ({
         }
     }, [imageUrl]);
 
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && (values && (Object.keys(values).length > 0))) {
+            form.setFieldsValue({
+                type: values.type,
+            });
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [values]);
+
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && (values && (Object.keys(values).length > 0))) {
+            handlePermit(values);
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, []);
+
     return (
         <Container css={styling}>
-        {
-            alert
-        }
-        {
-            !(file) &&
-            <Container>
-                <NativeInput
-                type="file"
-                ref={ref}
-                id="image"
-                hidden
-                accept=".jpg,.jpeg,.png"
-                onChange={() => onInputChange()} />
-
-                <Label
-                htmlFor="image"
-                uploadSize="medium"
-                className="d-flex flex-column justify-content-center align-items-center upload">
-                    <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
-                    <Text
-                    type="span"
-                    color="blue2"
-                    css={{ fontSize: '$heading3' }}>
-                        Upload
-                    </Text>
-                    <Text
-                    type="span"
-                    color="info"
-                    css={{ marginTop: '$10', }}>
-                        Supported formats: .jpg, .jpeg, .png
-                    </Text>
-                </Label>
-            </Container>
-        }
-
-        {/* Display preview */}
-        {
-            imageUrl &&
-            <Container>
-                <Image src={imageUrl} />
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
                 <Button
-                text={
-                    <Container className="d-flex align-items-center">
-                        <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
+                text={isFormShown ? "Cancel" : "Update"}
+                color={isFormShown ? '' : "yellow"}
+                className="flex-grow-1 flex-sm-grow-0"
+                onClick={() => handleToggleForm()} />
+            </Container>
+        {
+            !(isFormShown) ? 
+            <Container css={styling}>
+                <Text type="span">Edit</Text>
+            </Container> :
+            <Container css={styling}>
+            {
+                alert
+            }
+            {
+                !(file) &&
+                <Container>
+                    <NativeInput
+                    type="file"
+                    ref={ref}
+                    id="image"
+                    hidden
+                    accept=".jpg,.jpeg,.png"
+                    onChange={() => onInputChange()} />
+
+                    <Label
+                    htmlFor="image"
+                    uploadSize="medium"
+                    className="d-flex flex-column justify-content-center align-items-center upload">
+                        <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
                         <Text
                         type="span"
-                        color="danger"
-                        css={{ display: 'inline-block', marginTop: '$5 ', }}>
-                            Remove
+                        color="blue2"
+                        css={{ fontSize: '$heading3' }}>
+                            Upload
                         </Text>
-                    </Container>
-                }
-                color="transparent"
-                css={{ color: '$red2', }}
-                onClick={() => handleRemoveImage()} />
-                <Text type="span" color="danger">{ helpers && helpers.type }</Text>
-            </Container>
-        }
-        {
-            file &&
-            <Container>
-                <Form
-                name="student-permit-form"
-                {...formItemLayout}
-                form={form}
-                onFinish={onUpdate}
-                autoComplete="off">
+                        <Text
+                        type="span"
+                        color="info"
+                        css={{ marginTop: '$10', }}>
+                            Supported formats: .jpg, .jpeg, .png
+                        </Text>
+                    </Label>
+                </Container>
+            }
+            
+            {/* Display preview */}
+            {
+                imageUrl &&
+                <Container>
+                    <Image src={imageUrl} />
+                    <Button
+                    text={
+                        <Container className="d-flex align-items-center">
+                            <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
+                            <Text
+                            type="span"
+                            color="danger"
+                            css={{ display: 'inline-block', marginTop: '$5 ', }}>
+                                Remove
+                            </Text>
+                        </Container>
+                    }
+                    color="transparent"
+                    css={{ color: '$red2', }}
+                    onClick={() => handleRemoveImage()} />
+                    <Text type="span" color="danger">{helpers && helpers.type}</Text>
+                </Container>
+            }
 
-                {
-                    (typeOptions && (Object.keys(typeOptions).length > 0)) &&
-                    <Form.Item
-                    label="Type"
-                    name="type"
-                    {...helpers && helpers.type && { help: helpers.type }}
-                    rules={[{
-                        required: true,
-                        message: "Type is required.",
-                    }]}>
-                        <Radio.Group>
-                        {
-                            Object.keys(typeOptions).map((_, val) => <Radio key={Object.values(typeOptions)[val].id} value={Object.values(typeOptions)[val].value}>{Object.values(typeOptions)[val].label}</Radio>)
-                        }
-                        </Radio.Group>
-                    </Form.Item>
-                }
+            {
+                file &&
+                <Container>
+                    <Form
+                    name="student-permit-form"
+                    {...formItemLayout}
+                    form={form}
+                    onFinish={onUpdate}
+                    autoComplete="off">
 
-                    <Container className="d-flex">
-                        <Button
-                        submit
-                        text="Submit"
-                        color="blue"
-                        className="flex-grow-1 flex-sm-grow-0" />
-                    </Container>
-                </Form>
+                    {
+                        (typeOptions && (Object.keys(typeOptions).length > 0)) &&
+                        <Form.Item
+                        label="Type"
+                        name="type"
+                        {...helpers && helpers.type && { help: helpers.type }}
+                        rules={[{
+                            required: true,
+                            message: "Type is required.",
+                        }]}>
+                            <Radio.Group>
+                            {
+                                Object.keys(typeOptions).map((_, val) => <Radio key={Object.values(typeOptions)[val].id} value={Object.values(typeOptions)[val].value}>{Object.values(typeOptions)[val].label}</Radio>)
+                            }
+                            </Radio.Group>
+                        </Form.Item>
+                    }
+
+                        <Container className="d-flex">
+                            <Button
+                            submit
+                            text="Submit"
+                            color="blue"
+                            className="flex-grow-1 flex-sm-grow-0" />
+                        </Container>
+                    </Form>
+                </Container>
+            }
             </Container>
         }
         </Container>

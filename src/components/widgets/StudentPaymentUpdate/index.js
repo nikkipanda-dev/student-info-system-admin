@@ -4,7 +4,6 @@ import Button from "../../core/Button";
 import Container from "../../core/Container";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 
-import Alert from "../Alert";
 import Text from "../../core/Text";
 
 const styling = {
@@ -45,7 +44,6 @@ const validateMessages = {
 
 export const StudentPaymentUpdate = ({
     form,
-    resetForm,
     payments,
     handlePayments,
     onFinish,
@@ -57,11 +55,23 @@ export const StudentPaymentUpdate = ({
     handleHideModal,
     authUser,
 }) => {
+    const [payment, setPayment] = useState('');
+    const [isFormShown, setIsFormShown] = useState(false);
     const [helpers, setHelpers] = useState('');
     const [alert, setAlert] = useState('');
 
+    const handlePayment = payload => setPayment(payload);
+    const handleToggleForm = () => setIsFormShown(!(isFormShown));
     const handleHelpers = payload => setHelpers(payload);
     const handleAlertComponent = payload => setAlert(payload);
+
+    // Todo: display all values
+
+    const onResetForm = () => {
+        handleAlertComponent(getAlertComponent(null, null, null));
+        handleHideModal();
+        handleToggleForm();
+    }
 
     const statusOptions = [
         {
@@ -108,9 +118,7 @@ export const StudentPaymentUpdate = ({
                 return Object.values(payments)[val]
             }));
             
-            resetForm(form);
-            handleAlertComponent(getAlertComponent(null, null, null));
-            handleHideModal();
+            onResetForm(form);
             setTimeout(() => {
                 emitMessage("Payment updated.", "success", 2.5);
             }, 2000);
@@ -139,45 +147,72 @@ export const StudentPaymentUpdate = ({
         }
     }, [values]);
 
-    return (
-        <Container css={styling}>
-        {
-            alert
+    useEffect(() => {
+        let loading = true;
+
+        if (loading && (values && (Object.keys(values).length > 0))) {
+            handlePayment(values);
         }
-            <Form
-            name="student-update-payment-form"
-            {...formItemLayout}
-            form={form}
-            onFinish={onUpdate}
-            validateMessages={validateMessages}
-            autoComplete="off">
 
+        return () => {
+            loading = false;
+        }
+    }, []);
+
+    return (
+        <Container>
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
+                <Button
+                text={isFormShown ? "Cancel" : "Update"}
+                color={isFormShown ? '' : "yellow"}
+                className="flex-grow-1 flex-sm-grow-0"
+                onClick={() => handleToggleForm()} />
+            </Container>
+        {
+            !(isFormShown) ? 
+            <Container css={styling}>
+                <Text type="span">Edit</Text>
+            </Container> : 
+            <Container css={styling}>
             {
-                (statusOptions && (Object.keys(statusOptions).length > 0)) &&
-                <Form.Item
-                label="Status"
-                name="status"
-                {...helpers && helpers.status && { help: helpers.status }}
-                rules={[{
-                    required: true,
-                    message: "Status is required.",
-                }]}>
-                    <Radio.Group>
-                    {
-                        Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
-                    }
-                    </Radio.Group>
-                </Form.Item>
+                alert
             }
+                <Form
+                name="student-update-payment-form"
+                {...formItemLayout}
+                form={form}
+                onFinish={onUpdate}
+                validateMessages={validateMessages}
+                autoComplete="off">
 
-                <Container className="d-flex">
-                    <Button
-                    submit
-                    text="Submit"
-                    color="blue"
-                    className="flex-grow-1 flex-sm-grow-0" />
-                </Container>
-            </Form>
+                {
+                    (statusOptions && (Object.keys(statusOptions).length > 0)) &&
+                    <Form.Item
+                        label="Status"
+                        name="status"
+                        {...helpers && helpers.status && { help: helpers.status }}
+                        rules={[{
+                            required: true,
+                            message: "Status is required.",
+                        }]}>
+                        <Radio.Group>
+                            {
+                                Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                            }
+                        </Radio.Group>
+                    </Form.Item>
+                }
+
+                    <Container className="d-flex">
+                        <Button
+                        submit
+                        text="Submit"
+                        color="blue"
+                        className="flex-grow-1 flex-sm-grow-0" />
+                    </Container>
+                </Form>
+            </Container>
+        }
         </Container>
     )
 }

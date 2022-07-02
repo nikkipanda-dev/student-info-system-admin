@@ -7,7 +7,6 @@ import Text from '../../core/Text';
 import Button from '../../core/Button';
 import Image from '../../core/Image';
 import Alert from '../Alert';
-import StudentCor from '../StudentCor';
 import StudentCorUpdate from "../StudentCorUpdate";
 
 export const StudentCorTable = ({ 
@@ -22,8 +21,6 @@ export const StudentCorTable = ({
     deleteCor,
     authUser,
 }) => {
-    const [form] = Form.useForm();
-
     const onDownload = value => {
         window.location.href = `${process.env.REACT_APP_BASE_URL}student/file/download/${authUser.slug}/${student.slug}/${value}`;
     }
@@ -131,17 +128,9 @@ export const StudentCorTable = ({
                 }
             }}>
                 <Button
-                text={<Text type="span" color="info">View</Text>}
-                className="button-sm"
-                css={{
-                    color: '$gray4',
-                }}
-                onClick={() => handleModalContent(<StudentCor />, "COR Details")} />
-                <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"
                 onClick={() => handleModalContent(<StudentCorUpdate
-                    form={form}
                     onFinish={updateCor}
                     cors={cors}
                     handleCors={handleCors}
@@ -149,9 +138,7 @@ export const StudentCorTable = ({
                     isAuth={isAuth}
                     student={student}
                     slug={record.slug}
-                    values={{
-                        status: record.status,
-                    }}
+                    values={record}
                     handleHideModal={handleHideModal}
                     authUser={authUser} />, "Update Payment")}
                 css={{ marginLeft: '$10', }} />
