@@ -2,7 +2,6 @@ import { useState, useEffect, } from "react";
 import { Form, Radio, } from "antd";
 import Button from "../../core/Button";
 import Container from "../../core/Container";
-import { getAuthEmail, } from "../../../util/auth";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 
 import Alert from "../Alert";
@@ -46,6 +45,7 @@ const validateMessages = {
 
 export const StudentPaymentUpdate = ({
     form,
+    resetForm,
     payments,
     handlePayments,
     onFinish,
@@ -55,6 +55,7 @@ export const StudentPaymentUpdate = ({
     values,
     slug,
     handleHideModal,
+    authUser,
 }) => {
     const [helpers, setHelpers] = useState('');
     const [alert, setAlert] = useState('');
@@ -87,7 +88,7 @@ export const StudentPaymentUpdate = ({
             value[i] && updateForm.append(i, value[i]);
         }
 
-        updateForm.append("auth_email", getAuthEmail());
+        updateForm.append("auth_email", authUser.email);
         updateForm.append("student_slug", student.slug);
         updateForm.append("slug", slug);
 
@@ -106,7 +107,8 @@ export const StudentPaymentUpdate = ({
 
                 return Object.values(payments)[val]
             }));
-
+            
+            resetForm(form);
             handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             setTimeout(() => {
@@ -162,7 +164,7 @@ export const StudentPaymentUpdate = ({
                 }]}>
                     <Radio.Group>
                     {
-                        Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                        Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
                     }
                     </Radio.Group>
                 </Form.Item>

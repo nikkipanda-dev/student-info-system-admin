@@ -19,9 +19,9 @@ export const Settings = ({
     const handleAdministrator = payload => setAdministrator(payload);
 
     useEffect(() => {
-        let loading = false;
+        let loading = true;
 
-        if (isAuth && authUser && (Object.keys(authUser).length > 0)) {
+        if (loading && isAuth && authUser && (Object.keys(authUser).length > 0)) {            
             handleAdministrator(authUser);
         }
 
@@ -41,7 +41,8 @@ export const Settings = ({
                             authUser={authUser}
                             values={administrator}
                             handleAdministrator={handleAdministrator}
-                            emitMessage={emitMessage} />
+                            emitMessage={emitMessage}
+                            handleUser={handleUser} />
                         </Card>
                     </Column>
                 </Row>

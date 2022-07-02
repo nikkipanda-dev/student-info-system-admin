@@ -1,6 +1,7 @@
 import { useState, useEffect, } from "react";
 import { Form, Input, } from "antd";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
+import { setCookieEmail, } from "../../../util/auth";
 
 import Button from "../../core/Button";
 import Text from "../../core/Text";
@@ -43,6 +44,7 @@ export const SettingsEmailForm = ({
     slug,
     emitMessage,
     handleArrayObj,
+    handleUser,
 }) => {
     const [form] = Form.useForm();
 
@@ -116,6 +118,16 @@ export const SettingsEmailForm = ({
                 ...values,
                 email: email,
             });
+
+            let arr = {
+                ...authUser,
+                email: email,
+            }
+
+            if (handleUser) {
+                handleUser(arr);
+                setCookieEmail(arr);
+            }
         }
 
         return () => {

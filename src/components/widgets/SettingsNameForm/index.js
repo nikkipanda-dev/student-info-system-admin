@@ -1,6 +1,7 @@
 import { useState, useEffect, } from "react";
 import { Form, Input, }  from "antd";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
+import { setCookieName, } from "../../../util/auth";
 
 import Button from "../../core/Button";
 import Text from "../../core/Text";
@@ -43,6 +44,7 @@ export const SettingsNameForm = ({
     slug,
     emitMessage,
     handleArrayObj,
+    handleUser,
 }) => {
     const [form] = Form.useForm();
 
@@ -130,6 +132,18 @@ export const SettingsNameForm = ({
                 middle_name: name.middle_name,
                 last_name: name.last_name,
             });
+
+            let arr = {
+                ...authUser,
+                first_name: name.first_name,
+                middle_name: name.middle_name,
+                last_name: name.last_name,
+            }
+
+            if (handleUser) {
+                handleUser(arr);
+                setCookieName(arr);
+            }
         }
 
         return () => {

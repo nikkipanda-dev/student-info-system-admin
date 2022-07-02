@@ -11,6 +11,7 @@ export const AuthUserSettings = ({
     values,
     handleAdministrator,
     emitMessage,
+    handleUser,
 }) => {
     return (
         (values && (Object.keys(values).length > 0)) &&
@@ -21,19 +22,22 @@ export const AuthUserSettings = ({
             onFinish={updateName}
             emitMessage={emitMessage}
             slug={slug}
-            handleArrayObj={handleAdministrator} />
+            handleArrayObj={handleAdministrator}
+            handleUser={handleUser} />
             <SettingsEmailForm
             authUser={authUser}
             values={values}
             onFinish={updateEmail}
             emitMessage={emitMessage}
             slug={slug}
-            handleArrayObj={handleAdministrator} />
+            handleArrayObj={handleAdministrator}
+            handleUser={handleUser} />
             <SettingsPasswordForm
             authUser={authUser}
             onFinish={updatePassword}
             emitMessage={emitMessage}
             slug={slug}
+            handleUser={handleUser}
             authenticated />
         </>
     )

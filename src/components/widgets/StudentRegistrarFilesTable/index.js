@@ -107,7 +107,7 @@ export const StudentRegistrarFilesTable = ({
                 <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"
-                    onClick={() => handleModalContent(<StudentRegistrarFileUpdate
+                onClick={() => handleModalContent(<StudentRegistrarFileUpdate
                     form={form}
                     resetForm={resetForm}
                     onFinish={updateRegistrarFile}

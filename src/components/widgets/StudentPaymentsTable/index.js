@@ -10,6 +10,7 @@ import StudentPaymentUpdate from '../StudentPaymentUpdate';
 import StudentPayment from '../StudentPayment';
 
 export const StudentPaymentsTable = ({ 
+    resetForm,
     handleModalContent,
     deletePayment,
     authUser,
@@ -135,6 +136,7 @@ export const StudentPaymentsTable = ({
                     className="button-sm"
                     onClick={() => handleModalContent(<StudentPaymentUpdate 
                         form={form} 
+                        resetForm={resetForm}
                         onFinish={updatePayment}
                         payments={payments}
                         handlePayments={handlePayments}
@@ -145,7 +147,8 @@ export const StudentPaymentsTable = ({
                         values={{
                             status: record.status,
                         }}
-                        handleHideModal={handleHideModal} />, "Update Payment")} 
+                        handleHideModal={handleHideModal}
+                        authUser={authUser} />, "Update Payment")} 
                     css={{ marginLeft: '$10', }} />
                     <Button 
                     text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>} 
