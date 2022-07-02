@@ -32,7 +32,7 @@ export const Students = ({ isAuth, authUser, }) => {
         handleShowModal();
     };
 
-    const resetForm = () => {
+    const resetForm = form => {
         form.resetFields();
     }
 

@@ -50,17 +50,17 @@ export const RegisterAdmin = forwardRef(({
             return;
         }
 
-        const form = new FormData();
+        const storeForm = new FormData();
 
         for (let i in values) {
-            values[i] && form.append(i, values[i]);
+            values[i] && storeForm.append(i, values[i]);
         }
 
-        form.append("auth_email", authUser.email);
+        storeForm.append("auth_email", authUser.email);
 
         emitMessage("Loading", "loading", 2);
 
-        onFinish(form).then(response => {
+        onFinish(storeForm).then(response => {
             if (!(response.data.is_success)) {
                 handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;
@@ -72,10 +72,10 @@ export const RegisterAdmin = forwardRef(({
                 arr = [response.data.data.details]
             }
 
-            resetForm();
+            resetForm(form);
             handleAlertComponent(getAlertComponent(null, null, null));
-            handleHideModal();
             handleAdministrators(arr);
+            handleHideModal();
             setTimeout(() => {
                 emitMessage("Administrator added.", "success", 2.5);
             }, 2000);

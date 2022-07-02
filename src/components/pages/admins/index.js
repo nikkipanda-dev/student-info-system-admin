@@ -40,7 +40,7 @@ export const Admins = ({ isAuth, authUser, }) => {
         handleShowModal();
     };
 
-    const resetForm = () => {
+    const resetForm = form => {
         form.resetFields();
     }
 

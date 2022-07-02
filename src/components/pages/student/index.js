@@ -8,7 +8,7 @@ import {
 } from "react-router-dom";
 import { sectionStyle, studentContentStyle, } from "../../../stitches.config";
 import Container from "../../core/Container";
-import { getMessage, } from "../../../util";
+import { emitMessage, } from "../../../util";
 
 import Section from "../../core/Section";
 import Card from "../../core/Card";
@@ -39,14 +39,6 @@ export const Student = ({ isAuth, authUser, }) => {
         handleTitle(title);
         handleShowModal();
     };
-
-    const emitMessage = (content, status, duration) => {
-        return getMessage({
-            content: content,
-            status: status,
-            duration: duration,
-        });
-    }
 
     useEffect(() => {
         let loading = true;
@@ -79,6 +71,7 @@ export const Student = ({ isAuth, authUser, }) => {
                     slug={params.slug}
                     values={student}
                     authUser={authUser}
+                    emitMessage={emitMessage}
                     handleStudent={handleStudent} />, "Update Settings"
                 )}
                 color={isModalVisible ? '' : "yellow"}

@@ -60,6 +60,7 @@ export const SettingsEmailForm = ({
         form.resetFields();
         handleEmailHelp('');
         handleAlertComponent(getAlertComponent(null, null, null));
+        handleToggleForm();
     }
 
     const onUpdateEmail = values => {

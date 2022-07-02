@@ -66,6 +66,7 @@ export const SettingsNameForm = ({
         handleMiddleNameHelp('');
         handleLastNameHelp('');
         handleAlertComponent(getAlertComponent(null, null, null));
+        handleToggleForm();
     }
 
     const onUpdateName = values => {        

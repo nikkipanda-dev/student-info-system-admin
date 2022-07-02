@@ -149,7 +149,7 @@ export const RegisterStudent = ({
                 arr = [response.data.data.details]
             }
 
-            resetForm();
+            resetForm(form);
             handleStudents(arr);
             handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();

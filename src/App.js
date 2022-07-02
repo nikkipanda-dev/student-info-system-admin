@@ -104,8 +104,6 @@ function App() {
         }
     }, [isLoading]);
     
-    console.info('isProfileTab ', isProfileTab());
-
     return (
         <>
         {
@@ -135,7 +133,10 @@ function App() {
                                     </Routes> : 
                                     <Routes>
                                         <Route path="/dashboard" element={<Dashboard isAuth={isAuth} />} />
-                                        <Route path="/settings" element={<Settings />} />
+                                        <Route path="/settings" element={<Settings 
+                                        isAuth={isAuth} 
+                                        authUser={authUser}
+                                        handleUser={handleUser} />} />
                                         <Route path="/administrators" element={<Admins isAuth={isAuth} authUser={authUser} />} />
                                         <Route path="/students" element={<Students isAuth={isAuth} authUser={authUser} />} />
                                         <Route path="/student/:slug" element={<Student isAuth={isAuth} authUser={authUser} />}>

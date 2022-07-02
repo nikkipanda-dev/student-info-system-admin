@@ -1,6 +1,7 @@
 import { useState, } from "react";
 import { Form, Input, } from "antd";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
+import { getToken } from "../../../util/auth";
 
 import Button from "../../core/Button";
 import Heading from "../../core/Heading";
@@ -37,24 +38,29 @@ export const SettingsPasswordForm = ({
     onFinish,
     slug,
     emitMessage,
+    authenticated,
 }) => {
     const [form] = Form.useForm();
 
     const [isVisible, setIsVisible] = useState(false);
     const [passwordHelp, setPasswordHelp] = useState('');
     const [passwordConfirmationHelp, setPasswordConfirmationHelp] = useState('');
+    const [currentPasswordConfirmationHelp, setCurrentPasswordConfirmationHelp] = useState('');
     const [alert, setAlert] = useState('');
 
     const handleToggleForm = () => setIsVisible(!(isVisible));
     const handlePasswordHelp = message => setPasswordHelp(message);
     const handlePasswordConfirmationHelp = message => setPasswordConfirmationHelp(message);
+    const handleCurrentPasswordConfirmationHelp = message => setCurrentPasswordConfirmationHelp(message);
     const handleAlertComponent = payload => setAlert(payload);
 
     const resetForm = () => {
         form.resetFields();
         handlePasswordHelp('');
         handlePasswordConfirmationHelp('');
+        handleCurrentPasswordConfirmationHelp('');
         handleAlertComponent(getAlertComponent(null, null, null));
+        handleToggleForm();
     }
 
     const onUpdatePassword = values => {
@@ -77,6 +83,12 @@ export const SettingsPasswordForm = ({
 
             resetForm();
             handleAlertComponent(getAlertComponent(null, null, null));
+
+            // set new secret cookie
+            if (authenticated) {
+                getToken(response.data.data.details.token);
+            }
+
             setTimeout(() => {
                 emitMessage("Password updated.", "success", 2.5);
             }, 2000);
@@ -86,6 +98,7 @@ export const SettingsPasswordForm = ({
             if (err.response && err.response.data.errors) {
                 err.response.data.errors.password && handlePasswordHelp(getErrorMessage(err.response.data.errors.password[0]));
                 err.response.data.errors.password_confirmation && handlePasswordConfirmationHelp(getErrorMessage(err.response.data.errors.password_confirmation[0]));
+                authenticated && err.response.data.errors.current_password && handleCurrentPasswordConfirmationHelp(getErrorMessage(err.response.data.errors.current_password[0]));
             }
         });
     }
@@ -116,6 +129,24 @@ export const SettingsPasswordForm = ({
                 onFinish={onUpdatePassword}
                 validateMessages={validateMessages}
                 autoComplete="off">
+
+                {
+                    authenticated && 
+                    <Form.Item
+                    label="Current password"
+                    name="current_password"
+                    {...currentPasswordConfirmationHelp && { help: currentPasswordConfirmationHelp }}
+                    rules={[
+                        {
+                            required: true,
+                            type: 'string',
+                            min: 8,
+                            max: 20,
+                        },
+                    ]}>
+                        <Input.Password allowClear visibilityToggle />
+                    </Form.Item>
+                }
 
                     <Form.Item
                     label="Temporary password"

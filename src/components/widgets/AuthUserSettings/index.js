@@ -2,19 +2,18 @@ import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
 
 import SettingsNameForm from "../SettingsNameForm";
-import SettingsDisplayPhotoForm from "../SettingsDisplayPhotoForm";
 import SettingsEmailForm from "../SettingsEmailForm";
 import SettingsPasswordForm from "../SettingsPasswordForm";
 
-export const StudentSettings = ({ 
-    slug, 
+export const AuthUserSettings = ({
+    slug,
     authUser,
     values,
+    handleAdministrator,
     emitMessage,
-    handleStudent,
 }) => {
     return (
-        (values && (Object.keys(values).length > 0)) && 
+        (values && (Object.keys(values).length > 0)) &&
         <>
             <SettingsNameForm
             authUser={authUser}
@@ -22,33 +21,26 @@ export const StudentSettings = ({
             onFinish={updateName}
             emitMessage={emitMessage}
             slug={slug}
-            handleArrayObj={handleStudent} />
-            <SettingsDisplayPhotoForm
-            authUser={authUser}
-            values={values}
-            onFinish={updateDisplayPhoto}
-            emitMessage={emitMessage}
-            slug={slug}
-            handleArrayObj={handleStudent} />
+            handleArrayObj={handleAdministrator} />
             <SettingsEmailForm
             authUser={authUser}
             values={values}
             onFinish={updateEmail}
             emitMessage={emitMessage}
             slug={slug}
-            handleArrayObj={handleStudent} />
+            handleArrayObj={handleAdministrator} />
             <SettingsPasswordForm
             authUser={authUser}
             onFinish={updatePassword}
             emitMessage={emitMessage}
-            slug={slug} />
+            slug={slug}
+            authenticated />
         </>
-
     )
 }
 
 async function updateName(form) {
-    return request.post("student-name-update", form, {
+    return request.post("name-update", form, {
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }
@@ -56,7 +48,7 @@ async function updateName(form) {
 }
 
 async function updateEmail(form) {
-    return request.post("student-email-update", form, {
+    return request.post("email-update", form, {
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }
@@ -64,19 +56,11 @@ async function updateEmail(form) {
 }
 
 async function updatePassword(form) {
-    return request.post("student-password-update", form, {
+    return request.post("password-update", form, {
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }
     });
 }
 
-async function updateDisplayPhoto(form) {
-    return request.post("student-display-photo-update", form, {
-        headers: {
-            'Authorization': `Bearer ${getToken()}`,
-        }
-    });
-}
-
-export default StudentSettings;
+export default AuthUserSettings;

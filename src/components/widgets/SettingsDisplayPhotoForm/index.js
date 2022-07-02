@@ -114,6 +114,7 @@ export const StudentSettingsDisplayPhotoForm = ({
             handleRemoveImage();
             handleDisplayPhoto(response.data.data.details);
             handleAlertComponent(getAlertComponent(null, null, null));
+            handleToggleForm();
             setTimeout(() => {
                 emitMessage("Display photo updated.", "success", 2.5);
             }, 2000);
