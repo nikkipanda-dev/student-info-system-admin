@@ -26,6 +26,8 @@ export const StudentRegistrarFile = ({
     className,
     css,
 }) => {
+    console.info('Registrar values ', values);
+
     if (!(values)) {
         return;
     }
