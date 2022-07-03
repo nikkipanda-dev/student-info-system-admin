@@ -22,8 +22,6 @@ export const StudentPermit = ({
     className,
     css,
 }) => {
-    console.info('Permit values ', values);
-
     if (!(values)) {
         return;
     }
