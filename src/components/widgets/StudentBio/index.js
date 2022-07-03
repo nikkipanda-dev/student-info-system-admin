@@ -41,6 +41,8 @@ export const StudentBio = ({
 
     const status = values.is_enrolled ? "enrolled" : values.is_dropped ? "dropped" : values.is_expelled ? "expelled" : values.is_graduate ? "graduate" : '';
 
+    console.info('status ', status);
+
     if (!(enrollmentCategories[status])) {
         console.error('Invalid enrollment status.');
         return;
