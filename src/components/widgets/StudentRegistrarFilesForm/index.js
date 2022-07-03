@@ -149,6 +149,7 @@ export const StudentRegistrarFilesForm = ({
         emitMessage("Loading", "loading", 2);
 
         onFinish(storeForm).then(response => {
+            console.info('res ', response.data);
             if (!(response.data.is_success)) {
                 handleAlertComponent(getAlertComponent("Error", "danger", response.data.data, { marginTop: '0', }));
                 return;

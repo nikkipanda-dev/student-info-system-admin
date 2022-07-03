@@ -21,16 +21,10 @@ export const StudentPaymentDetails = ({ values, }) => {
                     {values.status.charAt(0).toUpperCase() + values.status.slice(1).toLowerCase()}
                 </Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Type" span={3}>
-                <FontAwesomeIcon
-                icon={values.is_full ? faCircleCheck : faChartPie}
-                className="fa-fw fa-lg"
-                style={{ color: values.is_full ? '#28A745' : '#747474', }} />
-                <Text type="span" css={{ marginLeft: '$5', }}>
-                    {values.is_full ? "Fully paid" : "Installment"}
-                </Text>
+            <Descriptions.Item label="Description" span={3}>
+                <Text type="span">{values.description}</Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Date Paid" span={3}>
+            <Descriptions.Item label="Date Added" span={3}>
                 <Text type="span">{new Intl.DateTimeFormat('en-US', {
                     timeZone: "Asia/Manila",
                     hourCycle: 'h24',
@@ -42,21 +36,12 @@ export const StudentPaymentDetails = ({ values, }) => {
                     second: 'numeric',
                 }).format(new Date(values.created_at))}</Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Amount Paid" span={3}>
-                <Text type="span">&#x20B1;&#xa0;{values.amount_paid}</Text>
-            </Descriptions.Item>
             {
                 values.balance &&
                 <Descriptions.Item label="Balance" span={3}>
                     <Text type="span">&#x20B1;&#xa0;{values.balance}</Text>
                 </Descriptions.Item>
             }
-            <Descriptions.Item
-                label="Mode of Payment"
-                span={3}
-                labelStyle={{ width: '200px', }}>
-                <Text type="span">{paymentModes[values.mode_of_payment]}</Text>
-            </Descriptions.Item>
             <Descriptions.Item label="Course" span={3}>
                 <Text type="span">{courseOptions[values.course]}</Text>
             </Descriptions.Item>
