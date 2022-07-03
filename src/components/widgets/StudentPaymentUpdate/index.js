@@ -3,8 +3,7 @@ import { Form, Radio, } from "antd";
 import Button from "../../core/Button";
 import Container from "../../core/Container";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
-
-import Text from "../../core/Text";
+import StudentPayment from "../StudentPayment";
 
 const styling = {
     'img': {
@@ -47,6 +46,7 @@ export const StudentPaymentUpdate = ({
     payments,
     handlePayments,
     onFinish,
+    onDownload,
     emitMessage,
     isAuth,
     student,
@@ -64,8 +64,6 @@ export const StudentPaymentUpdate = ({
     const handleToggleForm = () => setIsFormShown(!(isFormShown));
     const handleHelpers = payload => setHelpers(payload);
     const handleAlertComponent = payload => setAlert(payload);
-
-    // Todo: display all values
 
     const onResetForm = () => {
         handleAlertComponent(getAlertComponent(null, null, null));
@@ -118,7 +116,7 @@ export const StudentPaymentUpdate = ({
                 return Object.values(payments)[val]
             }));
             
-            onResetForm(form);
+            onResetForm();
             setTimeout(() => {
                 emitMessage("Payment updated.", "success", 2.5);
             }, 2000);
@@ -171,7 +169,11 @@ export const StudentPaymentUpdate = ({
         {
             !(isFormShown) ? 
             <Container css={styling}>
-                <Text type="span">Edit</Text>
+                <StudentPayment 
+                values={payment} 
+                onDownload={onDownload}
+                authUser={authUser}
+                student={student} />
             </Container> : 
             <Container css={styling}>
             {
@@ -188,17 +190,17 @@ export const StudentPaymentUpdate = ({
                 {
                     (statusOptions && (Object.keys(statusOptions).length > 0)) &&
                     <Form.Item
-                        label="Status"
-                        name="status"
-                        {...helpers && helpers.status && { help: helpers.status }}
-                        rules={[{
-                            required: true,
-                            message: "Status is required.",
-                        }]}>
+                    label="Status"
+                    name="status"
+                    {...helpers && helpers.status && { help: helpers.status }}
+                    rules={[{
+                        required: true,
+                        message: "Status is required.",
+                    }]}>
                         <Radio.Group>
-                            {
-                                Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
-                            }
+                        {
+                            Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                        }
                         </Radio.Group>
                     </Form.Item>
                 }

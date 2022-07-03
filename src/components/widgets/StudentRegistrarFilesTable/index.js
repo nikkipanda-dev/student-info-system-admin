@@ -2,6 +2,7 @@ import { Table, Form, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
+import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
@@ -109,6 +110,7 @@ export const StudentRegistrarFilesTable = ({
                 onClick={() => handleModalContent(<StudentRegistrarFileUpdate
                     form={form}
                     onFinish={updateRegistrarFile}
+                    onDownload={onDownload}
                     registrarFiles={registrarFiles}
                     handleRegistrarFiles={handleRegistrarFiles}
                     emitMessage={emitMessage}

@@ -7,6 +7,7 @@ export const Modal = ({
     bodyStyle,
     closable,
     maskClosable,
+    width,
     onCancel,
     destroyOnClose,
 }) => {
@@ -17,6 +18,7 @@ export const Modal = ({
         closable={closable}
         maskClosable={maskClosable} 
         footer={null}
+        {...width && {width: width}}
         {...destroyOnClose && {destroyOnClose: destroyOnClose}}
         {...bodyStyle && {bodyStyle: {...bodyStyle}}}
         onCancel={() => onCancel()}>

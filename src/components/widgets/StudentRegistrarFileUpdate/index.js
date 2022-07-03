@@ -19,6 +19,7 @@ import Image from "../../core/Image";
 import Text from "../../core/Text";
 import Button from "../../core/Button";
 import NotFound from "../NotFound";
+import StudentRegistrarFile from "../StudentRegistrarFile";
 
 const NativeInput = styled('input', {});
 
@@ -51,6 +52,7 @@ const formItemLayout = {
 export const StudentRegistrarFileUpdate = ({
     form,
     onFinish,
+    onDownload,
     registrarFiles,
     handleRegistrarFiles,
     emitMessage,
@@ -170,6 +172,7 @@ export const StudentRegistrarFileUpdate = ({
                         ...Object.values(registrarFiles)[val],
                         description: response.data.data.details.description,
                         status: response.data.data.details.status,
+                        files: response.data.data.details.files,
                     }
                 }
 
@@ -180,6 +183,7 @@ export const StudentRegistrarFileUpdate = ({
                 ...registrarFile,
                 description: response.data.data.details.description,
                 status: response.data.data.details.status,
+                files: response.data.data.details.files,
             });
             
             onResetForm(form);
@@ -270,7 +274,11 @@ export const StudentRegistrarFileUpdate = ({
         {
             !(isFormShown) ? 
             <Container css={styling}>
-                <Text type="span">Edit</Text>
+                <StudentRegistrarFile
+                values={registrarFile}
+                onDownload={onDownload}
+                authUser={authUser}
+                student={student} />
             </Container> : 
             <Container css={styling}>
             {

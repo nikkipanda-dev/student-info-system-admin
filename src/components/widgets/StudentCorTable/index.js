@@ -1,7 +1,8 @@
-import { Form, Table, } from 'antd';
+import { Table, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
+import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
@@ -21,8 +22,8 @@ export const StudentCorTable = ({
     deleteCor,
     authUser,
 }) => {
-    const onDownload = value => {
-        window.location.href = `${process.env.REACT_APP_BASE_URL}student/file/download/${authUser.slug}/${student.slug}/${value}`;
+    const onDownloadFile = value => {
+        onDownload(authUser.slug, student.slug, value);
     }
 
     const onConfirmDeletion = slug => {
@@ -89,8 +90,8 @@ export const StudentCorTable = ({
             dataIndex: 'slug',
             width: '130px',
             render: (_, record) => <Image
-                src={record.path}
-                onClick={() => onDownload(record.slug)}
+                src={record.file[0].path}
+                onClick={() => onDownloadFile(record.slug)}
                 css={{
                     width: '100px',
                     width: '100px',
@@ -133,6 +134,7 @@ export const StudentCorTable = ({
                 onClick={() => handleModalContent(<StudentCorUpdate
                     onFinish={updateCor}
                     cors={cors}
+                    onDownload={onDownload}
                     handleCors={handleCors}
                     emitMessage={emitMessage}
                     isAuth={isAuth}
@@ -140,7 +142,7 @@ export const StudentCorTable = ({
                     slug={record.slug}
                     values={record}
                     handleHideModal={handleHideModal}
-                    authUser={authUser} />, "Update Payment")}
+                    authUser={authUser} />, "Update COR")}
                 css={{ marginLeft: '$10', }} />
                 <Button
                 text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>}

@@ -5,7 +5,6 @@ import {
 } from "react";
 import {
     Form,
-    Input,
     Radio,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -14,12 +13,12 @@ import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { styled } from "../../../stitches.config";
 
 import Container from '../../core/Container';
-import Alert from '../Alert';
 import Text from "../../core/Text";
 import Button from "../../core/Button";
 import NotFound from "../NotFound";
 import Label from "../../core/Label";
 import Image from "../../core/Image";
+import StudentPermit from "../StudentPermit";
 
 const NativeInput = styled('input', {});
 
@@ -53,9 +52,9 @@ export const StudentPermitUpdate = ({
     form,
     onFinish,
     permits,
+    onDownload,
     handlePermits,
     emitMessage,
-    resetForm,
     isAuth,
     student,
     slug,
@@ -153,7 +152,7 @@ export const StudentPermitUpdate = ({
                     return {
                         ...Object.values(permits)[val],
                         slug: response.data.data.details.slug,
-                        path: response.data.data.details.path,
+                        file: response.data.data.details.file,
                     }
                 }
 
@@ -234,7 +233,11 @@ export const StudentPermitUpdate = ({
         {
             !(isFormShown) ? 
             <Container css={styling}>
-                <Text type="span">Edit</Text>
+                <StudentPermit
+                values={permit}
+                onDownload={onDownload}
+                authUser={authUser}
+                student={student} />
             </Container> :
             <Container css={styling}>
             {

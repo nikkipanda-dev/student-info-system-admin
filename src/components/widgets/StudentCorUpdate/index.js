@@ -14,6 +14,7 @@ import Text from "../../core/Text";
 import Image from "../../core/Image";
 import NotFound from "../NotFound";
 import Button from "../../core/Button";
+import StudentCor from "../StudentCor";
 
 const NativeInput = styled('input', {});
 
@@ -34,6 +35,7 @@ const styling = {
 
 export const StudentCorUpdate = ({
     cors,
+    onDownload,
     handleCors,
     onFinish,
     emitMessage,
@@ -156,7 +158,7 @@ export const StudentCorUpdate = ({
                     return { 
                         ...Object.values(cors)[val], 
                         slug: response.data.data.details.slug,
-                        path: response.data.data.details.path, 
+                        file: response.data.data.details.file, 
                     }
                 }
 
@@ -222,7 +224,11 @@ export const StudentCorUpdate = ({
         {
             !(isFormShown) ? 
             <Container css={styling}>
-                <Text type="span">Edit</Text>
+                <StudentCor 
+                values={cor}
+                onDownload={onDownload}
+                authUser={authUser}
+                student={student} />
             </Container> :
             <Container css={styling}>
             {

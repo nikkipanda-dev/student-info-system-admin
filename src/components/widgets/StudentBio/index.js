@@ -1,7 +1,7 @@
 import Container from "../../core/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, } from "@fortawesome/free-solid-svg-icons";
-import { ordinalNumbers, } from "../../../util";
+import { ordinalNumbers, courseOptions, } from "../../../util";
 import { 
     studentBioStyle, 
     anchorStyle,
@@ -19,14 +19,7 @@ export const StudentBio = ({
     className,
     css,
 }) => {
-    const courses = {
-        bsit: "Bachelor of Science in Information Technology",
-        bscs: "Bachelor of Science in Computer Science",
-        bsis: "Bachelor of Science in Information Systems",
-        bsba: "Bachelor of Science in Business Administration",
-    };
-
-    if (!(courses[values.course])) {
+    if (!(courseOptions[values.course])) {
         console.error('Invalid course.');
         return;
     }
@@ -54,7 +47,7 @@ export const StudentBio = ({
                 href={`mailto:${values.email}`}>
                     {`${values.email}`}
                 </Text>
-                <Text type="span">{`${courses[values.course]}`}</Text>
+                <Text type="span">{`${courseOptions[values.course]}`}</Text>
                 <Text type="span">{`${ordinalNumbers[values.year]} year, ${ordinalNumbers[values.term]} term`}</Text>
             </Container>
         </Card>

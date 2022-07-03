@@ -2,6 +2,7 @@ import { Table, Form, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
+import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
@@ -128,6 +129,7 @@ export const StudentPaymentsTable = ({
                     onClick={() => handleModalContent(<StudentPaymentUpdate 
                         form={form} 
                         onFinish={updatePayment}
+                        onDownload={onDownload}
                         payments={payments}
                         handlePayments={handlePayments}
                         emitMessage={emitMessage}
@@ -136,7 +138,7 @@ export const StudentPaymentsTable = ({
                         slug={record.slug}
                         values={record}
                         handleHideModal={handleHideModal}
-                        authUser={authUser} />, "Update Payment")} 
+                        authUser={authUser} />, "Payment Details")} 
                     css={{ marginLeft: '$10', }} />
                     <Button 
                     text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>} 
