@@ -106,6 +106,7 @@ export const Student = ({ isAuth, authUser, }) => {
             isVisible={isModalVisible}
             maskClosable={false}
             title={title}
+            width="700px"
             onCancel={handleHideModal}>
                 {modalContent}
             </Modal>

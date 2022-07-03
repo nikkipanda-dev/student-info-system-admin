@@ -2,6 +2,8 @@ import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
 
 import SettingsNameForm from "../SettingsNameForm";
+import SettingsCourseForm from "../SettingsCourseForm";
+import SettingsYearTermForm from "../SettingsYearTermForm";
 import SettingsDisplayPhotoForm from "../SettingsDisplayPhotoForm";
 import SettingsEmailForm from "../SettingsEmailForm";
 import SettingsPasswordForm from "../SettingsPasswordForm";
@@ -20,6 +22,20 @@ export const StudentSettings = ({
             authUser={authUser}
             values={values}
             onFinish={updateName}
+            emitMessage={emitMessage}
+            slug={slug}
+            handleArrayObj={handleStudent} />
+            <SettingsCourseForm
+            authUser={authUser}
+            values={values}
+            onFinish={updateCourse}
+            emitMessage={emitMessage}
+            slug={slug}
+            handleArrayObj={handleStudent} />
+            <SettingsYearTermForm
+            authUser={authUser}
+            values={values}
+            onFinish={updateYearTerm}
             emitMessage={emitMessage}
             slug={slug}
             handleArrayObj={handleStudent} />
@@ -49,6 +65,22 @@ export const StudentSettings = ({
 
 async function updateName(form) {
     return request.post("student-name-update", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function updateCourse(form) {
+    return request.post("student-course-update", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
+}
+
+async function updateYearTerm(form) {
+    return request.post("student-year-term-update", form, {
         headers: {
             'Authorization': `Bearer ${getToken()}`,
         }
