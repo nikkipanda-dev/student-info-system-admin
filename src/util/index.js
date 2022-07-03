@@ -121,6 +121,13 @@ export const paymentTypes = {
     installment: "Installment",
 }
 
+export const courseOptions = {
+    bsit: "Bachelor of Science in Information Technology",
+    bscs: "Bachelor of Science in Computer Science",
+    bsis: "Bachelor of Science in Information Systems",
+    bsba: "Bachelor of Science in Business Administration",
+};
+
 export const statusOptions = {
     pending: "Pending",
     verified: "Verified",
@@ -153,4 +160,8 @@ export const emitMessage = (content, status, duration) => {
         status: status,
         duration: duration,
     });
+}
+
+export const onDownload = (authUserSlug, studentSlug, value) => {
+    window.location.href = `${process.env.REACT_APP_BASE_URL}student/file/download/${authUserSlug}/${studentSlug}/${value}`;
 }

@@ -1,11 +1,15 @@
-import { ordinalNumbers, courseOptions, } from '../../../util';
+import {
+    ordinalNumbers,
+    courseOptions,
+    paymentModes,
+} from '../../../util';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, } from '@fortawesome/free-solid-svg-icons';
 import { imagePreviewFileStyle, } from '../../../stitches.config';
 import Container from "../../core/Container";
 
 import Text from "../../core/Text";
-import StudentCorDetails from "../StudentCorDetails";
+import StudentPaymentDetails from '../StudentPaymentDetails';
 import FilePreview from '../FilePreview';
 
 const styling = {
@@ -14,7 +18,7 @@ const styling = {
     }
 }
 
-export const StudentCor = ({
+export const StudentRegistrarFile = ({
     values,
     onDownload,
     authUser,
@@ -27,7 +31,7 @@ export const StudentCor = ({
     }
 
     if (!(courseOptions[values.course]) || !(ordinalNumbers[values.term]) || !(ordinalNumbers[values.year])) {
-        console.error('Invalid course, mode of payment, term and/or year.');
+        console.error('Invalid course, term, and/or year.');
         return;
     }
 
@@ -39,7 +43,7 @@ export const StudentCor = ({
         (values && (Object.keys(values).length > 0)) &&
         <Container {...className && { className: className }} css={{ ...styling, ...css }}>
             <Container>
-                <StudentCorDetails values={values} />
+                <StudentPaymentDetails values={values} />
             </Container>
             <Container className="d-flex flex-column">
                 <Container>
@@ -61,7 +65,7 @@ export const StudentCor = ({
                 }}>
                     <FilePreview
                     onClick={onClick}
-                    {...values && values.file && { values: values.file }}
+                    {...values.files && { values: { ...values.files } }}
                     css={{ marginTop: '$30', }} />
                 </Container>
             </Container>
@@ -69,4 +73,4 @@ export const StudentCor = ({
     )
 }
 
-export default StudentCor;
+export default StudentRegistrarFile;

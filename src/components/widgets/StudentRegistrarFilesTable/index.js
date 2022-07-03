@@ -2,6 +2,7 @@ import { Table, Form, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
+import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
@@ -9,7 +10,6 @@ import Alert from '../Alert';
 import StudentRegistrarFileUpdate from '../StudentRegistrarFileUpdate';
 
 export const StudentRegistrarFilesTable = ({ 
-    resetForm,
     handleModalContent,
     emitMessage,
     isAuth,
@@ -107,10 +107,10 @@ export const StudentRegistrarFilesTable = ({
                 <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"
-                    onClick={() => handleModalContent(<StudentRegistrarFileUpdate
+                onClick={() => handleModalContent(<StudentRegistrarFileUpdate
                     form={form}
-                    resetForm={resetForm}
                     onFinish={updateRegistrarFile}
+                    onDownload={onDownload}
                     registrarFiles={registrarFiles}
                     handleRegistrarFiles={handleRegistrarFiles}
                     emitMessage={emitMessage}

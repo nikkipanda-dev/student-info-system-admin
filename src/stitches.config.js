@@ -168,3 +168,15 @@ export const displayPhotoStyle = {
     maxHeight: '300px',
     objectFit: 'cover',
 }
+
+export const imagePreviewFileStyle = {
+    width: '100%',
+    background: '$gray1',
+    borderRadius: '$small',
+    padding: '$5',
+    height: 'auto',
+    margin: '$10',
+    maxWidth: '400px',
+    maxHeight: '400px',
+    objectFit: 'cover',
+}

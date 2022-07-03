@@ -84,7 +84,6 @@ export const StudentRegistrarFiles = ({
             {
                 (registrarFiles && (Object.keys(registrarFiles).length > 0)) ?
                 <StudentRegistrarFilesTable
-                resetForm={resetForm}
                 handleModalContent={handleModalContent}
                 emitMessage={emitMessage}
                 isAuth={isAuth}
@@ -104,6 +103,8 @@ export const StudentRegistrarFiles = ({
                 isVisible={isModalVisible}
                 maskClosable={false}
                 title={title}
+                width="700px"
+                destroyOnClose={true}
                 bodyStyle={{ maxHeight: '80vh', overflowY: 'auto', }}
                 onCancel={handleHideModal}>
                     {modalContent}

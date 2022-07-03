@@ -1,17 +1,16 @@
 import { Form, Table, } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
+import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
 import Image from '../../core/Image';
 import Alert from '../Alert';
 import Container from '../../core/Container';
 import Button from '../../core/Button';
-import StudentPermit from '../StudentPermit';
 import StudentPermitUpdate from '../StudentPermitUpdate';
 
 export const StudentPermitsTable = ({
-    resetForm,
     handleModalContent,
     emitMessage,
     isAuth,
@@ -25,8 +24,8 @@ export const StudentPermitsTable = ({
  }) => {
     const [form] = Form.useForm();
 
-    const onDownload = value => {
-        window.location.href = `${process.env.REACT_APP_BASE_URL}student/file/download/${authUser.slug}/${student.slug}/${value}`;
+    const onDownloadFile = value => {
+        onDownload(authUser.slug, student.slug, value);
     }
 
     const onConfirmDeletion = slug => {
@@ -93,8 +92,8 @@ export const StudentPermitsTable = ({
             dataIndex: 'slug',
             width: '130px',
             render: (_, record) => <Image
-                src={record.path}
-                onClick={() => onDownload(record.slug)}
+                src={record.file[0].path}
+                onClick={() => onDownloadFile(record.slug)}
                 css={{
                     width: '100px',
                     width: '100px',
@@ -132,25 +131,19 @@ export const StudentPermitsTable = ({
                 }
             }}>
                 <Button
-                text={<Text type="span" color="info">View</Text>}
-                className="button-sm"
-                css={{
-                    color: '$gray4',
-                }}
-                onClick={() => handleModalContent(<StudentPermit />, "Permit Details")} />
-                <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"
                 onClick={() => handleModalContent(<StudentPermitUpdate
                     form={form}
                     onFinish={updatePermit}
                     permits={permits}
+                    onDownload={onDownload}
                     handlePermits={handlePermits}
                     emitMessage={emitMessage}
-                    resetForm={resetForm}
                     isAuth={isAuth}
                     student={student}
                     slug={record.slug}
+                    values={record}
                     handleHideModal={handleHideModal}
                     authUser={authUser} />, "Update Payment")}
                 css={{ marginLeft: '$10', }} />

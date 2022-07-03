@@ -88,17 +88,6 @@ export const StudentRegistrarFilesForm = ({
         },
     ];
 
-    // const handleAlertComponent = (header, status, message) => {
-    //     if (!(message)) {
-    //         handleAlert('');
-    //         return;
-    //     }
-
-    //     handleHeader(header);
-    //     handleStatus(status);
-    //     handleAlert(<Text type="span">{message}</Text>);
-    // }
-
     const handleRemoveImage = value => {
         let target = Object.values(imageUrls).find(el => el.id === value);
         target && URL.revokeObjectURL(target.src);
@@ -172,8 +161,8 @@ export const StudentRegistrarFilesForm = ({
             }
 
             resetForm(form);
-            handleAlertComponent(getAlertComponent(null, null, null));
             handleRegistrarFiles(arr);
+            handleAlertComponent(getAlertComponent(null, null, null));
             handleHideModal();
             setTimeout(() => {
                 emitMessage("Registrar file added.", "success", 2.5);

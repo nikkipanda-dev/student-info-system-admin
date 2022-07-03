@@ -84,7 +84,6 @@ export const StudentPermits = ({
             {
                 (permits && (Object.keys(permits).length > 0)) ?
                 <StudentPermitsTable
-                resetForm={resetForm}
                 handleModalContent={handleModalContent}
                 emitMessage={emitMessage}
                 isAuth={isAuth}
@@ -104,6 +103,8 @@ export const StudentPermits = ({
             isVisible={isModalVisible}
             maskClosable={false}
             title={title}
+            width="700px"
+            destroyOnClose={true}
             bodyStyle={{ maxHeight: '80vh', overflowY: 'auto', }}
             onCancel={handleHideModal}>
                 {modalContent}

@@ -37,7 +37,6 @@ function App() {
     const [authUser, setAuthUser] = useState('');
     const location = useLocation();
     const navigate = useNavigate();
-    const pattern = [/\/student\/[^"]+?\/payments$/];
 
     const handleHideLoading = () => setIsContentLoading(false);
     const handleShowSpinner = () => setIsLoading(true);

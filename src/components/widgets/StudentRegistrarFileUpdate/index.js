@@ -19,6 +19,7 @@ import Image from "../../core/Image";
 import Text from "../../core/Text";
 import Button from "../../core/Button";
 import NotFound from "../NotFound";
+import StudentRegistrarFile from "../StudentRegistrarFile";
 
 const NativeInput = styled('input', {});
 
@@ -50,8 +51,8 @@ const formItemLayout = {
 
 export const StudentRegistrarFileUpdate = ({
     form,
-    resetForm,
     onFinish,
+    onDownload,
     registrarFiles,
     handleRegistrarFiles,
     emitMessage,
@@ -98,6 +99,13 @@ export const StudentRegistrarFileUpdate = ({
 
         handleFiles(Object.values(files).filter(el => el.id !== value));
         handleImageUrls(Object.values(imageUrls).filter(el => el.id !== value));
+    }
+
+    const onResetForm = () => {
+        handleAlertComponent(getAlertComponent(null, null, null));
+        handleHideModal();
+        handleFiles('');
+        handleImageUrls('');
     }
 
     const onInputChange = () => {
@@ -164,6 +172,7 @@ export const StudentRegistrarFileUpdate = ({
                         ...Object.values(registrarFiles)[val],
                         description: response.data.data.details.description,
                         status: response.data.data.details.status,
+                        files: response.data.data.details.files,
                     }
                 }
 
@@ -174,18 +183,10 @@ export const StudentRegistrarFileUpdate = ({
                 ...registrarFile,
                 description: response.data.data.details.description,
                 status: response.data.data.details.status,
-            });
-
-            form.setFieldsValue({
-                status: response.data.data.details.status,
-                description: response.data.data.details.description,
+                files: response.data.data.details.files,
             });
             
-            resetForm(form);
-            handleAlertComponent(getAlertComponent(null, null, null));
-            handleHideModal();
-            handleFiles('');
-            handleImageUrls('');
+            onResetForm(form);
             setTimeout(() => {
                 emitMessage("Registrar file updated.", "success", 2.5);
             }, 2000);
@@ -235,6 +236,21 @@ export const StudentRegistrarFileUpdate = ({
 
     useEffect(() => {
         let loading = true;
+
+        if (loading && (values && (Object.keys(values).length > 0))) {
+            form.setFieldsValue({
+                description: values.description,
+                status: values.status,
+            });
+        }
+
+        return () => {
+            loading = false;
+        }
+    }, [values]);
+
+    useEffect(() => {
+        let loading = true;
         
         if (loading && (values && (Object.keys(values).length > 0))) {
             handleRegistrarFile(values);
@@ -258,7 +274,11 @@ export const StudentRegistrarFileUpdate = ({
         {
             !(isFormShown) ? 
             <Container css={styling}>
-                <Text type="span">Edit</Text>
+                <StudentRegistrarFile
+                values={registrarFile}
+                onDownload={onDownload}
+                authUser={authUser}
+                student={student} />
             </Container> : 
             <Container css={styling}>
             {
@@ -323,10 +343,6 @@ export const StudentRegistrarFileUpdate = ({
                 name="student-registrar-files-form"
                 {...formItemLayout}
                 form={form}
-                initialValues={{
-                    description: registrarFile.description,
-                    status: registrarFile.status,
-                }}
                 onFinish={onUpdate}
                 autoComplete="off">
 

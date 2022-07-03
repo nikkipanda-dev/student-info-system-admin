@@ -1,13 +1,13 @@
-import { Form, Table, } from 'antd';
+import { Table, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
+import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
 import Image from '../../core/Image';
 import Alert from '../Alert';
-import StudentCor from '../StudentCor';
 import StudentCorUpdate from "../StudentCorUpdate";
 
 export const StudentCorTable = ({ 
@@ -22,10 +22,8 @@ export const StudentCorTable = ({
     deleteCor,
     authUser,
 }) => {
-    const [form] = Form.useForm();
-
-    const onDownload = value => {
-        window.location.href = `${process.env.REACT_APP_BASE_URL}student/file/download/${authUser.slug}/${student.slug}/${value}`;
+    const onDownloadFile = value => {
+        onDownload(authUser.slug, student.slug, value);
     }
 
     const onConfirmDeletion = slug => {
@@ -92,8 +90,8 @@ export const StudentCorTable = ({
             dataIndex: 'slug',
             width: '130px',
             render: (_, record) => <Image
-                src={record.path}
-                onClick={() => onDownload(record.slug)}
+                src={record.file[0].path}
+                onClick={() => onDownloadFile(record.slug)}
                 css={{
                     width: '100px',
                     width: '100px',
@@ -131,29 +129,20 @@ export const StudentCorTable = ({
                 }
             }}>
                 <Button
-                text={<Text type="span" color="info">View</Text>}
-                className="button-sm"
-                css={{
-                    color: '$gray4',
-                }}
-                onClick={() => handleModalContent(<StudentCor />, "COR Details")} />
-                <Button
                 text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
                 className="button-sm"
                 onClick={() => handleModalContent(<StudentCorUpdate
-                    form={form}
                     onFinish={updateCor}
                     cors={cors}
+                    onDownload={onDownload}
                     handleCors={handleCors}
                     emitMessage={emitMessage}
                     isAuth={isAuth}
                     student={student}
                     slug={record.slug}
-                    values={{
-                        status: record.status,
-                    }}
+                    values={record}
                     handleHideModal={handleHideModal}
-                    authUser={authUser} />, "Update Payment")}
+                    authUser={authUser} />, "Update COR")}
                 css={{ marginLeft: '$10', }} />
                 <Button
                 text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>}
