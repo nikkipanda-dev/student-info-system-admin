@@ -1,7 +1,17 @@
 import Container from "../../core/Container";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, } from "@fortawesome/free-solid-svg-icons";
-import { ordinalNumbers, courseOptions, } from "../../../util";
+import { 
+    faUser,
+    faGraduationCap,
+    faSchoolCircleCheck,
+    faSchoolCircleExclamation,
+    faSchoolCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
+import { 
+    ordinalNumbers, 
+    courseOptions,
+    enrollmentCategories,
+} from "../../../util";
 import { 
     studentBioStyle, 
     anchorStyle,
@@ -29,6 +39,13 @@ export const StudentBio = ({
         return;
     }
 
+    const status = values.is_enrolled ? "enrolled" : values.is_dropped ? "dropped" : values.is_expelled ? "expelled" : values.is_graduate ? "graduate" : '';
+
+    if (!(enrollmentCategories[status])) {
+        console.error('Invalid enrollment status.');
+        return;
+    }
+
     return (
         <Card 
         className={'d-flex flex-column ' + (className ? (' ' + className) : '')} 
@@ -41,6 +58,21 @@ export const StudentBio = ({
                 <FontAwesomeIcon icon={faUser} className="fa-fw fa-10x" />
             }
                 <Text type="span">{`${values.first_name} ${values.middle_name ?? ''} ${values.last_name}`}</Text>
+                <Container>
+                    <FontAwesomeIcon 
+                    icon={
+                        values.is_enrolled ? faSchoolCircleCheck : 
+                        values.is_dropped ? faSchoolCircleExclamation : 
+                        values.is_expelled ? faSchoolCircleXmark : faGraduationCap
+                    } 
+                    className="fa-fw fa-lg"
+                    style={{
+                        color: values.is_enrolled ? "#00B4D8 " :
+                               values.is_dropped ? "#f0ca57" :
+                               values.is_expelled ? "#DC3545" : "#28A745",
+                    }} />
+                    <Text type="span" css={{ marginLeft: '$5', }}>{`${enrollmentCategories[status]}`}</Text>
+                </Container>
                 <Text 
                 type="span" 
                 as="a" 

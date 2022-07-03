@@ -9,6 +9,14 @@ import {
     getAlertComponent,
     enrollmentCategories,
 } from "../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+    faUser,
+    faGraduationCap,
+    faSchoolCircleCheck,
+    faSchoolCircleExclamation,
+    faSchoolCircleXmark,
+} from "@fortawesome/free-solid-svg-icons";
 
 import Button from "../../core/Button";
 import Text from "../../core/Text";
@@ -186,7 +194,19 @@ export const SettingsEnrollmentStatusForm = ({
                     <Descriptions.Item
                     label={<Text type="span">Enrollment Status</Text>}
                     labelStyle={{ width: '180px', }}>
-                        <Text type="span">
+                        <FontAwesomeIcon
+                        icon={
+                            enrollmentStatus.is_enrolled ? faSchoolCircleCheck :
+                            enrollmentStatus.is_dropped ? faSchoolCircleExclamation :
+                            enrollmentStatus.is_expelled ? faSchoolCircleXmark : faGraduationCap
+                        }
+                        className="fa-fw fa-lg"
+                        style={{
+                            color: enrollmentStatus.is_enrolled ? "#00B4D8 " :
+                                   enrollmentStatus.is_dropped ? "#f0ca57" :
+                                   enrollmentStatus.is_expelled ? "#DC3545" : "#28A745",
+                        }} />
+                        <Text type="span" css={{ marginLeft: '$5', }}>
                         {
                             `${enrollmentStatus.is_enrolled ? enrollmentCategories['enrolled'] : 
                             enrollmentStatus.is_dropped ? enrollmentCategories['dropped'] : 
