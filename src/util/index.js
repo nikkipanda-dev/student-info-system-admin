@@ -128,6 +128,13 @@ export const courseOptions = {
     bsba: "Bachelor of Science in Business Administration",
 };
 
+export const enrollmentCategories = {
+    enrolled: "Enrolled",
+    dropped: "Dropped",
+    expelled: "Expelled",
+    graduate: "Graduated",
+}
+
 export const statusOptions = {
     pending: "Pending",
     verified: "Verified",

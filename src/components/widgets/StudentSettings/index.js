@@ -1,6 +1,7 @@
 import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
 
+import SettingsEnrollmentStatusForm from "../SettingsEnrollmentStatusForm";
 import SettingsNameForm from "../SettingsNameForm";
 import SettingsCourseForm from "../SettingsCourseForm";
 import SettingsYearTermForm from "../SettingsYearTermForm";
@@ -18,6 +19,13 @@ export const StudentSettings = ({
     return (
         (values && (Object.keys(values).length > 0)) && 
         <>
+            <SettingsEnrollmentStatusForm
+            authUser={authUser}
+            values={values}
+            onFinish={updateEnrollmentStatus}
+            emitMessage={emitMessage}
+            slug={slug}
+            handleArrayObj={handleStudent} />
             <SettingsNameForm
             authUser={authUser}
             values={values}
@@ -61,6 +69,14 @@ export const StudentSettings = ({
         </>
 
     )
+}
+
+async function updateEnrollmentStatus(form) {
+    return request.post("student-enrollment-status-update", form, {
+        headers: {
+            'Authorization': `Bearer ${getToken()}`,
+        }
+    });
 }
 
 async function updateName(form) {
