@@ -26,6 +26,8 @@ export const StudentPayment = ({
     className,
     css,
 }) => {
+    console.info('Payment values ', values);
+
     if (!(values)) {
         return;
     }

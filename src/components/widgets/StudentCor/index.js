@@ -22,6 +22,8 @@ export const StudentCor = ({
     className,
     css,
 }) => {
+    console.info('COR values ', values);
+
     if (!(values)) {
         return;
     }
