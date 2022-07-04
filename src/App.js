@@ -22,6 +22,7 @@ import Admins from "./components/pages/admins";
 import Students from "./components/pages/students";
 import Student from "./components/pages/student";
 import StudentContent from "./components/widgets/StudentContent";
+import UserLogs from "./components/pages/user-logs";
 import NotFound from "./components/pages/not-found";
 import Row from "./components/core/Row";
 import Column from "./components/core/Column";
@@ -139,6 +140,7 @@ function App() {
                                             <Route index element={<StudentContent isAuth={isAuth} />} />
                                             <Route path=":tab_slug" element={<StudentContent isAuth={isAuth} />} />
                                         </Route>
+                                        <Route path="/user-logs" element={<UserLogs isAuth={isAuth} authUser={authUser} />} />
                                         <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                     </Routes>
                             }

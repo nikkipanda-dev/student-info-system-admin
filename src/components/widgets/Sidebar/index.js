@@ -21,6 +21,11 @@ export const Sidebar = () => {
             label: "Students",
             path: "/students",
         },
+        {
+            id: 3,
+            label: "User Logs",
+            path: "/user-logs",
+        },
     ]
 
     return (
