@@ -140,7 +140,10 @@ function App() {
                                             <Route index element={<StudentContent isAuth={isAuth} />} />
                                             <Route path=":tab_slug" element={<StudentContent isAuth={isAuth} />} />
                                         </Route>
-                                        <Route path="/user-logs" element={<UserLogs isAuth={isAuth} authUser={authUser} />} />
+                                        {
+                                            authUser.is_super_admin && 
+                                            <Route path="/user-logs" element={<UserLogs isAuth={isAuth} authUser={authUser} />} />
+                                        }
                                         <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                     </Routes>
                             }
