@@ -4,26 +4,37 @@ import {
     faCircleCheck, 
     faChartPie, 
     faClock,
+    faBan,
 } from '@fortawesome/free-solid-svg-icons';
 import { paymentModes, courseOptions, ordinalNumbers, } from '../../../util';
 
 import Text from '../../core/Text';
 
 export const StudentPaymentDetails = ({ values, }) => {
-    if (!(paymentModes[values.mode_of_payment])) {
-        console.error("Invalid payment mode.");
-        return;
-    }
-
     return (
         <Descriptions bordered>
             <Descriptions.Item label="Status" span={3}>
                 <FontAwesomeIcon
-                icon={(values.status === 'verified') ? faCircleCheck : faClock}
+                icon={
+                    (values.status === 'verified') ? faCircleCheck : 
+                    (values.status === 'pending') ? faClock : faBan
+                }
                 className="fa-fw fa-lg"
                 style={{ color: (values.status === 'verified') ? '#00B4D8' : '#747474', }} />
                 <Text type="span" css={{ marginLeft: '$5', }}>
                     {values.status.charAt(0).toUpperCase() + values.status.slice(1).toLowerCase()}
+                </Text>
+            </Descriptions.Item>
+            <Descriptions.Item label="Type" span={3}>
+                <FontAwesomeIcon
+                icon={values.is_full ? faCircleCheck : values.is_installment ? faChartPie : faBan}
+                className="fa-fw fa-lg"
+                style={{ color: values.is_full ? '#00B4D8' : '#747474', }} />
+                <Text type="span" css={{ marginLeft: '$5', }}>
+                {
+                    values.is_full ? "Fully paid" : 
+                    values.is_installment ? "Installment" : ''
+                }
                 </Text>
             </Descriptions.Item>
             <Descriptions.Item label="Mode of Payment" span={3}>

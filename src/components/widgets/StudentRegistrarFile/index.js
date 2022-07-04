@@ -9,7 +9,7 @@ import { imagePreviewFileStyle, } from '../../../stitches.config';
 import Container from "../../core/Container";
 
 import Text from "../../core/Text";
-import StudentPaymentDetails from '../StudentPaymentDetails';
+import StudentRegistrarFileDetails from '../StudentRegistrarFileDetails';
 import FilePreview from '../FilePreview';
 
 const styling = {
@@ -43,7 +43,7 @@ export const StudentRegistrarFile = ({
         (values && (Object.keys(values).length > 0)) &&
         <Container {...className && { className: className }} css={{ ...styling, ...css }}>
             <Container>
-                <StudentPaymentDetails values={values} />
+                <StudentRegistrarFileDetails values={values} />
             </Container>
             <Container className="d-flex flex-column">
                 <Container>
