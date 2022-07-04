@@ -142,7 +142,7 @@ export const StudentCorTable = ({
                     slug={record.slug}
                     values={record}
                     handleHideModal={handleHideModal}
-                    authUser={authUser} />, "Update COR")}
+                    authUser={authUser} />, "COR Details")}
                 css={{ marginLeft: '$10', }} />
                 <Button
                 text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>}

@@ -10,6 +10,11 @@ import { paymentModes, courseOptions, ordinalNumbers, } from '../../../util';
 import Text from '../../core/Text';
 
 export const StudentPaymentDetails = ({ values, }) => {
+    if (!(paymentModes[values.mode_of_payment])) {
+        console.error("Invalid payment mode.");
+        return;
+    }
+
     return (
         <Descriptions bordered>
             <Descriptions.Item label="Status" span={3}>
@@ -21,8 +26,8 @@ export const StudentPaymentDetails = ({ values, }) => {
                     {values.status.charAt(0).toUpperCase() + values.status.slice(1).toLowerCase()}
                 </Text>
             </Descriptions.Item>
-            <Descriptions.Item label="Description" span={3}>
-                <Text type="span">{values.description}</Text>
+            <Descriptions.Item label="Mode of Payment" span={3}>
+                <Text type="span">{paymentModes[values.mode_of_payment]}</Text>
             </Descriptions.Item>
             <Descriptions.Item label="Date Added" span={3}>
                 <Text type="span">{new Intl.DateTimeFormat('en-US', {

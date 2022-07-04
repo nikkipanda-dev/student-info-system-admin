@@ -2,7 +2,6 @@ import { useState, useEffect, } from "react";
 import { 
     Routes, 
     Route,
-    Navigate,
     useNavigate,
     useLocation,
 } from "react-router-dom";
@@ -32,7 +31,6 @@ function App() {
     globalStyles();
     const [isLoading, setIsLoading] = useState(true);
     const [isContentLoading, setIsContentLoading] = useState(true);
-    const [forceRender, setForceRender] = useState(false);
     const [isAuth, setIsAuth] = useState(false);
     const [authUser, setAuthUser] = useState('');
     const location = useLocation();
@@ -41,7 +39,6 @@ function App() {
     const handleHideLoading = () => setIsContentLoading(false);
     const handleShowSpinner = () => setIsLoading(true);
     const handleHideSpinner = () => setIsLoading(false);
-    const handleForceRender = () => setForceRender(!(forceRender));
     const handleUser = authUser => setAuthUser(authUser);
     const handleLoggedIn = () => setIsAuth(true);
     const handleLoggedOut = () => setIsAuth(false);
