@@ -46,7 +46,11 @@ function App() {
 
     const handleNavigator = () => {
         (location.pathname === "/" || location.pathname === "/admin") && navigate("/dashboard", { replace: true });
-        isAuth && authUser && (Object.keys(authUser).length > 0) && !(authUser.is_super_admin) && (location.pathname === "/user-logs") && navigate("/dashboard", { replace: true });
+        
+        if (isAuth && authUser && (Object.keys(authUser).length > 0) && !(authUser.is_super_admin)) {
+            (location.pathname === "/user-logs") && navigate("/dashboard", { replace: true });
+            (location.pathname === "/administrators") && navigate("/dashboard", { replace: true });
+        }
     }
 
     // Handle state is no user cookies
@@ -137,7 +141,10 @@ function App() {
                                         isAuth={isAuth} 
                                         authUser={authUser}
                                         handleUser={handleUser} />} />
-                                        <Route path="/administrators" element={<Admins isAuth={isAuth} authUser={authUser} />} />
+                                        {
+                                            authUser.is_super_admin && 
+                                            <Route path="/administrators" element={<Admins isAuth={isAuth} authUser={authUser} />} />
+                                        }
                                         <Route path="/students" element={<Students isAuth={isAuth} authUser={authUser} />} />
                                         <Route path="/student/:slug" element={<Student isAuth={isAuth} authUser={authUser} />}>
                                             <Route index element={<StudentContent isAuth={isAuth} />} />
