@@ -46,6 +46,7 @@ function App() {
 
     const handleNavigator = () => {
         (location.pathname === "/" || location.pathname === "/admin") && navigate("/dashboard", { replace: true });
+        isAuth && authUser && (Object.keys(authUser).length > 0) && !(authUser.is_super_admin) && (location.pathname === "/user-logs") && navigate("/dashboard", { replace: true });
     }
 
     // Handle state is no user cookies
@@ -100,6 +101,8 @@ function App() {
             loading = false;
         }
     }, [isLoading]);
+
+    console.info(authUser);
     
     return (
         <>
@@ -110,7 +113,7 @@ function App() {
                 {
                     isAuth &&
                     <Column className="col-sm-3">
-                        <Sidebar />
+                        <Sidebar isAuth={isAuth} authUser={authUser} />
                     </Column>
                 }
                     <Column className={isAuth ? "col-sm-9" : "col"}>

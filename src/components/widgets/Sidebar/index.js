@@ -4,7 +4,7 @@ import { navStyle, } from "../../../stitches.config";
 
 const styling = navStyle;
 
-export const Sidebar = () => {
+export const Sidebar = ({ isAuth, authUser, }) => {
     const links = [
         {
             id: 0,
@@ -24,7 +24,7 @@ export const Sidebar = () => {
         {
             id: 3,
             label: "User Logs",
-            path: "/user-logs",
+            path: isAuth && authUser && (Object.keys(authUser).length > 0) && authUser.is_super_admin ? "/user-logs" : '',
         },
     ]
 
@@ -33,7 +33,7 @@ export const Sidebar = () => {
         {
             (links && (Object.keys(links).length > 0)) && 
             Object.keys(links).map((i, val) => 
-                <NavLink 
+                Object.values(links)[val].path && <NavLink 
                 key={Object.values(links)[val].id} 
                 to={Object.values(links)[val].path}
                 className={({ isActive }) =>
