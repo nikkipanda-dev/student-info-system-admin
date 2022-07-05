@@ -51,6 +51,8 @@ export const Students = ({ isAuth, authUser, }) => {
         }
     }, []);
 
+    console.info('students ', students);
+
     return (
         <Section css={sectionStyle}>
             <Container>

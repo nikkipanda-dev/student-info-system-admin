@@ -43,6 +43,8 @@ export const SettingsEmailForm = ({
     values,
     slug,
     emitMessage,
+    users,
+    handleUsers,
     handleArrayObj,
     handleUser,
 }) => {
@@ -114,10 +116,25 @@ export const SettingsEmailForm = ({
         let loading = true;
 
         if (loading && values && (Object.keys(values).length > 0) && email) {
-            handleArrayObj({
-                ...values,
-                email: email,
-            });
+            if (handleArrayObj) {
+                handleArrayObj({
+                    ...values,
+                    email: email,
+                });
+            }
+
+            if (handleUsers) {
+                handleUsers(Object.keys(users).map((_, val) => {
+                    if (Object.values(users)[val].slug === slug) {
+                        return {
+                            ...Object.values(users)[val],
+                            email: email,
+                        }
+                    }
+
+                    return Object.values(users)[val];
+                }));
+            }
 
             let arr = {
                 ...authUser,

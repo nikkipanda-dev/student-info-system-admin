@@ -9,9 +9,9 @@ import Section from "../../core/Section";
 import Container from "../../core/Container";
 import Text from "../../core/Text";
 import RegisterAdmin from "../../widgets/RegisterAdmin";
-import UserCards from "../../widgets/UserCards";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
+import AdminsTable from "../../widgets/AdminsTable";
 
 const cardGroupStyling = {
     '> div': {
@@ -79,16 +79,16 @@ export const Admins = ({ isAuth, authUser, }) => {
             </Container>
             <Container>
             {
-                (administrators && (Object.keys(administrators).length > 0)) ? 
-                <UserCards 
-                values={administrators} 
-                className="d-flex flex-sm-wrap flex-column flex-sm-row" 
-                css={{ ...cardGroupStyling }}
+                (administrators && (Object.keys(administrators).length > 0)) ?
+                <AdminsTable 
+                values={administrators}
                 onUpdate={toggleAdminStatus}
                 authUser={authUser}
                 emitMessage={emitMessage}
                 isModalVisible={isModalVisible}
-                handleModalContent={handleModalContent} /> :
+                handleModalContent={handleModalContent}
+                administrators={administrators}
+                handleAdministrators={handleAdministrators} /> :
                 <Text type="span">No data</Text>
             }
             </Container>

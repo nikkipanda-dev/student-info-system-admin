@@ -44,6 +44,8 @@ export const SettingsNameForm = ({
     slug,
     emitMessage,
     handleArrayObj,
+    users,
+    handleUsers,
     handleUser,
 }) => {
     const [form] = Form.useForm();
@@ -126,12 +128,29 @@ export const SettingsNameForm = ({
         let loading = true;
 
         if (loading && values && (Object.keys(values).length > 0) && name && (Object.keys(name).length > 0)) {
-            handleArrayObj({
-                ...values,
-                first_name: name.first_name,
-                middle_name: name.middle_name,
-                last_name: name.last_name,
-            });
+            if (handleArrayObj) {
+                handleArrayObj({
+                    ...values,
+                    first_name: name.first_name,
+                    middle_name: name.middle_name,
+                    last_name: name.last_name,
+                });
+            }
+            
+            if (handleUsers) {
+                handleUsers(Object.keys(users).map((_, val) => {
+                    if (Object.values(users)[val].slug === slug) {
+                        return { 
+                            ...Object.values(users)[val], 
+                            first_name: name.first_name,
+                            middle_name: name.middle_name,
+                            last_name: name.last_name,
+                        }
+                    }
+
+                    return Object.values(users)[val];
+                }));
+            }
 
             let arr = {
                 ...authUser,
