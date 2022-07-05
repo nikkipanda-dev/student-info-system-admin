@@ -3,11 +3,12 @@ import { request, } from "../../../util/request";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 import Cookies from "js-cookie";
 import { Form, } from "antd";
+import { sectionStyle, } from "../../../stitches.config";
 
 import Login from "../../widgets/Login";
 import Section from "../../core/Section";
-import Alert from "../../widgets/Alert";
-import Text from "../../core/Text";
+import Container from "../../core/Container";
+import Image from "../../core/Image";
 
 export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
     const [form] = Form.useForm();
@@ -66,15 +67,61 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
     }
 
     return (
-        <Section background="gray2">
-        {
-            alert
-        }
-            <Login 
-            onFinish={onLogIn} 
-            form={form}
-            emailHelp={emailHelp}
-            passwordHelp={passwordHelp} />
+        <Section 
+        className="d-flex justify-content-center align-items-center" 
+        css={{ minHeight: '90vh', }}>
+            <Container css={{
+                ...sectionStyle,
+                width: '35%',
+                '@media screen and (max-width: 1500px)': {
+                    width: '40%',
+                },
+                '@media screen and (max-width: 1200px)': {
+                    width: '50%',
+                },
+                '@media screen and (max-width: 900px)': {
+                    width: '70%',
+                },
+                '@media screen and (max-width: 767px)': {
+                    width: '80%',
+                },
+                '@media screen and (max-width: 575px)': {
+                    width: '100%',
+                },
+            }}>
+                <Container 
+                className="d-flex justify-content-center" 
+                css={{marginBottom: '$30', }}>
+                    <Image 
+                    src="/informatics_logo_full.png"
+                    css={{
+                        maxWidth: '300px',
+                        display: 'none',
+                        '@media screen and (min-width: 576px)': {
+                            display: 'block',
+                        },
+                    }} />
+                    <Image 
+                    src="/informatics_logo.png"
+                    css={{
+                        width: '80px',
+                        height: '80px',
+                        objectFit: 'cover',
+                        display: 'block',
+                        '@media screen and (min-width: 576px)': {
+                            display: 'none',
+                        },
+                    }} />
+                </Container>
+            {
+                alert
+            }
+                <Login
+                onFinish={onLogIn}
+                form={form}
+                emailHelp={emailHelp}
+                passwordHelp={passwordHelp} />
+            </Container>
         </Section>
     )
 }

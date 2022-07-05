@@ -1,19 +1,16 @@
-import { 
-    Form, 
-    Input,
-    Checkbox,
-} from 'antd';
+import { Form, Input, } from 'antd';
 
 import Container from '../../core/Container';
 import Button from "../../core/Button";
 
 const formItemLayout = {
     labelCol: {
-        sm: { span: 5, },
-        md: { span: 4, },
+        sm: { span: 8, },
+        md: { span: 7, },
     },
     wrapperCol: {
-        sm: { span: 24, },
+        offset: 0,
+        sm: { span: 24, offset: 1, },
         md: { span: 24, },
     },
 }
@@ -36,7 +33,6 @@ export const Login = ({
         name="login-form"
         {...formItemLayout}
         form={form}
-        initialValues={{ remember: true }}
         onFinish={onFinish}
         validateMessages={validateMessages}
         autoComplete="off">
@@ -56,11 +52,7 @@ export const Login = ({
                 <Input.Password />
             </Form.Item>
 
-            <Form.Item name="remember" valuePropName="checked">
-                <Checkbox>Remember me</Checkbox>
-            </Form.Item>
-
-            <Container className="d-flex">
+            <Container className="d-flex justify-content-sm-center align-items-center">
                 <Button 
                 submit 
                 text="Submit"
