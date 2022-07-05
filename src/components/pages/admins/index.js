@@ -3,6 +3,8 @@ import { Form, } from "antd";
 import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
 import { emitMessage, } from "../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, } from "@fortawesome/free-solid-svg-icons";
 import { sectionStyle, } from "../../../stitches.config";
 
 import Section from "../../core/Section";
@@ -61,8 +63,11 @@ export const Admins = ({ isAuth, authUser, }) => {
 
     return (
         <Section css={sectionStyle}>
-            <Container>
-                <Button 
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
+            {
+                !(isModalVisible) && 
+                <Button
+                className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleModalContent(
                     <RegisterAdmin
                     form={form}
@@ -75,7 +80,13 @@ export const Admins = ({ isAuth, authUser, }) => {
                     handleAdministrators={handleAdministrators}
                     handleHideModal={handleHideModal} />, "Add Administrator"
                 )}
-                text="Add" />
+                text={
+                    <>
+                        <FontAwesomeIcon icon={faUserPlus} className="fa-fw fa-lg" />
+                        <Text type="span" css={{ marginLeft: '$5', }}>Add</Text>
+                    </>
+                } />
+            }
             </Container>
             <Container>
             {
