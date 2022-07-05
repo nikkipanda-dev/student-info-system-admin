@@ -4,6 +4,26 @@ import NotFound from "../../widgets/NotFound";
 
 const styling = {
     fontFamily: '$sawarabiGothic',
+    color: '$black',
+    variants: {
+        color: {
+            info: {
+                color: '$gray4',
+            },
+            success: {
+                color: '$green2',
+            },
+            warning: {
+                color: '$yellow3',
+            },
+            danger: {
+                color: '$red2',
+            },
+            blue2: {
+                color: '$blue2',
+            }
+        },
+    },
 }
 
 const H1 = styled('h1', 
@@ -45,6 +65,7 @@ export const Heading = ({
     type,
     className,
     css,
+    color,
     text,
 }) => {
     if (!(type)) {
@@ -54,7 +75,10 @@ export const Heading = ({
     const Header = headingType[type];
 
     return (
-        <Header {...className && {className: className}} {...css && {css: {...css}}}>
+        <Header 
+        {...className && {className: className}} 
+        {...css && {css: {...css}}}
+        {...color && {color: color}}>
             {text}
         </Header>
     )
