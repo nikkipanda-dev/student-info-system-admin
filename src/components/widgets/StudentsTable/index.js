@@ -1,5 +1,8 @@
 import { Link, } from 'react-router-dom';
 import { Table, } from 'antd';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLink, } from '@fortawesome/free-solid-svg-icons';
+import { courseOptions, ordinalNumbers, } from '../../../util';
 
 import Text from '../../core/Text';
 
@@ -8,42 +11,66 @@ export const StudentsTable = ({ values, }) => {
         {
             title: 'Student #',
             dataIndex: 'student_number',
-            render: (text) => <Text type="span">{text}</Text>,
+            fixed: 'left',
+            width: '200px',
+            render: (text) => <Text type="span" color="info">{text}</Text>,
         },
         {
             title: 'First Name',
             dataIndex: 'first_name',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '200px',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => <Text type="span">{`${text.charAt(0).toUpperCase()}${text.slice(1).toLowerCase() }`}</Text>,
         },
         {
             title: 'M.I.',
             dataIndex: 'middle_name',
-            render: (text) => <Text type="span">{text && `${text.charAt(0)}.`}</Text>,
+            width: '100px',
+            render: (text) => <Text type="span" {...!text && {color: "info"}}>{text ? `${text.charAt(0).toUpperCase()}.` : 'n/a'}</Text>,
         },
         {
             title: 'Last Name',
             dataIndex: 'last_name',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '200px',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => <Text type="span">{`${text.charAt(0).toUpperCase()}${text.slice(1).toLowerCase()}`}</Text>,
         },
         {
             title: 'Course',
             dataIndex: 'course',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '300px',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) =>
+            <>
+                <Text type="span" color="blue2">{`[${text.toUpperCase()}]`}</Text>
+                <Text 
+                type="span" 
+                css={{ marginLeft: '$5', }}>{courseOptions[text]}</Text>
+            </>,
         },
         {
             title: 'Year',
             dataIndex: 'year',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '100px',
+            render: (text) => <Text type="span">{ordinalNumbers[text]}</Text>,
         },
         {
             title: 'Term',
             dataIndex: 'term',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '100px',
+            render: (text) => <Text type="span">{ordinalNumbers[text]}</Text>,
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
-            render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
+            width: '200px',
+            render: (text) => <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
                 year: '2-digit',
@@ -58,7 +85,21 @@ export const StudentsTable = ({ values, }) => {
             title: 'Action',
             dataIndex: 'student_number',
             key: 'action',
-            render: (_, record) => <Link to={`/student/${record.slug}`}>View profile</Link>,
+            width: '200px',
+            fixed: 'right',
+            render: (_, record) => 
+            <Link to={`/student/${record.slug}`}>
+                <FontAwesomeIcon 
+                icon={faLink} 
+                className="fa-fw fa-md"
+                style={{
+                    color: '#00B4D8',
+                }} />
+                <Text 
+                type="span" 
+                color="info"
+                css={{ marginLeft: '$5', }}>View profile</Text>
+            </Link>,
         },
     ];
 
@@ -67,7 +108,10 @@ export const StudentsTable = ({ values, }) => {
         <Table 
         columns={columns} 
         dataSource={[...values]} 
-        rowKey="student_number" />
+        rowKey="student_number"
+        scroll={{
+            x: 700,
+        }} />
     )
 }
 

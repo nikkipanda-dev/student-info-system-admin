@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
-import { Table, } from 'antd';
+import { Table, Tooltip, } from 'antd';
 
 import Container from '../../core/Container';
 import Text from '../../core/Text';
@@ -22,25 +22,28 @@ export const AdminsTable = ({
             title: 'First Name',
             dataIndex: 'first_name',
             width: '200px',
-            render: (text) => <Text type="span">{text}</Text>,
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => <Text type="span">{`${text.charAt(0).toUpperCase()}${text.slice(1).toLowerCase()}`}</Text>,
         },
         {
             title: 'M.I.',
             dataIndex: 'middle_name',
             width: '100px',
-            render: (text) => <Text type="span">{text && `${text.charAt(0)}.`}</Text>,
+            render: (text) => <Text type="span" {...!text && { color: "info" }}>{text ? `${text.charAt(0).toUpperCase()}.` : 'n/a'}</Text>,
         },
         {
             title: 'Last Name',
             dataIndex: 'last_name',
             width: '200px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">{`${text.charAt(0).toUpperCase()}${text.slice(1).toLowerCase()}`}</Text>,
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
             width: '200px',
-            render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
+            render: (text) => <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
                 year: '2-digit',

@@ -9,19 +9,12 @@ import { sectionStyle, } from "../../../stitches.config";
 
 import Section from "../../core/Section";
 import Container from "../../core/Container";
+import Heading from "../../core/Heading";
 import Text from "../../core/Text";
 import RegisterAdmin from "../../widgets/RegisterAdmin";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
 import AdminsTable from "../../widgets/AdminsTable";
-
-const cardGroupStyling = {
-    '> div': {
-        padding: '$5 $10',
-        margin: '$10 $5',
-        flex: '1 300px',
-    },
-}
 
 export const Admins = ({ isAuth, authUser, }) => {
     const [form] = Form.useForm();
@@ -63,6 +56,10 @@ export const Admins = ({ isAuth, authUser, }) => {
 
     return (
         <Section css={sectionStyle}>
+            <Heading 
+            type={2} 
+            text="Administrators"
+            color="info" />
             <Container className="d-flex justify-content-sm-end align-items-sm-center">
             {
                 !(isModalVisible) && 
@@ -88,7 +85,7 @@ export const Admins = ({ isAuth, authUser, }) => {
                 } />
             }
             </Container>
-            <Container>
+            <Container css={{ marginTop: '$30', }}>
             {
                 (administrators && (Object.keys(administrators).length > 0)) ?
                 <AdminsTable 
