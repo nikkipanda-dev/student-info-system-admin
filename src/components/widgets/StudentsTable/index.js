@@ -73,7 +73,7 @@ export const StudentsTable = ({ values, }) => {
             render: (text) => <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
-                year: '2-digit',
+                year: 'numeric',
                 month: 'short',
                 day: 'numeric',
                 hour: 'numeric',

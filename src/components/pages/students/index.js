@@ -42,7 +42,7 @@ export const Students = ({ isAuth, authUser, }) => {
     useEffect(() => {
         let loading = true;
 
-        if (loading && (!(students) || (Object.keys(students).length === 0))) {
+        if (loading && isAuth && (!(students) || (Object.keys(students).length === 0))) {
             getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleStudents('');
                 response.data.data.details && handleStudents(response.data.data.details);
@@ -67,15 +67,15 @@ export const Students = ({ isAuth, authUser, }) => {
                 className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleModalContent(
                     <RegisterStudent
-                        form={form}
-                        onFinish={storeUser}
-                        authUser={authUser}
-                        emitMessage={emitMessage}
-                        isAuth={isAuth}
-                        resetForm={resetForm}
-                        students={students}
-                        handleStudents={handleStudents}
-                        handleHideModal={handleHideModal} />, "Add Student"
+                    form={form}
+                    onFinish={storeUser}
+                    authUser={authUser}
+                    emitMessage={emitMessage}
+                    isAuth={isAuth}
+                    resetForm={resetForm}
+                    students={students}
+                    handleStudents={handleStudents}
+                    handleHideModal={handleHideModal} />, "Add Student"
                 )}
                 text={
                     <>

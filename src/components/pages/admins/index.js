@@ -42,7 +42,7 @@ export const Admins = ({ isAuth, authUser, }) => {
     useEffect(() => {
         let loading = true;
 
-        if (loading && (!(administrators) || (Object.keys(administrators).length === 0))) {
+        if (loading && isAuth && (!(administrators) || (Object.keys(administrators).length === 0))) {
             getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleAdministrators('');
                 response.data.data.details && handleAdministrators(response.data.data.details);

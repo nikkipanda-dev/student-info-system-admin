@@ -8,8 +8,7 @@ import { sectionStyle, } from "../../../stitches.config";
 
 import Section from "../../core/Section";
 import Text from "../../core/Text";
-import Modal from "../../widgets/Modal";
-import Button from "../../core/Button";
+import Heading from "../../core/Heading";
 import UserLogsTable from "../../widgets/UserLogsTable";
 
 export const UserLogs = ({ isAuth, authUser, }) => {
@@ -20,7 +19,7 @@ export const UserLogs = ({ isAuth, authUser, }) => {
     useEffect(() => {
         let loading = true;
 
-        if (loading && (!(userLogs) || (Object.keys(userLogs).length === 0))) {
+        if (loading && isAuth && (!(userLogs) || (Object.keys(userLogs).length === 0))) {
             getUserLogs(authUser.email).then(response => {
                 console.info('res ', response.data);
                 !(response.data.is_success) && handleUserLogs('');
@@ -35,7 +34,11 @@ export const UserLogs = ({ isAuth, authUser, }) => {
 
     return (
         <Section css={sectionStyle}>
-            <Container>
+            <Heading
+            type={2}
+            text="User Logs"
+            color="info" />
+            <Container css={{ marginTop: '$30', }}>
             {
                 (userLogs && (Object.keys(userLogs).length > 0)) ?
                 <UserLogsTable values={userLogs} /> :
