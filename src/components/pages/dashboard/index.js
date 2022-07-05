@@ -12,6 +12,9 @@ import StudentsOverview from "../../widgets/StudentsOverview";
 import AdminsOverview from "../../widgets/AdminsOverview";
 import RecentActivites from "../../widgets/RecentActivities";
 
+import Heading from "../../core/Heading";
+import Text from "../../core/Text";
+
 export const Dashboard = ({ isAuth, authUser, }) => {
     const [users, setUsers] = useState([]);
     const [payments, setPayments] = useState([]);
@@ -44,6 +47,7 @@ export const Dashboard = ({ isAuth, authUser, }) => {
     }, []);
 
     return (
+        isAuth && authUser && (Object.keys(authUser).length > 0) &&
         <Section css={sectionStyle}>
             <Container>
                 <Row css={{ 
@@ -51,6 +55,13 @@ export const Dashboard = ({ isAuth, authUser, }) => {
                         marginTop: '$20', 
                     }
                 }}>
+                    <Column className="col-12 d-flex flex-column flex-md-row justify-content-center justify-content-md-between">
+                        <Heading type={2} text={`Hi, ${authUser.first_name} 👋`} />
+                        <Heading 
+                        type={4} 
+                        text={`${new Date().getFullYear()} Overview`}
+                        color="info" />
+                    </Column>
                     <Column className="col-12">
                         <TuitionFeeOverview values={payments} />
                     </Column>

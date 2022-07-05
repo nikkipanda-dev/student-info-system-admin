@@ -1,4 +1,3 @@
-import { useState, useEffect, } from "react";
 import { useNavigate, } from "react-router-dom";
 import Container from "../../core/Container";
 import { Dropdown, Menu, } from "antd";
@@ -6,6 +5,8 @@ import { request, } from "../../../util/request";
 import { styled, } from "../../../stitches.config";
 import Cookies from "js-cookie";
 import Sidebar from "../Sidebar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, } from "@fortawesome/free-solid-svg-icons";
 import { getToken } from "../../../util/auth";
 
 import Text from "../../core/Text";
@@ -14,7 +15,7 @@ const Nav = styled('nav', {
     position: 'sticky',
     top: 0,
     background: '$white',
-    padding: '$15',
+    padding: '$30 $20',
     transition: '$default',
     zIndex: '99999',
 });
@@ -84,20 +85,52 @@ export const Navbar = ({
     );
 
     return (
+        isAuth && authUser && (Object.keys(authUser).length > 0) &&
         <Nav>
-            {/* Click trigger for mobile view */}
-            <Dropdown overlay={menu} trigger={['click', 'hover']}>
-                <a onClick={(e) => e.preventDefault()}>
-                    Click me
-                </a>
-            </Dropdown>
-            {
-                isMobileView && 
-                <Sidebar 
-                isAuth={isAuth} 
-                authUser={authUser}
-                className="d-flex flex-column flex-sm-row" />
-            }
+            {/* Click to trigger for mobile view */}
+            <Container className="d-flex flex-column-reverse flex-sm-column">
+                <Container className="d-flex justify-content-center justify-content-sm-end align-items-center flex-grow-1 flex-sm-grow-0">
+                    <Dropdown
+                    overlay={menu}
+                    className="align-self-center"
+                    trigger={['click', 'hover']}>
+                        <a onClick={(e) => e.preventDefault()}>
+                            <Container className="d-flex align-items-center">
+                                <FontAwesomeIcon
+                                icon={faUser}
+                                className={`fa-fw ${!(isMobileView) ? "fa-3x" : "fa-2x"}`}
+                                style={{ color: '#00B4D8', }} />
+                                <Text
+                                type="span"
+                                color="info"
+                                css={{
+                                    marginLeft: '$5',
+                                    display: 'none',
+                                    '@media screen and (max-width: 575px)': {
+                                        display: 'inline-block',
+                                    },
+                                }}>{authUser.first_name}</Text>
+                            </Container>
+                        </a>
+                    </Dropdown>
+                </Container>
+                {
+                    isMobileView &&
+                    <Sidebar
+                    isAuth={isAuth}
+                    authUser={authUser}
+                    className="d-flex flex-wrap justify-content-center"
+                    css={{ 
+                        marginTop: '$20',
+                        '> a:nth-child(n+2)': {
+                            marginLeft: '$10',
+                        },
+                        '@media screen and (max-width: 575px)': {
+                            marginTop: '0px',
+                        },
+                     }} />
+                }
+            </Container>
         </Nav>
     )
 }

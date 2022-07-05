@@ -16,7 +16,6 @@ const styling = navStyle;
 export const Sidebar = ({ 
     isAuth, 
     authUser,
-    isMobileView,
     className,
     css,
 }) => {
@@ -45,11 +44,11 @@ export const Sidebar = ({
             path: isAuth && authUser && (Object.keys(authUser).length > 0) && authUser.is_super_admin ? "/user-logs" : '',
             icon: faBook,
         },
-    ]
+    ];
 
     return (
         <Container 
-        className={(isMobileView ? "justify-content-center" : '') + (className ? (' ' + className) : '')} 
+        className={className} 
         css={{...styling, ...css}}>
         {
             (links && (Object.keys(links).length > 0)) && 
@@ -59,9 +58,8 @@ export const Sidebar = ({
                 to={Object.values(links)[val].path}
                 className={({ isActive }) =>
                     isActive ? 'activeLink' : undefined
-                }
-                style={{ margin: '$5 auto', }}>
-                    <Container css={{ margin: '$5 auto', }}>
+                }>
+                    <Container css={{ margin: '$5', }}>
                         <FontAwesomeIcon icon={Object.values(links)[val].icon} className="fa-fw fa-lg" />
                         <Text 
                         type="span" 

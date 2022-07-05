@@ -7,22 +7,21 @@ export const UserLogsTable = ({ values, }) => {
         {
             title: 'Description',
             dataIndex: 'description',
-            fixed: 'left',
-            width: '800px',
             render: (text) => <Text type="span">{text}</Text>,
         },
         {
             title: 'Page',
             dataIndex: 'page',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span" color="info">{text}</Text>,
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
-            render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
+            width: '200px',
+            render: (text) => <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
-                year: '2-digit',
+                year: 'numeric',
                 month: 'short',
                 day: 'numeric',
                 hour: 'numeric',

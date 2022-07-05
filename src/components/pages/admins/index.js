@@ -3,23 +3,18 @@ import { Form, } from "antd";
 import { getToken, } from "../../../util/auth";
 import { request, } from "../../../util/request";
 import { emitMessage, } from "../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, } from "@fortawesome/free-solid-svg-icons";
 import { sectionStyle, } from "../../../stitches.config";
 
 import Section from "../../core/Section";
 import Container from "../../core/Container";
+import Heading from "../../core/Heading";
 import Text from "../../core/Text";
 import RegisterAdmin from "../../widgets/RegisterAdmin";
-import UserCards from "../../widgets/UserCards";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
-
-const cardGroupStyling = {
-    '> div': {
-        padding: '$5 $10',
-        margin: '$10 $5',
-        flex: '1 300px',
-    },
-}
+import AdminsTable from "../../widgets/AdminsTable";
 
 export const Admins = ({ isAuth, authUser, }) => {
     const [form] = Form.useForm();
@@ -47,7 +42,7 @@ export const Admins = ({ isAuth, authUser, }) => {
     useEffect(() => {
         let loading = true;
 
-        if (loading && (!(administrators) || (Object.keys(administrators).length === 0))) {
+        if (loading && isAuth && (!(administrators) || (Object.keys(administrators).length === 0))) {
             getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleAdministrators('');
                 response.data.data.details && handleAdministrators(response.data.data.details);
@@ -61,8 +56,15 @@ export const Admins = ({ isAuth, authUser, }) => {
 
     return (
         <Section css={sectionStyle}>
-            <Container>
-                <Button 
+            <Heading 
+            type={2} 
+            text="Administrators"
+            color="info" />
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
+            {
+                !(isModalVisible) && 
+                <Button
+                className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleModalContent(
                     <RegisterAdmin
                     form={form}
@@ -75,20 +77,26 @@ export const Admins = ({ isAuth, authUser, }) => {
                     handleAdministrators={handleAdministrators}
                     handleHideModal={handleHideModal} />, "Add Administrator"
                 )}
-                text="Add" />
+                text={
+                    <>
+                        <FontAwesomeIcon icon={faUserPlus} className="fa-fw fa-lg" />
+                        <Text type="span" css={{ marginLeft: '$5', }}>Add</Text>
+                    </>
+                } />
+            }
             </Container>
-            <Container>
+            <Container css={{ marginTop: '$30', }}>
             {
-                (administrators && (Object.keys(administrators).length > 0)) ? 
-                <UserCards 
-                values={administrators} 
-                className="d-flex flex-sm-wrap flex-column flex-sm-row" 
-                css={{ ...cardGroupStyling }}
+                (administrators && (Object.keys(administrators).length > 0)) ?
+                <AdminsTable 
+                values={administrators}
                 onUpdate={toggleAdminStatus}
                 authUser={authUser}
                 emitMessage={emitMessage}
                 isModalVisible={isModalVisible}
-                handleModalContent={handleModalContent} /> :
+                handleModalContent={handleModalContent}
+                administrators={administrators}
+                handleAdministrators={handleAdministrators} /> :
                 <Text type="span">No data</Text>
             }
             </Container>

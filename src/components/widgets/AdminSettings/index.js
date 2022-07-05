@@ -10,6 +10,8 @@ export const AdminSettings = ({
     authUser,
     values,
     handleAdministrator,
+    administrators,
+    handleAdministrators,
     emitMessage,
 }) => {
     return (
@@ -21,14 +23,18 @@ export const AdminSettings = ({
             onFinish={updateName}
             emitMessage={emitMessage}
             slug={slug}
-            handleArrayObj={handleAdministrator} />
+            handleArrayObj={handleAdministrator}
+            users={administrators}
+            handleUsers={handleAdministrators} />
             <SettingsEmailForm
             authUser={authUser}
             values={values}
             onFinish={updateEmail}
             emitMessage={emitMessage}
             slug={slug}
-            handleArrayObj={handleAdministrator} />
+            handleArrayObj={handleAdministrator}
+            users={administrators}
+            handleUsers={handleAdministrators} />
             <SettingsPasswordForm
             authUser={authUser}
             onFinish={updatePassword}

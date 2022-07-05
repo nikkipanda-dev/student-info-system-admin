@@ -4,10 +4,13 @@ import { getToken, } from "../../../util/auth";
 import { Form, } from "antd";
 import { emitMessage, } from "../../../util";
 import Container from "../../core/Container";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUserPlus, } from "@fortawesome/free-solid-svg-icons";
 import { sectionStyle, } from "../../../stitches.config";
 
 import Section from "../../core/Section";
 import Text from "../../core/Text";
+import Heading from "../../core/Heading";
 import Modal from "../../widgets/Modal";
 import Button from "../../core/Button";
 import StudentsTable from "../../widgets/StudentsTable";
@@ -39,7 +42,7 @@ export const Students = ({ isAuth, authUser, }) => {
     useEffect(() => {
         let loading = true;
 
-        if (loading && (!(students) || (Object.keys(students).length === 0))) {
+        if (loading && isAuth && (!(students) || (Object.keys(students).length === 0))) {
             getUsers(authUser.email).then(response => {
                 !(response.data.is_success) && handleStudents('');
                 response.data.data.details && handleStudents(response.data.data.details);
@@ -53,8 +56,15 @@ export const Students = ({ isAuth, authUser, }) => {
 
     return (
         <Section css={sectionStyle}>
-            <Container>
+            <Heading
+            type={2}
+            text="Students"
+            color="info" />
+            <Container className="d-flex justify-content-sm-end align-items-sm-center">
+            {
+                !(isModalVisible) && 
                 <Button
+                className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleModalContent(
                     <RegisterStudent
                     form={form}
@@ -67,9 +77,15 @@ export const Students = ({ isAuth, authUser, }) => {
                     handleStudents={handleStudents}
                     handleHideModal={handleHideModal} />, "Add Student"
                 )}
-                text="Add" />
+                text={
+                    <>
+                        <FontAwesomeIcon icon={faUserPlus} className="fa-fw fa-lg" />
+                        <Text type="span" css={{ marginLeft: '$5', }}>Add</Text>
+                    </>
+                } />
+            }
             </Container>
-            <Container>
+            <Container css={{ marginTop: '$30', }}>
             {
                 (students && (Object.keys(students).length > 0)) ? 
                 <StudentsTable values={students} /> :

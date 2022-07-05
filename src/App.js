@@ -156,7 +156,12 @@ function App() {
                         }} />
                     </Column>
                 }
-                    <Column className={(isAuth && !(isMobileView)) ? "col-sm-9 col-lg-10" : "col"} css={{ background: '$green1', }}>
+                    <Column 
+                    className={(isAuth && !(isMobileView)) ? "col-sm-9 col-lg-10" : "col-12"} 
+                    css={{ 
+                        // background: '$green1', 
+                        padding: '0 !important',
+                    }}>
                     {
                         isAuth &&
                         <Navbar 
@@ -168,7 +173,7 @@ function App() {
                     {
                         (isLoading && (location.pathname ? !(isProfileTab(location.pathname)) : null)) ?
                         <Spinner /> : 
-                        <Container css={{ marginTop: '$30', }}>
+                        <Container css={{ marginTop: '$30', padding: '0px $20', }}>
                         {
                             !(isAuth) ?
                                 <Routes>
