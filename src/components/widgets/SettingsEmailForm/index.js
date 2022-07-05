@@ -16,10 +16,18 @@ const styling = {
     },
 }
 
+const formStyling = {
+    background: '$white',
+    borderRadius: '$small',
+    margin: 'auto',
+    padding: '$20',
+    maxWidth: '700px',
+}
+
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 6, },
+        md: { span: 5, },
     },
     wrapperCol: {
         sm: { span: 24, },
@@ -165,12 +173,12 @@ export const SettingsEmailForm = ({
                 className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleToggleForm()} />
             </Container>
-            <Container css={{ marginBottom: '$15', }}>
-                <Text type="span">{`${email}`}</Text>
+            <Container css={{ margin: '$20 0px', }}>
+                <Text type="span">Current: {`${email}`}</Text>
             </Container>
         {
             isVisible && 
-            <Container>
+            <Container css={formStyling}>
             {
                 alert
             }
@@ -183,7 +191,7 @@ export const SettingsEmailForm = ({
                 autoComplete="off">
 
                     <Form.Item
-                    label="Email"
+                    label="Email address"
                     name="email"
                     {...emailHelp && { help: emailHelp }}
                     rules={[{

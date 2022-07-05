@@ -15,14 +15,22 @@ const styling = {
     },
 }
 
+const formStyling = {
+    background: '$white',
+    borderRadius: '$small',
+    margin: 'auto',
+    padding: '$20',
+    maxWidth: '700px',
+}
+
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 24, },
+        md: { span: 7, },
     },
     wrapperCol: {
+        offset: 0,
         sm: { span: 24, },
-        md: { span: 24, },
     },
 }
 
@@ -118,7 +126,7 @@ export const SettingsPasswordForm = ({
             </Container>
         {
             isVisible && 
-            <Container>
+            <Container css={formStyling}>
             {
                 alert
             }

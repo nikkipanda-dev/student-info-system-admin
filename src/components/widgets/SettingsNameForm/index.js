@@ -16,10 +16,18 @@ const styling = {
     },
 }
 
+const formStyling = {
+    background: '$white',
+    borderRadius: '$small',
+    margin: 'auto',
+    padding: '$20',
+    maxWidth: '700px',
+}
+
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 6, },
+        md: { span: 5, },
     },
     wrapperCol: {
         sm: { span: 24, },
@@ -183,12 +191,12 @@ export const SettingsNameForm = ({
                 className="flex-grow-1 flex-sm-grow-0" 
                 onClick={() => handleToggleForm()} />
             </Container>
-            <Container css={{ marginBottom: '$15', }}>
-                <Text type="span">{`${name.first_name} ${name.middle_name ?? ''} ${name.last_name}`}</Text>
+            <Container css={{ margin: '$20 0px', }}>
+                <Text type="span">Current: {`${name.first_name} ${name.middle_name ?? ''} ${name.last_name}`}</Text>
             </Container>
         {
             isVisible && 
-            <Container>
+            <Container css={formStyling}>
             {
                 alert
             }

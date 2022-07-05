@@ -4,6 +4,7 @@ import { request, } from "../../../util/request";
 import SettingsNameForm from "../SettingsNameForm";
 import SettingsEmailForm from "../SettingsEmailForm";
 import SettingsPasswordForm from "../SettingsPasswordForm";
+import Container from "../../core/Container";
 
 export const AuthUserSettings = ({
     slug,
@@ -15,7 +16,7 @@ export const AuthUserSettings = ({
 }) => {
     return (
         (values && (Object.keys(values).length > 0)) &&
-        <>
+        <Container>
             <SettingsNameForm
             authUser={authUser}
             values={values}
@@ -39,7 +40,7 @@ export const AuthUserSettings = ({
             slug={slug}
             handleUser={handleUser}
             authenticated />
-        </>
+        </Container>
     )
 }
 

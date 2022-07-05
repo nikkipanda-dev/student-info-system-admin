@@ -6,7 +6,6 @@ import Container from "../../core/Container";
 import Section from "../../core/Section";
 import Row from "../../core/Row";
 import Column from "../../core/Column";
-import Card from "../../core/Card";
 import AuthUserSettings from "../../widgets/AuthUserSettings";
 
 export const Settings = ({ 
@@ -35,15 +34,13 @@ export const Settings = ({
             <Container>
                 <Row>
                     <Column className="col-12">
-                        <Card header="Header">
-                            <AuthUserSettings
-                            slug={authUser.slug}
-                            authUser={authUser}
-                            values={administrator}
-                            handleAdministrator={handleAdministrator}
-                            emitMessage={emitMessage}
-                            handleUser={handleUser} />
-                        </Card>
+                        <AuthUserSettings
+                        slug={authUser.slug}
+                        authUser={authUser}
+                        values={administrator}
+                        handleAdministrator={handleAdministrator}
+                        emitMessage={emitMessage}
+                        handleUser={handleUser} />
                     </Column>
                 </Row>
             </Container>
