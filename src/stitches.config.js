@@ -12,7 +12,7 @@ export const {
 } = createStitches({
     theme: {
         colors: {
-            blue1: "#00B4D8",
+            blue1: "#d3f8ff",
             blue2: "#00B4D8",
             blue3: "#0077B6",
             blue4: "#03045E",
@@ -128,8 +128,11 @@ export const navStyle = {
         letterSpacing: '$default',
     },
     '.activeLink': {
-        fontFamily: '$khula',
         color: '$blue2',
+    },
+    ':hover': {
+        color: '$blue2',
+        transition: 'all .2s ease-in-out',
     },
 }
 
@@ -179,4 +182,25 @@ export const imagePreviewFileStyle = {
     maxWidth: '400px',
     maxHeight: '400px',
     objectFit: 'cover',
+}
+
+export const itemsStyling = {
+    marginTop: '$20',
+    borderRadius: '$small',
+    background: '$gray1',
+    '> div': {
+        flexGrow: 1,
+        borderRadius: '$small',
+        flexBasis: "40%",
+        background: '$white ',
+        margin: '$10',
+        padding: '$10',
+        boxShadow: '0 0 15px -5px #E3E3E3',
+    },
+    '@media screen and (max-width: 767px)': {
+        '> div': {
+            flexGrow: 1,
+            flexBasis: "100%",
+        },
+    },
 }

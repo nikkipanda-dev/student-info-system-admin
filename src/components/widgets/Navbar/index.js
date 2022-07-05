@@ -5,6 +5,7 @@ import { Dropdown, Menu, } from "antd";
 import { request, } from "../../../util/request";
 import { styled, } from "../../../stitches.config";
 import Cookies from "js-cookie";
+import Sidebar from "../Sidebar";
 import { getToken } from "../../../util/auth";
 
 import Text from "../../core/Text";
@@ -18,7 +19,12 @@ const Nav = styled('nav', {
     zIndex: '99999',
 });
 
-export const Navbar = ({ isAuth, handleLoggedOut, }) => {
+export const Navbar = ({ 
+    isAuth,
+    authUser, 
+    isMobileView,
+    handleLoggedOut,
+}) => {
     const navigate = useNavigate();
 
     const onLogOut = () => {
@@ -79,18 +85,19 @@ export const Navbar = ({ isAuth, handleLoggedOut, }) => {
 
     return (
         <Nav>
-            <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, molestias!
-            </span>
-            <span>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, molestias!
-            </span>
             {/* Click trigger for mobile view */}
             <Dropdown overlay={menu} trigger={['click', 'hover']}>
                 <a onClick={(e) => e.preventDefault()}>
                     Click me
                 </a>
             </Dropdown>
+            {
+                isMobileView && 
+                <Sidebar 
+                isAuth={isAuth} 
+                authUser={authUser}
+                className="d-flex flex-column flex-sm-row" />
+            }
         </Nav>
     )
 }
