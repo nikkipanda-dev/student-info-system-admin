@@ -58,7 +58,7 @@ export const About = () => {
         {
             id: 4,
             name: "Decena, Mary Joy",
-            photo: "/images/decena.jpeg",
+            photo: "https://student-info-system.sfo3.digitaloceanspaces.com/display_photos/1657104881372.JPEG",
             icon: faCube,
             role:
                 <Container>
