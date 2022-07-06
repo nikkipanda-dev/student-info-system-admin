@@ -1,8 +1,14 @@
 import { Table, Form, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
-import { onDownload, } from '../../../util';
+import { 
+    faTrash, 
+    faPen,
+    faCircleCheck,
+    faClock,
+    faBan,
+} from '@fortawesome/free-solid-svg-icons';
+import { onDownload, ordinalNumbers, } from '../../../util';
 
 import Text from '../../core/Text';
 import Button from '../../core/Button';
@@ -69,38 +75,51 @@ export const StudentPaymentsTable = ({
             title: 'Status',
             dataIndex: 'status',
             fixed: 'left',
-            width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '130px',
+            render: (text) => 
+            <>
+                <FontAwesomeIcon
+                icon={
+                    (text === 'verified') ? faCircleCheck :
+                    (text === 'pending') ? faClock : faBan
+                }
+                className="fa-fw fa-lg"
+                style={{ color: (text === 'verified') ? '#00B4D8' : '#747474', }} />
+                <Text type="span" css={{ marginLeft: '$5', }}>
+                    {text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()}
+                </Text>
+            </>,
         },
         {
             title: 'Amount',
             dataIndex: 'amount_paid',
             width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">&#x20B1;&#xa0;{text}</Text>,
         },
         {
             title: 'Balance',
             dataIndex: 'balance',
             width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">&#x20B1;&#xa0;{text ?? parseFloat(0).toFixed(2)}</Text>,
         },
         {
             title: 'Year',
             dataIndex: 'year',
             width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">{ordinalNumbers[text]}</Text>,
         },
         {
             title: 'Term',
             dataIndex: 'term',
             width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">{ordinalNumbers[text]}</Text>,
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
             width: '200px',
-            render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
+            render: (text) => 
+            <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
                 year: 'numeric',
@@ -117,35 +136,36 @@ export const StudentPaymentsTable = ({
             key: 'action',
             fixed: 'right',
             width: '180px',
-            render: (_, record) => <Container css={{ 
-                    width: '100%',
-                    'button': {
-                        background: 'transparent',
-                    }
-                }}>
-                    <Button 
-                    text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
-                    className="button-sm"
-                    onClick={() => handleModalContent(<StudentPaymentUpdate 
-                        form={form} 
-                        onFinish={updatePayment}
-                        onDownload={onDownload}
-                        payments={payments}
-                        handlePayments={handlePayments}
-                        emitMessage={emitMessage}
-                        isAuth={isAuth}
-                        student={student}
-                        slug={record.slug}
-                        values={record}
-                        handleHideModal={handleHideModal}
-                        authUser={authUser} />, "Payment Details")} 
-                    css={{ marginLeft: '$10', }} />
-                    <Button 
-                    text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>} 
-                    className="button-sm"
-                    css={{ color: '$red2', marginLeft: '$10', }}
-                    onClick={() => onConfirmDeletion(record.slug)} />
-                </Container>,
+            render: (_, record) => 
+            <Container css={{ 
+                width: '100%',
+                'button': {
+                    background: 'transparent',
+                }
+            }}>
+                <Button 
+                text={<Text type="span" color="warning"><FontAwesomeIcon icon={faPen} className="fa-fw" /></Text>}
+                className="button-sm"
+                onClick={() => handleModalContent(<StudentPaymentUpdate 
+                    form={form} 
+                    onFinish={updatePayment}
+                    onDownload={onDownload}
+                    payments={payments}
+                    handlePayments={handlePayments}
+                    emitMessage={emitMessage}
+                    isAuth={isAuth}
+                    student={student}
+                    slug={record.slug}
+                    values={record}
+                    handleHideModal={handleHideModal}
+                    authUser={authUser} />, "Payment Details")} 
+                css={{ marginLeft: '$10', }} />
+                <Button 
+                text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>} 
+                className="button-sm"
+                css={{ color: '$red2', marginLeft: '$10', }}
+                onClick={() => onConfirmDeletion(record.slug)} />
+            </Container>,
         },
     ];
 

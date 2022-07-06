@@ -5,6 +5,7 @@ import {
     faUserGroup,
     faGraduationCap,
     faBook,
+    faCircleInfo,
 } from "@fortawesome/free-solid-svg-icons";
 import { navStyle, } from "../../../stitches.config";
 
@@ -43,6 +44,12 @@ export const Sidebar = ({
             label: "User Logs",
             path: isAuth && authUser && (Object.keys(authUser).length > 0) && authUser.is_super_admin ? "/user-logs" : '',
             icon: faBook,
+        },
+        {
+            id: 4,
+            label: "About",
+            path: "/about",
+            icon: faCircleInfo,
         },
     ];
 

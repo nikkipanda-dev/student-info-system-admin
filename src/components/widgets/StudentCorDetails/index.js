@@ -6,9 +6,6 @@ import Text from '../../core/Text';
 export const StudentCorDetails = ({ values, }) => {
     return (
         <Descriptions bordered>
-            <Descriptions.Item label="Type" span={3}>
-                <Text type="span">{values.type.charAt(0).toUpperCase() + values.type.slice(1).toLowerCase()}</Text>
-            </Descriptions.Item>
             <Descriptions.Item label="Date Added" span={3}>
                 <Text type="span">{new Intl.DateTimeFormat('en-US', {
                     timeZone: "Asia/Manila",

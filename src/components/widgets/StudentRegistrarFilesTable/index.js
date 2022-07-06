@@ -1,7 +1,13 @@
 import { Table, Form, } from 'antd';
 import Container from '../../core/Container';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrash, faPen, } from '@fortawesome/free-solid-svg-icons';
+import { 
+    faTrash, 
+    faPen,
+    faCircleCheck,
+    faClock,
+    faBan,
+} from '@fortawesome/free-solid-svg-icons';
 import { onDownload, } from '../../../util';
 
 import Text from '../../core/Text';
@@ -68,20 +74,36 @@ export const StudentRegistrarFilesTable = ({
         {
             title: 'Status',
             dataIndex: 'status',
-            width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '130px',
+            render: (text) => 
+            <>
+                <FontAwesomeIcon
+                icon={
+                    (text === 'verified') ? faCircleCheck :
+                    (text === 'pending') ? faClock : faBan
+                }
+                className="fa-fw fa-lg"
+                style={{ color: (text === 'verified') ? '#00B4D8' : '#747474', }} />
+                <Text type="span" css={{ marginLeft: '$5', }}>
+                    {text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()}
+                </Text>
+            </>,
         },
         {
             title: 'Description',
             dataIndex: 'description',
-            width: '300px',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '150px',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => <Text type="span">{text.charAt(0).toUpperCase() + ((text.length > 1) && text.slice(1).toLowerCase()) }</Text>,
         },
         {
             title: 'Created',
             dataIndex: 'created_at',
             width: '180px',
-            render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
+            render: (text) => 
+            <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
                 year: '2-digit',

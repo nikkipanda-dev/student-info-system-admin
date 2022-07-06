@@ -48,7 +48,7 @@ export const StudentPermit = ({
                     className="fa-fw fa-lg"
                     style={{ color: '#00B4D8', }} />
                     <Text type="span" css={{ marginLeft: '$5', }}>
-                        Uploaded files:
+                        Uploaded file:
                     </Text>
                 </Container>
                 <Container
