@@ -11,7 +11,11 @@ import {
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
-import { styled } from "../../../stitches.config";
+import { 
+    styled,
+    containerFileStyle,
+    imagePreviewFileStyle,
+} from "../../../stitches.config";
 
 import Container from "../../core/Container";
 import Label from "../../core/Label";
@@ -24,13 +28,6 @@ import StudentRegistrarFile from "../StudentRegistrarFile";
 const NativeInput = styled('input', {});
 
 const styling = {
-    'img': {
-        width: '100%',
-        height: 'auto',
-        maxWidth: '400px',
-        maxHeight: '400px',
-        objectFit: 'cover',
-    },
     '@media screen and (max-width: 575px)': {
         'button': {
             marginTop: '$10',
@@ -40,8 +37,8 @@ const styling = {
 
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 11, },
+        md: { span: 10, },
     },
     wrapperCol: {
         sm: { span: 24, },
@@ -280,7 +277,7 @@ export const StudentRegistrarFileUpdate = ({
                 authUser={authUser}
                 student={student} />
             </Container> : 
-            <Container css={styling}>
+            <Container css={{ marginTop: '$20', }}>
             {
                 alert
             }
@@ -318,10 +315,25 @@ export const StudentRegistrarFileUpdate = ({
             }
 
             {/* Display preview */}
-                <Container className="d-flex flex-column align-items-center">
+                <Container 
+                className="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center"
+                css={{
+                    '> div': {
+                        flex: 1,
+                        ...containerFileStyle,
+                    },
+                    '> div > img': {
+                        ...imagePreviewFileStyle,
+                        width: '200px',
+                        height: '200px',
+                    },
+                }}>
                 {
                     (imageUrls && (Object.keys(imageUrls))) &&
-                    Object.keys(imageUrls).map((i, val) => <Container key={Object.values(imageUrls)[val].id}>
+                    Object.keys(imageUrls).map((i, val) => 
+                    <Container
+                    className="d-flex flex-column align-items-center" 
+                    key={Object.values(imageUrls)[val].id}>
                         <Image src={Object.values(imageUrls)[val].src} />
                         <Button
                         text={
@@ -330,7 +342,10 @@ export const StudentRegistrarFileUpdate = ({
                             </Container>
                         }
                         color="transparent"
-                        css={{ color: '$red2', }}
+                        css={{ 
+                            color: '$red2',
+                            marginTop: '$5',
+                        }}
                         onClick={() => handleRemoveImage(Object.values(imageUrls)[val].id)} />
                     </Container>)
                 }
@@ -339,57 +354,64 @@ export const StudentRegistrarFileUpdate = ({
 
             {
                 (registrarFile && (Object.keys(registrarFile).length > 0)) &&
-                <Form
-                name="student-registrar-files-form"
-                {...formItemLayout}
-                form={form}
-                onFinish={onUpdate}
-                autoComplete="off">
+                <Container
+                css={{
+                    ...styling, 
+                    marginTop: '$50', 
+                    padding: '$15',
+                }}>
+                    <Form
+                    name="student-registrar-files-form"
+                    {...formItemLayout}
+                    form={form}
+                    onFinish={onUpdate}
+                    autoComplete="off">
 
-                    <Form.Item
-                    name="description"
-                    {...helpers && helpers.description && { help: helpers.description }}
-                    rules={[{
-                        required: true,
-                        message: "Description is required.",
-                    }, {
-                        type: 'string',
-                        min: 2,
-                        max: 500,
-                        message: "Description must be must be at least 2 and not more than 500 characters.",
-                    }]}>
-                        <Input.TextArea
-                        rows={4}
-                        placeholder="Description"
-                        maxLength={500} />
-                    </Form.Item>
+                        <Form.Item
+                        name="description"
+                        {...helpers && helpers.description && { help: helpers.description }}
+                        rules={[{
+                            required: true,
+                            message: "Description is required.",
+                        }, {
+                            type: 'string',
+                            min: 2,
+                            max: 500,
+                            message: "Description must be must be at least 2 and not more than 500 characters.",
+                        }]}>
+                            <Input.TextArea
+                            rows={4}
+                            placeholder="Description"
+                            maxLength={500} />
+                        </Form.Item>
 
-                {
-                    (statusOptions && (Object.keys(statusOptions).length > 0)) &&
-                    <Form.Item
-                    label="Status"
-                    name="status"
-                    {...helpers && helpers.status && { help: helpers.status }}
-                    rules={[{
-                        required: true,
-                        message: "Status is required.",
-                    }]}>
-                        <Radio.Group>
-                        {
-                            Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
-                        }
-                        </Radio.Group>
-                    </Form.Item>
-                }
+                    {
+                        (statusOptions && (Object.keys(statusOptions).length > 0)) &&
+                        <Form.Item
+                            label="Status"
+                            name="status"
+                            {...helpers && helpers.status && { help: helpers.status }}
+                            rules={[{
+                                required: true,
+                                message: "Status is required.",
+                            }]}>
+                            <Radio.Group>
+                                {
+                                    Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                                }
+                            </Radio.Group>
+                        </Form.Item>
+                    }
 
-                    <Container className="d-flex">
-                        <Button
-                        submit
-                        text="Submit"
-                        color="blue"
-                        className="flex-grow-1 flex-sm-grow-0" />
-                    </Container>
-                </Form>
+                        <Container className="d-flex justify-content-sm-center align-items-sm-center">
+                            <Button
+                            submit
+                            text="Submit"
+                            color="blue"
+                            className="flex-grow-1 flex-sm-grow-0" />
+                        </Container>
+                    </Form>
+                </Container>
             }   
             </Container>
         }

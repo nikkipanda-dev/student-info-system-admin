@@ -13,11 +13,14 @@ import {
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
-import { styled, } from "../../../stitches.config";
+import { 
+    styled,
+    containerFileStyle, 
+    imagePreviewFileStyle,
+} from "../../../stitches.config";
 
 import Button from "../../core/Button";
 import Image from "../../core/Image";
-import Alert from "../Alert";
 import Text from "../../core/Text";
 import Container from "../../core/Container";
 import Label from "../../core/Label";
@@ -28,13 +31,6 @@ const { Option } = Select;
 const NativeInput = styled('input', {});
 
 const styling = {
-    'img': {
-        width: '100%',
-        height: 'auto',
-        maxWidth: '400px',
-        maxHeight: '400px',
-        objectFit: 'cover',
-    },
     '@media screen and (max-width: 575px)': {
         'button': {
             marginTop: '$10',
@@ -44,8 +40,8 @@ const styling = {
 
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 7, },
+        md: { span: 6, },
     },
     wrapperCol: {
         sm: { span: 24, },
@@ -280,48 +276,63 @@ export const StudentPaymentsForm = ({
     }, [imageUrls]);
 
     return (
-        <Container css={styling}>
+        <Container>
         {
             alert
         }
         {
             (!(files) || (Object.keys(files).length === 0)) && 
-                <Container>
-                    <NativeInput
-                    type="file"
-                    ref={ref}
-                    id="payment-images"
-                    hidden
-                    accept=".jpg,.jpeg,.png"
-                    multiple
-                    onChange={() => onInputChange()} />
+            <Container>
+                <NativeInput
+                type="file"
+                ref={ref}
+                id="payment-images"
+                hidden
+                accept=".jpg,.jpeg,.png"
+                multiple
+                onChange={() => onInputChange()} />
 
-                    <Label
-                    htmlFor="payment-images"
-                    uploadSize="medium"
-                    className="d-flex flex-column justify-content-center align-items-center upload">
-                        <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
-                        <Text
-                        type="span"
-                        color="blue2"
-                        css={{ fontSize: '$heading3' }}>
-                            Upload
-                        </Text>
-                        <Text
-                        type="span"
-                        color="info"
-                        css={{ marginTop: '$10', }}>
-                            Supported formats: .jpg, .jpeg, .png
-                        </Text>
-                    </Label>
-                </Container>
+                <Label
+                htmlFor="payment-images"
+                uploadSize="medium"
+                className="d-flex flex-column justify-content-center align-items-center upload">
+                    <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
+                    <Text
+                    type="span"
+                    color="blue2"
+                    css={{ fontSize: '$heading3' }}>
+                        Upload
+                    </Text>
+                    <Text
+                    type="span"
+                    color="info"
+                    css={{ marginTop: '$10', }}>
+                        Supported formats: .jpg, .jpeg, .png
+                    </Text>
+                </Label>
+            </Container>
         }
 
             {/* Display preview */}
-            <Container className="d-flex flex-column align-items-center">
+            <Container 
+            className="d-flex flex-wrap justify-content-center justify-content-md-start align-items-center" 
+            css={{
+                '> div': {
+                    flex: 1,
+                    ...containerFileStyle,
+                },
+                '> div > img': {
+                    ...imagePreviewFileStyle,
+                    width: '200px',
+                    height: '200px',
+                },
+            }}>
             {
                 (imageUrls && (Object.keys(imageUrls))) && 
-                Object.keys(imageUrls).map((_, val) => <Container key={Object.values(imageUrls)[val].id}>
+                Object.keys(imageUrls).map((_, val) => 
+                <Container 
+                className="d-flex flex-column align-items-center" 
+                key={Object.values(imageUrls)[val].id}>
                     <Image src={Object.values(imageUrls)[val].src} />
                     <Button
                     text={
@@ -330,7 +341,10 @@ export const StudentPaymentsForm = ({
                         </Container>
                     }
                     color="transparent"
-                    css={{ color: '$red2', }}
+                    css={{ 
+                        color: '$red2',
+                        marginTop: '$5',
+                    }}
                     onClick={() => handleRemoveImage(Object.values(imageUrls)[val].id)} />
                 </Container>)
             }
@@ -339,16 +353,22 @@ export const StudentPaymentsForm = ({
 
         {
             (files && (Object.keys(files).length > 0)) && 
-            <Form
-            name="student-payments-form"
-            {...formItemLayout}
-            form={form}
-            onFinish={onStore}
-            validateMessages={validateMessages}
-            initialValues={{
-                amount: 0,
-            }}
-            autoComplete="off">
+            <Container 
+            css={{ 
+                ...styling, 
+                marginTop: '$50', 
+                padding: '$15',
+            }}>
+                <Form
+                name="student-payments-form"
+                {...formItemLayout}
+                form={form}
+                onFinish={onStore}
+                validateMessages={validateMessages}
+                initialValues={{
+                    amount: 0,
+                }}
+                autoComplete="off">
 
             {
                 (paymentModes && (Object.keys(paymentModes).length > 0)) &&
@@ -362,69 +382,35 @@ export const StudentPaymentsForm = ({
                 }]}>
                     <Select>
                     {
-                        Object.keys(paymentModes).map((_, val) => <Option
+                        Object.keys(paymentModes).map((_, val) => 
+                        <Option
                         key={Object.values(paymentModes)[val].id}
                         value={Object.values(paymentModes)[val].value}
-                        disabled={Object.values(paymentModes)[val].isDisabled}>{Object.values(paymentModes)[val].label}</Option>)
+                        disabled={Object.values(paymentModes)[val].isDisabled}>
+                            {Object.values(paymentModes)[val].label}
+                        </Option>)
                     }
                     </Select>
                 </Form.Item>
             }
 
-            <Form.Item
-            label="Date paid"
-            name="date_paid"
-            {...helpers && helpers.date_paid && { help: helpers.date_paid }}
-            rules={[{
-                required: true,
-                message: 'Date paid is required.',
-            }]}>
+                <Form.Item
+                label="Date paid"
+                name="date_paid"
+                {...helpers && helpers.date_paid && { help: helpers.date_paid }}
+                rules={[{
+                    required: true,
+                    message: 'Date paid is required.',
+                }]}>
                 <DatePicker style={{
                     width: '100%',
                 }} />
-            </Form.Item>
-
-            <Form.Item
-            label="Amount"
-            name="amount_paid"
-            {...helpers && helpers.amount_paid && { help: helpers.amount_paid }}
-            rules={[{
-                required: true,
-            }]}>
-                <InputNumber
-                style={{
-                    width: '100%',
-                }}
-                min="1"
-                max="100000"
-                step=".01"
-                addonBefore={<Text type="span">&#x20B1;</Text>} />
-            </Form.Item>
-
-            {
-                (termOptions && (Object.keys(termOptions).length > 0)) &&
-                <Form.Item
-                label="Payment type"
-                name="payment_type"
-                {...helpers && helpers.payment_type && { help: helpers.payment_type }}
-                rules={[{
-                    required: true,
-                    message: "Term is required.",
-                }]}>
-                    <Radio.Group onChange={evt => onPaymentTypeChange(evt)}>
-                    {
-                        Object.keys(termOptions).map((i, val) => <Radio key={Object.values(termOptions)[val].id} value={Object.values(termOptions)[val].value}>{Object.values(termOptions)[val].label}</Radio>)
-                    }
-                    </Radio.Group>
                 </Form.Item>
-            }
 
-            {
-                ((isInstallment !== '') && (isInstallment !== null)) && (isInstallment) &&
                 <Form.Item
-                label="Balance"
-                name="balance"
-                {...helpers && helpers.balance && { help: helpers.balance }}
+                label="Amount"
+                name="amount_paid"
+                {...helpers && helpers.amount_paid && { help: helpers.amount_paid }}
                 rules={[{
                     required: true,
                 }]}>
@@ -434,37 +420,75 @@ export const StudentPaymentsForm = ({
                     }}
                     min="1"
                     max="100000"
-                    step="0.01"
+                    step=".01"
                     addonBefore={<Text type="span">&#x20B1;</Text>} />
                 </Form.Item>
-            }
 
-            {
-                (statusOptions && (Object.keys(statusOptions).length > 0)) &&
-                <Form.Item
-                label="Status"
-                name="status"
-                {...helpers && helpers.status && { help: helpers.status }}
-                rules={[{
-                    required: true,
-                    message: "Status is required.",
-                }]}>
-                    <Radio.Group>
-                    {
-                        Object.keys(statusOptions).map((i, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
-                    }
-                    </Radio.Group>
-                </Form.Item>
-            }
+                {
+                    (termOptions && (Object.keys(termOptions).length > 0)) &&
+                    <Form.Item
+                    label="Payment type"
+                    name="payment_type"
+                    {...helpers && helpers.payment_type && { help: helpers.payment_type }}
+                    rules={[{
+                        required: true,
+                        message: "Term is required.",
+                    }]}>
+                        <Radio.Group onChange={evt => onPaymentTypeChange(evt)}>
+                        {
+                            Object.keys(termOptions).map((i, val) => <Radio key={Object.values(termOptions)[val].id} value={Object.values(termOptions)[val].value}>{Object.values(termOptions)[val].label}</Radio>)
+                        }
+                        </Radio.Group>
+                    </Form.Item>
+                }
 
-            <Container className="d-flex">
-                <Button
-                submit
-                text="Submit"
-                color="blue"
-                className="flex-grow-1 flex-sm-grow-0" />
+                {
+                    ((isInstallment !== '') && (isInstallment !== null)) && (isInstallment) &&
+                    <Form.Item
+                    label="Balance"
+                    name="balance"
+                    {...helpers && helpers.balance && { help: helpers.balance }}
+                    rules={[{
+                        required: true,
+                    }]}>
+                        <InputNumber
+                        style={{
+                            width: '100%',
+                        }}
+                        min="1"
+                        max="100000"
+                        step="0.01"
+                        addonBefore={<Text type="span">&#x20B1;</Text>} />
+                    </Form.Item>
+                }
+
+                {
+                    (statusOptions && (Object.keys(statusOptions).length > 0)) &&
+                    <Form.Item
+                    label="Status"
+                    name="status"
+                    {...helpers && helpers.status && { help: helpers.status }}
+                    rules={[{
+                        required: true,
+                        message: "Status is required.",
+                    }]}>
+                        <Radio.Group>
+                        {
+                            Object.keys(statusOptions).map((_, val) => <Radio key={Object.values(statusOptions)[val].id} value={Object.values(statusOptions)[val].value}>{Object.values(statusOptions)[val].label}</Radio>)
+                        }
+                        </Radio.Group>
+                    </Form.Item>
+                }
+
+                    <Container className="d-flex justify-content-sm-center align-items-sm-center">
+                        <Button
+                        submit
+                        text="Submit"
+                        color="blue"
+                        className="flex-grow-1 flex-sm-grow-0" />
+                    </Container>
+                </Form>
             </Container>
-            </Form>
         }
         </Container>
     )

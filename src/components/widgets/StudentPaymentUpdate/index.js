@@ -22,8 +22,8 @@ const styling = {
 
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 11, },
+        md: { span: 10, },
     },
     wrapperCol: {
         sm: { span: 24, },
@@ -175,7 +175,10 @@ export const StudentPaymentUpdate = ({
                 authUser={authUser}
                 student={student} />
             </Container> : 
-            <Container css={styling}>
+            <Container css={{ 
+                ...styling, 
+                padding: '$15',
+            }}>
             {
                 alert
             }
@@ -205,7 +208,7 @@ export const StudentPaymentUpdate = ({
                     </Form.Item>
                 }
 
-                    <Container className="d-flex">
+                    <Container className="d-flex justify-content-sm-center align-items-sm-center">
                         <Button
                         submit
                         text="Submit"

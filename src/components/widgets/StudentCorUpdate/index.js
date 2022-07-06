@@ -6,7 +6,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
 import { getAlertComponent, } from "../../../util";
-import { styled } from "../../../stitches.config";
+import { 
+    styled,
+    containerFileStyle,
+    imagePreviewFileStyle,
+} from "../../../stitches.config";
 
 import Container from "../../core/Container";
 import Label from "../../core/Label";
@@ -59,59 +63,6 @@ export const StudentCorUpdate = ({
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
     const handleAlertComponent = payload => setAlert(payload);
-
-    const paymentModes = [
-        {
-            id: 1,
-            value: "bank_transfer_bdo",
-            label: "Bank Transfer (BDO)",
-            isDisabled: false,
-        },
-        {
-            id: 2,
-            value: "bank_transfer_security_bank",
-            label: "Bank Transfer (Security Bank)",
-            isDisabled: false,
-        },
-        {
-            id: 3,
-            value: "cash",
-            label: "Cash",
-            isDisabled: false,
-        },
-        {
-            id: 4,
-            value: "gcash",
-            label: "GCash",
-            isDisabled: false,
-        },
-    ];
-
-    const termOptions = [
-        {
-            id: 1,
-            value: "full",
-            label: "Full",
-        },
-        {
-            id: 2,
-            value: "installment",
-            label: "Installment",
-        },
-    ];
-
-    const statusOptions = [
-        {
-            id: 1,
-            value: "pending",
-            label: "Pending",
-        },
-        {
-            id: 2,
-            value: "verified",
-            label: "Verified",
-        },
-    ];
 
     const handleRemoveImage = () => {
         handleFile('');
@@ -230,7 +181,7 @@ export const StudentCorUpdate = ({
                 authUser={authUser}
                 student={student} />
             </Container> :
-            <Container css={styling}>
+            <Container css={{ marginTop: '$20', }}>
             {
                 alert
             }       
@@ -269,24 +220,45 @@ export const StudentCorUpdate = ({
             {/* Display preview */}
             {
                 imageUrl &&
-                <Container>
-                    <Image src={imageUrl} />
-                    <Button
-                    text={
-                        <Container className="d-flex align-items-center">
-                            <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
-                            <Text
-                            type="span"
-                            color="danger"
-                            css={{ display: 'inline-block', marginTop: '$5 ', }}>
-                                Remove
-                            </Text>
+                <>
+                    <Container
+                    className="d-flex flex-column justify-content-center"
+                    css={{
+                        '> div': {
+                            flex: 1,
+                            ...containerFileStyle,
+                        },
+                        '> div > img': {
+                            ...imagePreviewFileStyle,
+                            width: '200px',
+                            height: '200px',
+                        },
+                    }}>
+                        <Container className="d-flex flex-column align-items-center">
+                            <Image src={imageUrl} />
+                            <Button
+                            text={
+                                <Container className="d-flex align-items-center">
+                                    <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
+                                    <Text
+                                    type="span"
+                                    color="danger"
+                                    css={{ display: 'inline-block', marginTop: '$5 ', }}>
+                                        Remove
+                                    </Text>
+                                </Container>
+                            }
+                            color="transparent"
+                            css={{ 
+                                color: '$red2',
+                                marginTop: '$5',
+                            }}
+                            onClick={() => handleRemoveImage()} />
                         </Container>
-                    }
-                    color="transparent"
-                    css={{ color: '$red2', }}
-                    onClick={() => handleRemoveImage()} />
-                    <Container className="d-flex">
+                    </Container>
+                    <Container 
+                    className="d-flex justify-content-sm-center align-items-sm-center"
+                    css={{ marginTop: '$20', }}>
                         <Button
                         submit
                         text="Submit"
@@ -294,7 +266,7 @@ export const StudentCorUpdate = ({
                         className="flex-grow-1 flex-sm-grow-0"
                         onClick={() => onUpdate()} />
                     </Container>
-                </Container>
+                </>
             }
             </Container>
         }

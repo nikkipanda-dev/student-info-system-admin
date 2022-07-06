@@ -18,10 +18,13 @@ export const FilePreview = ({
             </Text>
             {
                 (values && (Object.keys(values).length > 0)) &&
-                Object.keys(values).map((i, val) => <Image
-                    key={Object.values(values)[val].id}
+                Object.keys(values).map((_, val) => 
+                <Container key={Object.values(values)[val].id}>
+                    <Image
                     src={Object.values(values)[val].path}
-                    onClick={() => onClick(Object.values(values)[val].slug)} />)
+                    onClick={() => onClick(Object.values(values)[val].slug)} />
+                </Container>
+                )
             }
         </Container>
     )

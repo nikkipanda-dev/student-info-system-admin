@@ -1,5 +1,7 @@
 import { useState, useEffect, } from "react";
 import { Form, } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileCirclePlus, } from "@fortawesome/free-solid-svg-icons";
 import Container from "../../core/Container";
 
 import Modal from "../Modal";
@@ -58,7 +60,11 @@ export const StudentRegistrarFiles = ({
 
     return (
         <Container>
-            <Container className="d-flex justify-content-sm-end align-items-center">
+            <Container 
+            className="d-flex justify-content-sm-end align-items-center"
+            css={{
+                marginTop: '$30',
+            }}>
             {
                 !(isModalVisible) &&
                 <Button
@@ -77,7 +83,18 @@ export const StudentRegistrarFiles = ({
                     handleHideModal={handleHideModal} />, "Add a Registrar File"
                 )}
                 color={isModalVisible ? '' : "yellow"}
-                text={isModalVisible ? "Cancel" : "Add a Registrar File"} />
+                text={
+                    isModalVisible ? "Cancel" :
+                    <>
+                        <FontAwesomeIcon icon={faFileCirclePlus} className="fa-fw fa-md" />
+                        <Text
+                        type="span"
+                        size="default"
+                        css={{ marginLeft: '$5', }}>
+                            Add a Registrar File
+                        </Text>
+                    </> 
+                } />
             }
             </Container>
             <Container css={{ marginTop: '$30', }}>

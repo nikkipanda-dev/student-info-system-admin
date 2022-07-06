@@ -1,4 +1,6 @@
 import { useState, useEffect, } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faFileCirclePlus, } from "@fortawesome/free-solid-svg-icons";
 import Container from "../../core/Container";
 
 import Modal from "../Modal";
@@ -51,7 +53,11 @@ export const StudentCors = ({
 
     return (
         <Container>
-            <Container className="d-flex justify-content-sm-end align-items-center">
+            <Container 
+            className="d-flex justify-content-sm-end align-items-center"
+            css={{
+                marginTop: '$30',
+            }}>
             {
                 !(isModalVisible) &&
                 <Button
@@ -65,10 +71,21 @@ export const StudentCors = ({
                     cors={cors}
                     handleCors={handleCors}
                     authUser={authUser}
-                    handleHideModal={handleHideModal} />, "Add a COR"
+                    handleHideModal={handleHideModal} />, "Add COR"
                 )}
                 color={isModalVisible ? '' : "yellow"}
-                text={isModalVisible ? "Cancel" : "Add a COR"} />
+                text={
+                    isModalVisible ? "Cancel" : 
+                    <>
+                        <FontAwesomeIcon icon={faFileCirclePlus} className="fa-fw fa-md" />
+                        <Text
+                        type="span"
+                        size="default"
+                        css={{ marginLeft: '$5', }}>
+                            Add COR
+                        </Text>
+                    </>
+                } />
             }
             </Container>
             <Container css={{ marginTop: '$30', }}>

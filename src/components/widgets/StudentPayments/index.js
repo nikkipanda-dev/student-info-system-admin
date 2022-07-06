@@ -1,5 +1,7 @@
 import { useState, useEffect, } from "react";
 import { Form, } from "antd";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCashRegister, } from "@fortawesome/free-solid-svg-icons";
 import Container from "../../core/Container";
 
 import Modal from "../Modal";
@@ -58,7 +60,11 @@ export const StudentPayments = ({
 
     return (
         <Container>
-            <Container className="d-flex justify-content-sm-end align-items-center">
+            <Container 
+            className="d-flex justify-content-sm-end align-items-center" 
+            css={{
+                marginTop: '$30',
+            }}>
             {
                 !(isModalVisible) && 
                 <Button
@@ -77,7 +83,18 @@ export const StudentPayments = ({
                     handleHideModal={handleHideModal} />, "Add Payment"
                 )}
                 color={isModalVisible ? '' : "yellow"}
-                text={isModalVisible ? "Cancel" : "Add Payment"} />
+                text={
+                    isModalVisible ? "Cancel" : 
+                    <>
+                        <FontAwesomeIcon icon={faCashRegister} className="fa-fw fa-md" />
+                        <Text 
+                        type="span" 
+                        size="default" 
+                        css={{ marginLeft: '$5', }}>
+                            Add payment
+                        </Text>
+                    </>
+                } />
             }
             </Container>
             <Container css={{ marginTop: '$30', }}>

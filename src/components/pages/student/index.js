@@ -8,6 +8,8 @@ import {
 } from "react-router-dom";
 import { sectionStyle, studentContentStyle, } from "../../../stitches.config";
 import Container from "../../core/Container";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft, faUserEdit, } from "@fortawesome/free-solid-svg-icons";
 import { emitMessage, } from "../../../util";
 
 import Section from "../../core/Section";
@@ -19,6 +21,15 @@ import StudentSettings from "../../widgets/StudentSettings";
 import StudentBio from "../../widgets/StudentBio";
 import ProfileTabs from "../../widgets/ProfileTabs";
 import Modal from "../../widgets/Modal";
+import Text from "../../core/Text";
+
+const styling = {
+    '@media screen and (max-width: 575px)': {
+        'button': {
+            marginTop: '$10',
+        }
+    },
+}
 
 export const Student = ({ isAuth, authUser, }) => {
     const params = useParams();
@@ -33,6 +44,10 @@ export const Student = ({ isAuth, authUser, }) => {
     const handleShowModal = () => setIsModalVisible(true);
     const handleHideModal = () => setIsModalVisible(false);
     const handleTitle = title => setTitle(title);
+
+    const handleNavigator = path => {
+        navigate(path, { replace: true });
+    }
 
     const handleModalContent = (payload, title) => {
         setModalContent(payload);
@@ -61,7 +76,23 @@ export const Student = ({ isAuth, authUser, }) => {
     return (
         (isAuth && params.slug && (student && (Object.keys(student).length > 0)) && params.tab_slug) && 
         <Section css={sectionStyle}>
-            <Container className="d-flex justify-content-sm-end align-items-center">
+            <Container 
+            className="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center" 
+            css={styling}>
+                <Button
+                className="flex-grow-1 flex-sm-grow-0"
+                onClick={() => handleNavigator("/students")}
+                text={
+                    <>
+                        <FontAwesomeIcon icon={faArrowLeft} className="fa-fw fa-md" />
+                        <Text 
+                        type="span" 
+                        size="default"
+                        css={{ marginLeft: '$5', }}>
+                            Back to students
+                        </Text>
+                    </>
+                } />
             {
                 !(isModalVisible) && 
                 <Button
@@ -75,7 +106,18 @@ export const Student = ({ isAuth, authUser, }) => {
                     handleStudent={handleStudent} />, "Update Settings"
                 )}
                 color={isModalVisible ? '' : "yellow"}
-                text={isModalVisible ? "Cancel" : "Update"} />
+                text={
+                    isModalVisible ? "Cancel" : 
+                    <>
+                        <FontAwesomeIcon icon={faUserEdit} className="fa-fw fa-md" />
+                        <Text 
+                        type="span"
+                        size="default" 
+                        css={{ marginLeft: '$5', }}>
+                            Update
+                        </Text>
+                    </>
+                } />
             }
             </Container>
             <Container css={{ marginTop: '$30', }}>
