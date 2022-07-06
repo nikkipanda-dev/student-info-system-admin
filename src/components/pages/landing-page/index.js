@@ -93,7 +93,7 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
                 className="d-flex justify-content-center" 
                 css={{marginBottom: '$30', }}>
                     <Image 
-                    src="/informatics_logo_full.png"
+                    src="https://student-info-system.sfo3.digitaloceanspaces.com/illustrations/informatics_logo_full.png"
                     css={{
                         maxWidth: '300px',
                         display: 'none',
@@ -102,7 +102,7 @@ export const LandingPage = ({ isAuth, handleLoggedIn, }) => {
                         },
                     }} />
                     <Image 
-                    src="/informatics_logo.png"
+                    src="https://student-info-system.sfo3.digitaloceanspaces.com/illustrations/informatics_logo.png"
                     css={{
                         width: '80px',
                         height: '80px',
