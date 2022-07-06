@@ -10,6 +10,8 @@ import {
     getAlertComponent, 
     ordinalNumbers,
 } from "../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faBan, } from "@fortawesome/free-solid-svg-icons";
 
 import Button from "../../core/Button";
 import Text from "../../core/Text";
@@ -194,7 +196,15 @@ export const SettingsYearTermForm = ({
             css={{ marginBottom: '$15', }}>
                 <Heading type={4} text="Year &#x26; Term" />
                 <Button
-                text={isVisible ? "Cancel" : "Update"}
+                text={
+                    <>
+                        <FontAwesomeIcon icon={isVisible ? faBan : faPen} className="fa-fw fa-md" />
+                        <Text
+                        type="span"
+                        size="default"
+                        css={{ marginLeft: '$5', }}>{isVisible ? "Cancel" : "Update"}</Text>
+                    </> 
+                }
                 color={isVisible ? "" : "yellow"}
                 className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleToggleForm()} />

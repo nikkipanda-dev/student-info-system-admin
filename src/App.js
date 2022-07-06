@@ -141,7 +141,7 @@ function App() {
                 <Row>
                 {
                     (isAuth && !(isMobileView)) &&
-                    <Column className="col-sm-3 col-lg-2" css={{ background: '$white', }}>
+                    <Column className="col-sm-3 col-md-2" css={{ background: '$white', }}>
                         <Sidebar 
                         className="d-flex flex-column"
                         isAuth={isAuth} 
@@ -158,7 +158,7 @@ function App() {
                     </Column>
                 }
                     <Column 
-                    className={(isAuth && !(isMobileView)) ? "col-sm-9 col-lg-10" : "col-12"} 
+                    className={(isAuth && !(isMobileView)) ? "col-sm-9 col-md-10" : "col-12"} 
                     css={{ 
                         // background: '$green1', 
                         padding: '0 !important',

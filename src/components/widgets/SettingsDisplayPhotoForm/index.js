@@ -10,6 +10,8 @@ import {
     faCloudArrowUp, 
     faCircleXmark,
     faUser,
+    faPen,
+    faBan,
 } from "@fortawesome/free-solid-svg-icons";
 import { styled } from "../../../stitches.config";
 
@@ -200,7 +202,15 @@ export const StudentSettingsDisplayPhotoForm = ({
             css={{ margin: '$30 0px $15', }}>
                 <Heading type={4} text="Display Photo" />
                 <Button
-                text={isVisible ? "Cancel" : "Update"}
+                text={
+                    <>
+                        <FontAwesomeIcon icon={isVisible ? faBan : faPen} className="fa-fw fa-md" />
+                        <Text
+                        type="span"
+                        size="default"
+                        css={{ marginLeft: '$5', }}>{isVisible ? "Cancel" : "Update"}</Text>
+                    </> 
+                }
                 color={isVisible ? "" : "yellow"}
                 className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleToggleForm()} />

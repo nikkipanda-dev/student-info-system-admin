@@ -64,7 +64,7 @@ export const StudentBio = ({
                     `${values.first_name.charAt(0).toUpperCase() + values.first_name.slice(1).toLowerCase()} ${values.middle_name ? values.middle_name.charAt(0).toUpperCase() + values.middle_name.slice(1).toLowerCase() : ''} ${values.last_name.charAt(0).toUpperCase() + values.last_name.slice(1).toLowerCase() }`
                 }
                 </Text>
-                <Text type="span">{values.student_number}</Text>
+                <Text type="span" css={{ marginTop: '$10', }}>{values.student_number}</Text>
                 <Divider orientation="center" plain>
                     Details
                 </Divider>

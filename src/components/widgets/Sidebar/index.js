@@ -29,7 +29,7 @@ export const Sidebar = ({
         },
         {
             id: 1,
-            label: "Administrators",
+            label: "Admins",
             path: "/administrators",
             icon: faUserGroup,
         },
@@ -66,7 +66,12 @@ export const Sidebar = ({
                 className={({ isActive }) =>
                     isActive ? 'activeLink' : undefined
                 }>
-                    <Container css={{ margin: '$5', }}>
+                    <Container 
+                    className="d-flex"
+                    css={{ 
+                        margin: '$5', 
+                        padding: '$5',
+                    }}>
                         <FontAwesomeIcon icon={Object.values(links)[val].icon} className="fa-fw fa-lg" />
                         <Text 
                         type="span" 

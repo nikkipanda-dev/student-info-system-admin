@@ -1,8 +1,6 @@
 import { useState, useEffect, } from "react";
 import {
     Form,
-    Radio,
-    Divider,
     Select,
     Descriptions,
 } from "antd";
@@ -11,6 +9,8 @@ import {
     getAlertComponent,
     courseOptions,
 } from "../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faBan, } from "@fortawesome/free-solid-svg-icons";
 
 import Button from "../../core/Button";
 import Text from "../../core/Text";
@@ -175,10 +175,18 @@ export const SettingsCourseForm = ({
                 css={{ marginBottom: '$15', }}>
                 <Heading type={4} text="Course" />
                 <Button
-                    text={isVisible ? "Cancel" : "Update"}
-                    color={isVisible ? "" : "yellow"}
-                    className="flex-grow-1 flex-sm-grow-0"
-                    onClick={() => handleToggleForm()} />
+                text={
+                    <>
+                        <FontAwesomeIcon icon={isVisible ? faBan : faPen} className="fa-fw fa-md" />
+                        <Text
+                        type="span"
+                        size="default"
+                        css={{ marginLeft: '$5', }}>{isVisible ? "Cancel" : "Update"}</Text>
+                    </> 
+                }
+                color={isVisible ? "" : "yellow"}
+                className="flex-grow-1 flex-sm-grow-0"
+                onClick={() => handleToggleForm()} />
             </Container>
             <Container css={{ marginBottom: '$15', }}>
                 <Descriptions bordered column={1}>

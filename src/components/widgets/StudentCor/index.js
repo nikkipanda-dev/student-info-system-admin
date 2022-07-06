@@ -1,7 +1,7 @@
 import { ordinalNumbers, courseOptions, } from '../../../util';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, } from '@fortawesome/free-solid-svg-icons';
-import { imagePreviewFileStyle, } from '../../../stitches.config';
+import { imagePreviewFileStyle, containerFileStyle, } from '../../../stitches.config';
 import Container from "../../core/Container";
 
 import Text from "../../core/Text";
@@ -54,15 +54,18 @@ export const StudentCor = ({
                 <Container
                 className="d-flex flex-column"
                 css={{
-                    'img': imagePreviewFileStyle,
                     'img:hover': {
                         cursor: 'pointer',
                     },
                 }}>
                     <FilePreview
                     onClick={onClick}
-                    {...values && values.file && { values: values.file }}
-                    css={{ marginTop: '$30', }} />
+                    {...values.file && { values: { ...values.file } }}
+                    css={{
+                        marginTop: '$30',
+                        '> div': containerFileStyle,
+                        '> div > img': imagePreviewFileStyle,
+                    }} />
                 </Container>
             </Container>
         </Container>
