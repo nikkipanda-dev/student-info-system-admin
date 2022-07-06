@@ -10,12 +10,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
-import { styled, } from "../../../stitches.config";
+import { 
+    styled,
+    containerFileStyle, 
+    imagePreviewFileStyle,
+} from "../../../stitches.config";
 
 import Container from "../../core/Container";
 import Text from "../../core/Text";
 import Button from "../../core/Button";
-import Alert from "../Alert";
 import Image from "../../core/Image";
 import Label from "../../core/Label";
 import NotFound from "../NotFound";
@@ -23,13 +26,6 @@ import NotFound from "../NotFound";
 const NativeInput = styled('input', {});
 
 const styling = {
-    'img': {
-        width: '100%',
-        height: 'auto',
-        maxWidth: '400px',
-        maxHeight: '400px',
-        objectFit: 'cover',
-    },
     '@media screen and (max-width: 575px)': {
         'button': {
             marginTop: '$10',
@@ -235,7 +231,7 @@ export const StudentPermitForm = ({
     }, [imageUrl]);
 
     return (
-        <Container css={styling}>
+        <Container>
         {
             alert
         }
@@ -274,29 +270,51 @@ export const StudentPermitForm = ({
         {/* Display preview */}
         {
             imageUrl &&
-            <Container>
-                <Image src={imageUrl} />
-                <Button
-                text={
-                    <Container className="d-flex align-items-center">
-                        <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
-                        <Text
-                        type="span"
-                        color="danger"
-                        css={{ display: 'inline-block', marginTop: '$5 ', }}>
-                            Remove
-                        </Text>
-                    </Container>
-                }
-                color="transparent"
-                css={{ color: '$red2', }}
-                onClick={() => handleRemoveImage()} />
-                <Text type="span" color="danger">{helpers && helpers.image}</Text>
+            <Container
+            className="d-flex flex-column justify-content-center"
+            css={{
+                '> div': {
+                    flex: 1,
+                    ...containerFileStyle,
+                },
+                '> div > img': {
+                    ...imagePreviewFileStyle,
+                    width: '200px',
+                    height: '200px',
+                },
+            }}>
+                <Container 
+                className="d-flex flex-column align-items-center" 
+                css={{ 
+                    background: 'red', 
+                    padding: '$5',
+                }}>
+                    <Image src={imageUrl} />
+                    <Button
+                    text={
+                        <Container className="d-flex align-items-center">
+                            <FontAwesomeIcon icon={faCircleXmark} className="fa-fw fa-2x" />
+                            <Text
+                            type="span"
+                            color="danger"
+                            css={{ display: 'inline-block', marginTop: '$5 ', }}>
+                                Remove
+                            </Text>
+                        </Container>
+                    }
+                    color="transparent"
+                    css={{ 
+                        color: '$red2',
+                        marginTop: '$5',
+                    }}
+                    onClick={() => handleRemoveImage()} />
+                    <Text type="span" color="danger">{helpers && helpers.image}</Text>
+                </Container>
             </Container>
         }
         {
             file &&
-            <Container>
+            <Container css={{ ...styling, marginTop: '$10', padding: '$15', }}>
                 <Form
                 name="student-permit-form"
                 {...formItemLayout}
@@ -322,7 +340,7 @@ export const StudentPermitForm = ({
                     </Form.Item>
                 }
 
-                    <Container className="d-flex">
+                    <Container className="d-flex justify-content-sm-center align-items-sm-center">
                         <Button
                         submit
                         text="Submit"

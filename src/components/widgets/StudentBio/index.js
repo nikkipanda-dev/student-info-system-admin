@@ -12,6 +12,7 @@ import {
     courseOptions,
     enrollmentCategories,
 } from "../../../util";
+import { Divider, } from 'antd';
 import { 
     studentBioStyle, 
     anchorStyle,
@@ -54,33 +55,50 @@ export const StudentBio = ({
         radius="small">
             <Container css={{ ...studentBioStyle, ...styling }}>
             {
-                values.display_photo ? <Image src={values.display_photo} css={displayPhotoStyle} /> : 
+                values.display_photo ? 
+                <Image src={values.display_photo} css={displayPhotoStyle} /> : 
                 <FontAwesomeIcon icon={faUser} className="fa-fw fa-10x" />
             }
-                <Text type="span">{`${values.first_name} ${values.middle_name ?? ''} ${values.last_name}`}</Text>
-                <Container>
-                    <FontAwesomeIcon 
-                    icon={
-                        values.is_enrolled ? faSchoolCircleCheck : 
-                        values.is_dropped ? faSchoolCircleExclamation : 
-                        values.is_expelled ? faSchoolCircleXmark : faGraduationCap
-                    } 
-                    className="fa-fw fa-lg"
-                    style={{
-                        color: values.is_enrolled ? "#00B4D8 " :
-                               values.is_dropped ? "#f0ca57" :
-                               values.is_expelled ? "#DC3545" : "#28A745",
-                    }} />
-                    <Text type="span" css={{ marginLeft: '$5', }}>{`${enrollmentCategories[status]}`}</Text>
-                </Container>
-                <Text 
-                type="span" 
-                as="a" 
-                href={`mailto:${values.email}`}>
-                    {`${values.email}`}
+                <Text type="span" css={{ marginTop: '$20', }}>
+                {
+                    `${values.first_name.charAt(0).toUpperCase() + values.first_name.slice(1).toLowerCase()} ${values.middle_name ? values.middle_name.charAt(0).toUpperCase() + values.middle_name.slice(1).toLowerCase() : ''} ${values.last_name.charAt(0).toUpperCase() + values.last_name.slice(1).toLowerCase() }`
+                }
                 </Text>
-                <Text type="span">{`${courseOptions[values.course]}`}</Text>
-                <Text type="span">{`${ordinalNumbers[values.year]} year, ${ordinalNumbers[values.term]} term`}</Text>
+                <Text type="span">{values.student_number}</Text>
+                <Divider orientation="center" plain>
+                    Details
+                </Divider>
+                <Container 
+                className="d-flex flex-column justify-content-center align-items-center"
+                css={{
+                    '> :nth-child(n+2)': {
+                        marginTop: '$10',
+                    },
+                }}>
+                    <Container>
+                        <FontAwesomeIcon
+                        icon={
+                            values.is_enrolled ? faSchoolCircleCheck :
+                            values.is_dropped ? faSchoolCircleExclamation :
+                            values.is_expelled ? faSchoolCircleXmark : faGraduationCap
+                        }
+                        className="fa-fw fa-lg"
+                        style={{
+                            color: values.is_enrolled ? "#00B4D8 " :
+                                   values.is_dropped ? "#f0ca57" :
+                                   values.is_expelled ? "#DC3545" : "#28A745",
+                        }} />
+                        <Text type="span" css={{ marginLeft: '$5', }}>{`${enrollmentCategories[status]}`}</Text>
+                    </Container>
+                    <Text
+                    type="span"
+                    as="a"
+                    href={`mailto:${values.email}`}>
+                        {`${values.email}`}
+                    </Text>
+                    <Text type="span">{`${courseOptions[values.course]}`}</Text>
+                    <Text type="span">{`${ordinalNumbers[values.year]} year, ${ordinalNumbers[values.term]} term`}</Text>
+                </Container>
             </Container>
         </Card>
     )

@@ -67,7 +67,9 @@ export const {
             small: "10px",
             rounded: "30px",
         },
-        shadows: {},
+        shadows: {
+            default: '0px 0px 15px -3px #dcdcdc',
+        },
         zIndices: {},
         transitions: {
             default: 'all .15s ease-in-out',
@@ -172,15 +174,17 @@ export const displayPhotoStyle = {
     objectFit: 'cover',
 }
 
-export const imagePreviewFileStyle = {
-    width: '100%',
-    background: '$gray1',
-    borderRadius: '$small',
-    padding: '$5',
-    height: 'auto',
+export const containerFileStyle = {
     margin: '$10',
-    maxWidth: '400px',
-    maxHeight: '400px',
+    padding: '$20',
+    borderRadius: '$small',
+    boxShadow: '$default',
+    background: '$gray1',
+}
+
+export const imagePreviewFileStyle = {
+    width: '400px',
+    height: '400px',
     objectFit: 'cover',
 }
 

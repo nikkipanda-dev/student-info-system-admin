@@ -145,7 +145,7 @@ export const StudentPermitsTable = ({
                     slug={record.slug}
                     values={record}
                     handleHideModal={handleHideModal}
-                    authUser={authUser} />, "Payment Details")}
+                    authUser={authUser} />, "Permit Details")}
                 css={{ marginLeft: '$10', }} />
                 <Button
                 text={<Text type="span" color="danger"><FontAwesomeIcon icon={faTrash} className="fa-fw" /></Text>}
