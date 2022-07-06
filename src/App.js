@@ -27,6 +27,7 @@ import Students from "./components/pages/students";
 import Student from "./components/pages/student";
 import StudentContent from "./components/widgets/StudentContent";
 import UserLogs from "./components/pages/user-logs";
+import About from "./components/pages/about";
 import NotFound from "./components/pages/not-found";
 import Row from "./components/core/Row";
 import Column from "./components/core/Column";
@@ -199,6 +200,7 @@ function App() {
                                         authUser.is_super_admin && 
                                         <Route path="/user-logs" element={<UserLogs isAuth={isAuth} authUser={authUser} />} />
                                     }
+                                    <Route path="/about" element={<About />} />
                                     <Route path="/:slug" element={<NotFound isAuth={isAuth} />} />
                                 </Routes>
                         }

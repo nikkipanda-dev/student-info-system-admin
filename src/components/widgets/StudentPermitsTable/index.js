@@ -1,7 +1,11 @@
 import { Form, Table, } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash, } from '@fortawesome/free-solid-svg-icons';
-import { onDownload, } from '../../../util';
+import { 
+    onDownload, 
+    courseOptions,
+    ordinalNumbers,
+} from '../../../util';
 
 import Text from '../../core/Text';
 import Image from '../../core/Image';
@@ -72,20 +76,29 @@ export const StudentPermitsTable = ({
         {
             title: 'Course',
             dataIndex: 'course',
-            width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            width: '200px',
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (text) => 
+            <>
+                <Text type="span" color="blue2">{`[${text.toUpperCase()}]`}</Text>
+                <Text
+                    type="span"
+                    css={{ marginLeft: '$5', }}>{courseOptions[text]}</Text>
+            </>,
         },
         {
             title: 'Year',
             dataIndex: 'year',
             width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">{ordinalNumbers[text]}</Text>,
         },
         {
             title: 'Term',
             dataIndex: 'term',
             width: '100px',
-            render: (text) => <Text type="span">{text}</Text>,
+            render: (text) => <Text type="span">{ordinalNumbers[text]}</Text>,
         },
         {
             title: 'Image',
@@ -107,7 +120,8 @@ export const StudentPermitsTable = ({
             title: 'Created',
             dataIndex: 'created_at',
             width: '180px',
-            render: (text) => <Text type="span">{new Intl.DateTimeFormat('en-US', {
+            render: (text) => 
+            <Text type="span" color="info">{new Intl.DateTimeFormat('en-US', {
                 timeZone: "Asia/Manila",
                 hourCycle: 'h24',
                 year: '2-digit',
@@ -124,7 +138,8 @@ export const StudentPermitsTable = ({
             key: 'action',
             width: '180px',
             fixed: 'right',
-            render: (_, record) => <Container css={{
+            render: (_, record) => 
+            <Container css={{
                 width: '100%',
                 'button': {
                     background: 'transparent',

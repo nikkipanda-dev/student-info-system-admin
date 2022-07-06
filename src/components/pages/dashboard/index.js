@@ -13,7 +13,6 @@ import AdminsOverview from "../../widgets/AdminsOverview";
 import RecentActivites from "../../widgets/RecentActivities";
 
 import Heading from "../../core/Heading";
-import Text from "../../core/Text";
 
 export const Dashboard = ({ isAuth, authUser, }) => {
     const [users, setUsers] = useState([]);

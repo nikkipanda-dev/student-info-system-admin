@@ -6,7 +6,7 @@ import {
     faClock,
     faBan,
 } from '@fortawesome/free-solid-svg-icons';
-import { paymentModes, courseOptions, ordinalNumbers, } from '../../../util';
+import { courseOptions, ordinalNumbers, } from '../../../util';
 
 import Text from '../../core/Text';
 
@@ -38,7 +38,7 @@ export const StudentPaymentDetails = ({ values, }) => {
                 </Text>
             </Descriptions.Item>
             <Descriptions.Item label="Mode of Payment" span={3}>
-                <Text type="span">{paymentModes[values.mode_of_payment]}</Text>
+                <Text type="span">{ }</Text>
             </Descriptions.Item>
             <Descriptions.Item label="Date Added" span={3}>
                 <Text type="span">{new Intl.DateTimeFormat('en-US', {

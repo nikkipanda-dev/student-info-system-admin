@@ -91,7 +91,7 @@ export const StudentRegistrarFiles = ({
                         type="span"
                         size="default"
                         css={{ marginLeft: '$5', }}>
-                            Add a Registrar File
+                            Add registrar file
                         </Text>
                     </> 
                 } />
