@@ -1,6 +1,8 @@
 import { useState, useEffect, } from "react";
 import { Form, Input, } from "antd";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen, faBan, } from "@fortawesome/free-solid-svg-icons";
 import { setCookieEmail, } from "../../../util/auth";
 
 import Button from "../../core/Button";
@@ -168,7 +170,15 @@ export const SettingsEmailForm = ({
             css={{ margin: '$30 0px $15', }}>
                 <Heading type={4} text="Email Address" />
                 <Button
-                text={isVisible ? "Cancel" : "Update"}
+                text={
+                    <>
+                        <FontAwesomeIcon icon={isVisible ? faBan : faPen} className="fa-fw fa-md" />
+                        <Text
+                        type="span"
+                        size="default"
+                        css={{ marginLeft: '$5', }}>{isVisible ? "Cancel" : "Update"}</Text>
+                    </> 
+                }
                 color={isVisible ? "" : "yellow"}
                 className="flex-grow-1 flex-sm-grow-0"
                 onClick={() => handleToggleForm()} />

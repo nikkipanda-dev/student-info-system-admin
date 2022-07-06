@@ -352,7 +352,7 @@ export const RegisterStudent = ({
                     <Input.Password allowClear visibilityToggle />
                 </Form.Item>
 
-                <Container className="d-flex">
+                <Container className="d-flex justify-content-sm-center align-items-sm-center">
                     <Button
                     submit
                     text="Submit"

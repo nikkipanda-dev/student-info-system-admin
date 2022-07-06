@@ -5,7 +5,7 @@ import {
 } from '../../../util';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperclip, } from '@fortawesome/free-solid-svg-icons';
-import { imagePreviewFileStyle, } from '../../../stitches.config';
+import { imagePreviewFileStyle, containerFileStyle, } from '../../../stitches.config';
 import Container from "../../core/Container";
 
 import Text from "../../core/Text";
@@ -55,19 +55,22 @@ export const StudentPayment = ({
                         Uploaded files:
                     </Text>
                 </Container>
-                <Container 
-                className="d-flex flex-column"
-                css={{ 
-                    'img': imagePreviewFileStyle,
-                    'img:hover': {
-                        cursor: 'pointer',
-                    },
-                }}>
-                    <FilePreview 
-                    onClick={onClick} 
-                    {...values.files && {values: {...values.files}}}
-                    css={{ marginTop: '$30', }} />
-                </Container>
+                    <Container
+                    className="d-flex flex-column"
+                    css={{
+                        'img:hover': {
+                            cursor: 'pointer',
+                        },
+                    }}>
+                        <FilePreview
+                        onClick={onClick}
+                        {...values.files && { values: { ...values.files } }}
+                        css={{
+                            marginTop: '$30',
+                            '> div': containerFileStyle,
+                            '> div > img': imagePreviewFileStyle,
+                        }} />
+                    </Container>
             </Container>
         </Container>
     )

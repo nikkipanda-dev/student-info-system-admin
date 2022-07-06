@@ -11,7 +11,8 @@ import {
 } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    faUser,
+    faPen,
+    faBan,
     faGraduationCap,
     faSchoolCircleCheck,
     faSchoolCircleExclamation,
@@ -33,8 +34,8 @@ const styling = {
 
 const formItemLayout = {
     labelCol: {
-        sm: { span: 9, },
-        md: { span: 8, },
+        sm: { span: 8, },
+        md: { span: 7, },
     },
     wrapperCol: {
         sm: { span: 24, },
@@ -182,9 +183,17 @@ export const SettingsEnrollmentStatusForm = ({
             <Container
             className="d-flex flex-column flex-sm-row justify-content-sm-between align-items-sm-center"
             css={{ marginBottom: '$15', }}>
-            <Heading type={4} text="Year &#x26; Term" />
+            <Heading type={4} text="Enrollment Status" />
             <Button
-            text={isVisible ? "Cancel" : "Update"}
+            text={
+                <>
+                    <FontAwesomeIcon icon={isVisible ? faBan : faPen} className="fa-fw fa-md" />
+                    <Text
+                    type="span"
+                    size="default"
+                    css={{ marginLeft: '$5', }}>{isVisible ? "Cancel" : "Update"}</Text>
+                </> 
+            }
             color={isVisible ? "" : "yellow"}
             className="flex-grow-1 flex-sm-grow-0"
             onClick={() => handleToggleForm()} />
