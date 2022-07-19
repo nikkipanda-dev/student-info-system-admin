@@ -24,9 +24,12 @@ export const AdminsOverview = ({ values, }) => {
                         type={3}
                         text="Administrators"
                         color="info" />
-                    <Text type="span" color="info">
+                    <Text 
+                    type="span" 
+                    as="b"
+                    color="info">
                         {
-                            `${values.count} student${(values.count > 1) ? 's' : ''}`
+                            `${values.count} administrator${(values.count > 1) ? 's' : ''}`
                         } in total
                     </Text>
                 </Container> : <Text type="span">No data</Text>

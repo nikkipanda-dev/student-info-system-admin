@@ -35,11 +35,11 @@ export const getErrorMessage = message => {
 export const icons = {
     loading: {
         icon: faCircleNotch,
-        color: "#E3E3E3",
+        color: "#9D9D9D",
     },
     info: {
         icon: faCircleInfo,
-        color: "#E3E3E3",
+        color: "#9D9D9D",
     },
     success: {
         icon: faCircleCheck,

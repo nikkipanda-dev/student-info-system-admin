@@ -25,7 +25,10 @@ export const TuitionFeeOverview = ({ values, }) => {
                     type={3}
                     text="Tuition Fees"
                     color="info" />
-                    <Text type="span" color="info">
+                    <Text 
+                    type="span" 
+                    as="b" 
+                    color="info">
                     {
                         `${values.students.count} student${(values.students.count > 1) ? 's' : ''}`
                     } paid
@@ -46,11 +49,25 @@ export const TuitionFeeOverview = ({ values, }) => {
                             <Text type="span" size="large">Amount</Text>
                             <Container>
                                 <Text type="span">Fully paid:</Text>
-                                <Text type="span" css={{ marginLeft: '$5', }}>{values.students.by_amount_per_type_count.full}</Text>
+                                <Text type="span" css={{ marginLeft: '$5', }}>
+                                    ₱&#xa0;
+                                    {
+                                        `${values.students.by_amount_per_type_count.full ? 
+                                        parseFloat(values.students.by_amount_per_type_count.full).toFixed(2) : 
+                                        parseFloat(0).toFixed(2) }`
+                                    }
+                                </Text>
                             </Container>
                             <Container>
                                 <Text type="span">Installment:</Text>
-                                <Text type="span" css={{ marginLeft: '$5', }}>{values.students.by_amount_per_type_count.installment}</Text>
+                                <Text type="span" css={{ marginLeft: '$5', }}>
+                                    ₱&#xa0;
+                                    {
+                                        `${values.students.by_amount_per_type_count.installment ?
+                                        parseFloat(values.students.by_amount_per_type_count.installment).toFixed(2) :
+                                        parseFloat(0).toFixed(2)}`
+                                    }
+                                </Text>
                             </Container>
                         </Container>
                         <Container className="d-flex flex-column">

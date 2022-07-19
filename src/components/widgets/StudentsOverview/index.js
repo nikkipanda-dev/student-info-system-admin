@@ -29,7 +29,10 @@ export const StudentsOverview = ({ values, }) => {
                     type={3}
                     text="Students"
                     color="info" />
-                    <Text type="span" color="info">
+                    <Text 
+                    type="span" 
+                    as="b" 
+                    color="info">
                     {
                         `${values.count} student${(values.count > 1) ? 's' : ''}`
                     } in total
