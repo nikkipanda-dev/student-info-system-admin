@@ -1,8 +1,16 @@
 import { useState, useEffect, } from "react";
-import { Form, Input, }  from "antd";
+import { 
+    Form, 
+    Input,
+    Divider,
+}  from "antd";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPen, faBan, } from "@fortawesome/free-solid-svg-icons";
+import { 
+    faPen, 
+    faBan,
+    faCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { setCookieName, } from "../../../util/auth";
 
 import Button from "../../core/Button";
@@ -210,6 +218,33 @@ export const SettingsNameForm = ({
             {
                 alert
             }
+            {
+                getAlertComponent(
+                    "Note", 
+                    "info", 
+                    <Container>
+                        <li>
+                            <FontAwesomeIcon 
+                            icon={faCircle} 
+                            className="fa-fw fa-2xs"
+                            style={{ color: '#747474', }} />
+                            <Text type="span" css={{ marginLeft: '$5', }}>
+                                Any empty <code>first name</code> and/or <code>last name</code> field <Text type="span" as="b" color="danger" css={{ marginLeft: '$5', }}>WILL NOT</Text> remove existing first and/or last name.
+                            </Text>
+                        </li>
+                        <li>
+                            <FontAwesomeIcon 
+                            icon={faCircle} 
+                            className="fa-fw fa-2xs"
+                            style={{ color: '#747474', }} />
+                            <Text type="span" css={{ marginLeft: '$5', }}>
+                                Any empty <code>middle name</code> field <Text type="span" as="b" color="danger" css={{ marginLeft: '$5', }}>WILL</Text> remove existing middle name.
+                            </Text>
+                        </li>
+                    </Container>, {
+                    marginTop: '0',
+                })
+            }
                 <Form
                 name="name-form"
                 {...formItemLayout}
@@ -229,6 +264,8 @@ export const SettingsNameForm = ({
                         <Input allowClear />
                     </Form.Item>
 
+                    <Divider plain><Text type="span">and/or</Text></Divider>
+
                     <Form.Item
                     label="Middle name"
                     name="middle_name"
@@ -240,6 +277,8 @@ export const SettingsNameForm = ({
                     }]}>
                         <Input allowClear />
                     </Form.Item>
+
+                    <Divider plain><Text type="span">and/or</Text></Divider>
 
                     <Form.Item
                     label="Last name"

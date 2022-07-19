@@ -93,6 +93,11 @@ export const globalStyles = globalCss({
         fontFamily: '$khula',
         fontSize: '$small',
     },
+    'code': {
+        background: '$blue1 !important',
+        color: '$black',
+        padding: '$5',
+    },
     "@import": ["https://fonts.googleapis.com/css2?family=Khula&family=Sawarabi+Gothic&display=swap"],
 });
 
