@@ -53,6 +53,10 @@ const Btn = styled('button', {
     '&:hover': {
         cursor: 'pointer',
     },
+    '&[disabled], &[disabled]:hover': {
+        background: '$blue1',
+        cursor: 'default',
+    },
 });
 
 export const Button = ({
@@ -63,6 +67,7 @@ export const Button = ({
     className,
     css,
     color,
+    disabled,
 }) => {
     return (
         <Btn
@@ -71,7 +76,8 @@ export const Button = ({
         type={submit ? "submit" : "button"}
         {...onClick && {onClick: () => onClick()}}
         {...evtOnclick && {onClick: evt => evtOnclick(evt)}}
-        {...color && {color: color}}>
+        {...color && {color: color}}
+        {...disabled && {disabled: true}}>
             {text}
         </Btn>
     )

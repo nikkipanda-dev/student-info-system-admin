@@ -8,7 +8,11 @@ import {
     Radio,
 } from "antd";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCloudArrowUp, faCircleXmark, } from "@fortawesome/free-solid-svg-icons";
+import { 
+    faCloudArrowUp, 
+    faCircleXmark,
+    faCircleNotch,
+} from "@fortawesome/free-solid-svg-icons";
 import { getErrorMessage, getAlertComponent, } from "../../../util";
 import { 
     styled,
@@ -62,9 +66,11 @@ export const StudentPermitForm = ({
     const [file, setFile] = useState('');
     const [imageUrl, setImageUrl] = useState('');
     const [alert, setAlert] = useState('');
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleFile = value => setFile(value);
     const handleImageUrl = value => setImageUrl(value);
+    const handleIsSubmitted = () => setIsSubmitted(true);
     const handleAlertComponent = payload => setAlert(payload);
     let arr;
 
@@ -161,6 +167,8 @@ export const StudentPermitForm = ({
     }
 
     const onStore = value => {
+        handleIsSubmitted();
+
         if (!(isAuth)) {
             console.error('on store permit: not auth');
             return;
@@ -249,6 +257,7 @@ export const StudentPermitForm = ({
                 <Label
                 htmlFor="image"
                 uploadSize="medium"
+                css={{ margin: 'auto', }}
                 className="d-flex flex-column justify-content-center align-items-center upload">
                     <FontAwesomeIcon icon={faCloudArrowUp} className="fa-fw" />
                     <Text
@@ -343,9 +352,16 @@ export const StudentPermitForm = ({
                     <Container className="d-flex justify-content-sm-center align-items-sm-center">
                         <Button
                         submit
-                        text="Submit"
+                        text={
+                            isSubmitted ?
+                                <>
+                                    <FontAwesomeIcon icon={faCircleNotch} className="fa-fw" />
+                                    <Text type="span" css={{ marginLeft: '$5', }}>Submitting</Text>
+                                </> : "Submit"
+                        }
                         color="blue"
-                        className="flex-grow-1 flex-sm-grow-0" />
+                        className="flex-grow-1 flex-sm-grow-0"
+                        {...isSubmitted && { disabled: isSubmitted }} />
                     </Container>
                 </Form>
             </Container>
